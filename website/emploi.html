@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Observatoire de l'emploi français</title>
+  <meta name="description" content="Taux de chômage par département en France, à partir des données INSEE (data.gouv.fr)." />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <nav class="site-nav">
+      <a href="index.html">Immobilier</a>
+      <a href="emploi.html" class="active">Emploi</a>
+    </nav>
+    <div class="app-header">
+      <div>
+        <h1 class="app-title">Observatoire de l'emploi français 🇫🇷</h1>
+        <p class="app-subtitle">Taux de chômage par département — INSEE, data.gouv.fr</p>
+      </div>
+      <div class="app-meta" id="last-updated"></div>
+    </div>
+
+    <div id="app-loading" class="loading">Chargement des données…</div>
+
+    <div id="app-content" class="hidden">
+      <div class="kpi-row" id="kpi-row"></div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-card-head">
+            <div class="chart-title" id="map-title"></div>
+            <div class="segmented" id="map-mode-toggle">
+              <button type="button" class="segmented-btn active" data-mode="niveau">Niveau</button>
+              <button type="button" class="segmented-btn" data-mode="evolution">Évolution</button>
+            </div>
+          </div>
+          <div id="map-graph"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-head">
+            <div class="chart-title" id="bar-title"></div>
+            <div class="segmented" id="bar-sort-toggle">
+              <button type="button" class="segmented-btn active" data-sort="desc">+ touchés</button>
+              <button type="button" class="segmented-btn" data-sort="asc">- touchés</button>
+            </div>
+          </div>
+          <div id="bar-graph"></div>
+        </div>
+      </div>
+
+      <label class="table-toggle">
+        <input type="checkbox" id="table-toggle" /> Voir les données en tableau
+      </label>
+      <div id="table-container"></div>
+    </div>
+
+    <div class="app-footer">
+      Données : <a href="https://www.data.gouv.fr/" target="_blank" rel="noopener">data.gouv.fr</a>
+      (taux de chômage localisé INSEE, republié par le Département de Seine-Saint-Denis) ·
+      Mis à jour automatiquement chaque semaine ·
+      <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
+    </div>
+  </div>
+
+  <script src="assets/emploi.js"></script>
+</body>
+</html>

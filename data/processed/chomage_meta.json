@@ -1,0 +1,15 @@
+{
+  "last_updated": "2026-09-18T15:17:17.304398+00:00",
+  "labels": {
+    "actuel": "4\u1d49 trim. 2025 (p)",
+    "precedent": "3\u1d49 trim. 2025",
+    "an_dernier": "4\u1d49 trim. 2024"
+  },
+  "national": {
+    "code_departement": "F",
+    "departement": "France hors Mayotte",
+    "taux_actuel": 7.9,
+    "taux_precedent": 7.7,
+    "taux_an_dernier": 7.3
+  }
+}

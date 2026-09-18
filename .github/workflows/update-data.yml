@@ -23,6 +23,7 @@ jobs:
       - name: Run data extraction scripts
         run: |
           python -m src.extract.build_dataset
+          python -m src.extract.build_chomage
 
       - name: Commit updated data
         run: |
