@@ -1,0 +1,33 @@
+name: Update data
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # tous les lundis à 6h UTC
+  workflow_dispatch: {}
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run data extraction scripts
+        run: |
+          echo "TODO: appeler les scripts dans src/extract/"
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || git commit -m "chore: update data [automated]"
+          git push
