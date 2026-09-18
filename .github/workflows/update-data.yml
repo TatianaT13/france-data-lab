@@ -24,6 +24,7 @@ jobs:
         run: |
           python -m src.extract.build_dataset
           python -m src.extract.build_chomage
+          python -m src.extract.build_energie
 
       - name: Commit updated data
         run: |

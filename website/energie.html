@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Observatoire de l'énergie français</title>
+  <meta name="description" content="Consommation, mix de production électrique et échanges internationaux en France, en temps quasi réel (RTE éCO2mix)." />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <nav class="site-nav">
+      <a href="index.html">Immobilier</a>
+      <a href="emploi.html">Emploi</a>
+      <a href="energie.html" class="active">Énergie</a>
+    </nav>
+    <div class="app-header">
+      <div>
+        <h1 class="app-title">Observatoire de l'énergie français 🇫🇷</h1>
+        <p class="app-subtitle">Consommation et mix de production électrique — RTE éCO2mix, data.gouv.fr</p>
+      </div>
+      <div class="app-meta" id="last-updated"></div>
+    </div>
+
+    <div id="app-loading" class="loading">Chargement des données…</div>
+
+    <div id="app-content" class="hidden">
+      <div class="kpi-row" id="kpi-row"></div>
+
+      <div class="chart-card full-width">
+        <div class="chart-title">Mix de production électrique — dernières 48h</div>
+        <div id="mix-graph"></div>
+      </div>
+
+      <div class="chart-card full-width">
+        <div class="chart-title">Intensité carbone de l'électricité — dernières 48h</div>
+        <div id="co2-graph"></div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-card-head">
+            <div class="chart-title" id="map-title"></div>
+            <div class="segmented" id="map-mode-toggle">
+              <button type="button" class="segmented-btn active" data-mode="consommation">Consommation</button>
+              <button type="button" class="segmented-btn" data-mode="renouvelable">% Renouvelable</button>
+            </div>
+          </div>
+          <div id="map-graph"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-head">
+            <div class="chart-title" id="bar-title"></div>
+            <div class="segmented" id="bar-sort-toggle">
+              <button type="button" class="segmented-btn active" data-sort="desc">+ conso.</button>
+              <button type="button" class="segmented-btn" data-sort="asc">- conso.</button>
+            </div>
+          </div>
+          <div id="bar-graph"></div>
+        </div>
+      </div>
+
+      <div class="chart-card full-width">
+        <div class="chart-title">Échanges commerciaux avec les pays voisins (instantané)</div>
+        <div id="exchange-graph"></div>
+      </div>
+
+      <label class="table-toggle">
+        <input type="checkbox" id="table-toggle" /> Voir les données régionales en tableau
+      </label>
+      <div id="table-container"></div>
+    </div>
+
+    <div class="app-footer">
+      Données : <a href="https://www.data.gouv.fr/" target="_blank" rel="noopener">data.gouv.fr</a>
+      (RTE éCO2mix, temps quasi réel) · Mis à jour automatiquement chaque semaine ·
+      <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
+    </div>
+  </div>
+
+  <script src="assets/energie.js"></script>
+</body>
+</html>

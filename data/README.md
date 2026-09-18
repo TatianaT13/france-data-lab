@@ -8,6 +8,7 @@ Ce dossier documente les **sources** de données utilisées par le projet, pas f
 |---|---|---|---|
 | Emploi | Taux de chômage localisé INSEE, via data.gouv.fr | [dataset](https://www.data.gouv.fr/fr/datasets/6a0eb9ef4780a16c39e21b76/) | CSV |
 | Immobilier | DVF (Demandes de Valeurs Foncières), via geo-dvf/Etalab | [files.data.gouv.fr/geo-dvf](https://files.data.gouv.fr/geo-dvf/latest/csv/) | CSV (gzip) |
+| Énergie | éCO2mix RTE (consommation, mix de production, échanges) | [opendata.reseaux-energies.fr](https://opendata.reseaux-energies.fr/) | API (OpenDataSoft) |
 | Accidents | Base des accidents corporels de la circulation | à compléter | CSV |
 
 ### Immobilier (DVF)
@@ -41,6 +42,22 @@ python -m src.extract.build_chomage
 - Traités (`data/processed/chomage_dept.csv`) : taux par département + variation en points.
 - Rafraîchi automatiquement chaque semaine par `.github/workflows/update-data.yml`.
 - Visualisé dans [`website/emploi.html`](../website/emploi.html).
+
+### Énergie (éCO2mix RTE)
+
+Récupéré automatiquement par [`src/extract/build_energie.py`](../src/extract/build_energie.py) :
+
+```bash
+python -m src.extract.build_energie
+```
+
+- Source : API publique RTE (opendata.reseaux-energies.fr, plateforme OpenDataSoft, sans
+  authentification) — consommation nationale/régionale, mix de production par filière,
+  intensité carbone, échanges commerciaux avec les pays limitrophes.
+- ⚠️ Ces données sont mises à jour en quasi temps réel côté RTE, mais le site ne les
+  rafraîchit qu'une fois par semaine (comme les autres pages) — la carte et les courbes
+  affichent donc un instantané figé au moment du dernier déploiement, pas du "live".
+- Visualisé dans [`website/energie.html`](../website/energie.html).
 
 ## Organisation suggérée
 
