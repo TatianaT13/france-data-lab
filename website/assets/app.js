@@ -177,6 +177,7 @@ function renderMap(year, type, pieces) {
     visible: false, fitbounds: "locations", bgcolor: SURFACE, showcountries: false,
     projection: { type: "mercator" },
   };
+  layout.transition = { duration: 700, easing: "cubic-in-out" };
 
   let trace;
   if (state.mapMode === "niveau") {
@@ -332,6 +333,43 @@ function renderAll() {
   renderTable(year, type, pieces);
 }
 
+let playTimer = null;
+
+function stopPlayback() {
+  if (playTimer) {
+    clearInterval(playTimer);
+    playTimer = null;
+  }
+  const btn = document.getElementById("play-btn");
+  btn.textContent = "▶ Animer";
+  btn.classList.remove("playing");
+}
+
+function togglePlayback() {
+  const btn = document.getElementById("play-btn");
+  if (playTimer) {
+    stopPlayback();
+    return;
+  }
+  const select = document.getElementById("year-select");
+  const years = [...select.options].map((o) => parseInt(o.value, 10));
+  btn.textContent = "⏸ Pause";
+  btn.classList.add("playing");
+
+  let idx = years.indexOf(parseInt(select.value, 10));
+  if (idx === -1 || idx === years.length - 1) idx = -1;
+
+  playTimer = setInterval(() => {
+    idx += 1;
+    if (idx >= years.length) {
+      stopPlayback();
+      return;
+    }
+    select.value = years[idx];
+    renderAll();
+  }, 1300);
+}
+
 function setupSegmented(containerId, dataAttr, onChange) {
   const container = document.getElementById(containerId);
   container.querySelectorAll(".segmented-btn").forEach((btn) => {
@@ -351,10 +389,14 @@ async function init() {
   document.getElementById("app-content").classList.remove("hidden");
   renderAll();
 
-  document.getElementById("year-select").addEventListener("change", renderAll);
+  document.getElementById("year-select").addEventListener("change", () => {
+    stopPlayback();
+    renderAll();
+  });
   document.getElementById("pieces-select").addEventListener("change", renderAll);
   document.querySelectorAll('input[name="type"]').forEach((el) => el.addEventListener("change", renderAll));
   document.getElementById("table-toggle").addEventListener("change", renderAll);
+  document.getElementById("play-btn").addEventListener("click", togglePlayback);
 
   setupSegmented("map-mode-toggle", "mode", (mode) => {
     state.mapMode = mode;
