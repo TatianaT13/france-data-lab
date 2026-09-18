@@ -7,8 +7,23 @@ Ce dossier documente les **sources** de données utilisées par le projet, pas f
 | Thème | Source | Lien | Format |
 |---|---|---|---|
 | Emploi | data.gouv.fr / Pôle Emploi | à compléter | CSV |
-| Immobilier | DVF (Demandes de Valeurs Foncières) | à compléter | CSV |
+| Immobilier | DVF (Demandes de Valeurs Foncières), via geo-dvf/Etalab | [files.data.gouv.fr/geo-dvf](https://files.data.gouv.fr/geo-dvf/latest/csv/) | CSV (gzip) |
 | Accidents | Base des accidents corporels de la circulation | à compléter | CSV |
+
+### Immobilier (DVF)
+
+Récupéré et agrégé automatiquement par [`src/extract/build_dataset.py`](../src/extract/build_dataset.py) :
+
+```bash
+python -m src.extract.build_dataset          # télécharge 2021-2024 et régénère data/processed/
+```
+
+- Bruts (`data/raw/dvf/*.csv.gz`, non versionnés) : un fichier national par année.
+- Traités (`data/processed/`, versionnés) : `dvf_dept_year.csv` (médiane €/m² et nb de
+  transactions par département/année/type de bien), `dvf_month.csv` (tendance nationale
+  mensuelle), `dvf_meta.json` (date de mise à jour).
+- Rafraîchi automatiquement chaque semaine par `.github/workflows/update-data.yml`.
+- Visualisé dans [`dashboards/dvf_dashboard.py`](../dashboards/dvf_dashboard.py).
 
 ## Organisation suggérée
 

@@ -5,3 +5,5 @@ seaborn
 jupyter
 requests
 scikit-learn
+plotly
+dash

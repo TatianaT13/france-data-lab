@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Data (voir data/README.md — les données brutes/volumineuses ne sont pas versionnées)
+data/raw/
+data/interim/
+
+# OS
+.DS_Store

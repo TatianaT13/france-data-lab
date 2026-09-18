@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Observatoire immobilier français</title>
+  <meta name="description" content="Prix de l'immobilier par département en France, à partir des données DVF (data.gouv.fr)." />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="app-header">
+      <div>
+        <h1 class="app-title">Observatoire immobilier français 🇫🇷</h1>
+        <p class="app-subtitle">Prix de l'immobilier par département — DVF, data.gouv.fr</p>
+      </div>
+      <div class="app-meta" id="last-updated"></div>
+    </div>
+
+    <div id="app-loading" class="loading">Chargement des données…</div>
+
+    <div id="app-content" class="hidden">
+      <div class="filters-row">
+        <div class="filter-group">
+          <label class="filter-label" for="year-select">Année</label>
+          <select id="year-select"></select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Type de bien</span>
+          <div class="radio-group">
+            <label><input type="radio" name="type" value="Tous" checked /> Tous</label>
+            <label><input type="radio" name="type" value="Appartement" /> Appartement</label>
+            <label><input type="radio" name="type" value="Maison" /> Maison</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-row" id="kpi-row"></div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div id="map-graph"></div>
+        </div>
+        <div class="right-col">
+          <div class="chart-card">
+            <div id="trend-graph"></div>
+          </div>
+          <div class="chart-card">
+            <div id="bar-graph"></div>
+          </div>
+        </div>
+      </div>
+
+      <label class="table-toggle">
+        <input type="checkbox" id="table-toggle" /> Voir les données en tableau
+      </label>
+      <div id="table-container"></div>
+    </div>
+
+    <div class="app-footer">
+      Données : <a href="https://www.data.gouv.fr/" target="_blank" rel="noopener">data.gouv.fr</a>
+      (DVF / Etalab) · Mis à jour automatiquement chaque semaine ·
+      <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
+    </div>
+  </div>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
