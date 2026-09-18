@@ -250,7 +250,7 @@ app.layout = html.Div(
                     [
                         html.Div(id="last-updated", className="app-meta"),
                         html.Button(
-                            "🔄 Actualiser depuis data.gouv.fr",
+                            "Actualiser depuis data.gouv.fr",
                             id="refresh-btn",
                             className="refresh-btn",
                         ),
