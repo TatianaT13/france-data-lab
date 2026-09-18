@@ -183,6 +183,44 @@ select#year-select {
   padding: 16px;
 }
 
+.chart-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.chart-card-head .chart-title {
+  margin-bottom: 0;
+}
+
+.segmented {
+  display: flex;
+  background: var(--page-plane);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2px;
+  margin-bottom: 8px;
+}
+
+.segmented-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-family: inherit;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.segmented-btn.active {
+  background: var(--series-blue);
+  color: #ffffff;
+}
+
 .chart-title {
   font-size: 14px;
   font-weight: 600;

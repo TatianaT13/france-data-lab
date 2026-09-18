@@ -40,7 +40,12 @@ SEQUENTIAL_BLUE = [
     "#2a78d6", "#3987e5", "#5598e7", "#6da7ec", "#86b6ef",
 ]
 
+DIVERGING_BLUE_RED = [
+    [0.0, "#b23b3b"], [0.25, "#d97a7a"], [0.5, "#383835"], [0.75, "#5598e7"], [1.0, "#2a78d6"],
+]
+
 TYPE_OPTIONS = ["Tous", "Appartement", "Maison"]
+PIECES_OPTIONS = ["Tous", "Studio", "T2", "T3", "T4", "T5+"]
 
 
 def load_data():
@@ -69,18 +74,38 @@ def base_layout(height: int = 380, top_margin: int = 10) -> dict:
     )
 
 
-def make_map(by_dept: pd.DataFrame, geo: dict, year: int, type_local: str) -> go.Figure:
-    df = by_dept[(by_dept["annee"] == year) & (by_dept["type_local"] == type_local)]
+def compute_evolution(by_dept: pd.DataFrame, year: int, type_local: str, pieces: str) -> pd.DataFrame:
+    """Variation % du prix médian entre la première année disponible et `year`."""
+    base_year = int(by_dept["annee"].min())
+    df = by_dept[(by_dept["type_local"] == type_local) & (by_dept["pieces_cat"] == pieces)]
+    base = df[df["annee"] == base_year].set_index("code_departement")["prix_m2_median"]
+    cur = df[df["annee"] == year].set_index("code_departement")["prix_m2_median"]
+    joined = pd.concat([base.rename("base"), cur.rename("cur")], axis=1).dropna()
+    joined["pct"] = (joined["cur"] - joined["base"]) / joined["base"] * 100
+    return joined.reset_index()
 
-    fig = go.Figure(
-        go.Choropleth(
-            geojson=geo,
-            featureidkey="properties.code",
+
+def make_map(
+    by_dept: pd.DataFrame, geo: dict, year: int, type_local: str, pieces: str, mode: str
+) -> go.Figure:
+    fig_kwargs = dict(
+        geojson=geo,
+        featureidkey="properties.code",
+        marker_line_color=BASELINE,
+        marker_line_width=0.6,
+    )
+
+    if mode == "niveau":
+        df = by_dept[
+            (by_dept["annee"] == year)
+            & (by_dept["type_local"] == type_local)
+            & (by_dept["pieces_cat"] == pieces)
+        ]
+        trace = go.Choropleth(
+            **fig_kwargs,
             locations=df["code_departement"],
             z=df["prix_m2_median"],
             colorscale=SEQUENTIAL_BLUE,
-            marker_line_color=BASELINE,
-            marker_line_width=0.6,
             colorbar=dict(
                 title=dict(text="€/m²", font=dict(color=TEXT_SECONDARY)),
                 tickfont=dict(color=TEXT_SECONDARY),
@@ -93,7 +118,25 @@ def make_map(by_dept: pd.DataFrame, geo: dict, year: int, type_local: str) -> go
                 "Transactions : %{customdata[1]:,.0f}<extra></extra>"
             ),
         )
-    )
+    else:
+        evo = compute_evolution(by_dept, year, type_local, pieces)
+        trace = go.Choropleth(
+            **fig_kwargs,
+            locations=evo["code_departement"],
+            z=evo["pct"],
+            zmid=0,
+            colorscale=DIVERGING_BLUE_RED,
+            colorbar=dict(
+                title=dict(text="% var.", font=dict(color=TEXT_SECONDARY)),
+                tickfont=dict(color=TEXT_SECONDARY),
+                ticksuffix=" %",
+                len=0.75,
+            ),
+            customdata=evo[["pct"]],
+            hovertemplate="<b>%{location}</b><br>Variation : %{customdata[0]:+.1f} %<extra></extra>",
+        )
+
+    fig = go.Figure(trace)
     fig.update_geos(
         visible=False, fitbounds="locations",
         bgcolor=SURFACE, showcountries=False,
@@ -103,7 +146,7 @@ def make_map(by_dept: pd.DataFrame, geo: dict, year: int, type_local: str) -> go
     return fig
 
 
-def make_trend(by_month: pd.DataFrame, type_local: str) -> go.Figure:
+def make_trend(by_month: pd.DataFrame, type_local: str, pieces: str) -> go.Figure:
     fig = go.Figure()
     if type_local == "Tous":
         series = [("Appartement", ORANGE), ("Maison", BLUE)]
@@ -111,7 +154,9 @@ def make_trend(by_month: pd.DataFrame, type_local: str) -> go.Figure:
         series = [(type_local, BLUE)]
 
     for name, color in series:
-        d = by_month[by_month["type_local"] == name].sort_values("mois")
+        d = by_month[
+            (by_month["type_local"] == name) & (by_month["pieces_cat"] == pieces)
+        ].sort_values("mois")
         fig.add_trace(
             go.Scatter(
                 x=d["mois"], y=d["prix_m2_median"], mode="lines", name=name,
@@ -132,13 +177,20 @@ def make_trend(by_month: pd.DataFrame, type_local: str) -> go.Figure:
     return fig
 
 
-def make_top_departments(by_dept: pd.DataFrame, year: int, type_local: str, geo: dict) -> go.Figure:
+def make_top_departments(
+    by_dept: pd.DataFrame, year: int, type_local: str, pieces: str, geo: dict, ascending: bool
+) -> go.Figure:
     names = {f["properties"]["code"]: f["properties"]["nom"] for f in geo["features"]}
-    df = by_dept[(by_dept["annee"] == year) & (by_dept["type_local"] == type_local)].copy()
+    df = by_dept[
+        (by_dept["annee"] == year)
+        & (by_dept["type_local"] == type_local)
+        & (by_dept["pieces_cat"] == pieces)
+    ].copy()
     df = df[df["code_departement"].isin(names)]
     df["nom"] = df["code_departement"].map(names)
     df["label"] = df["code_departement"] + " · " + df["nom"]
-    df = df.sort_values("prix_m2_median", ascending=False).head(15).sort_values("prix_m2_median")
+    df = df.sort_values("prix_m2_median", ascending=not ascending).head(15)
+    df = df.sort_values("prix_m2_median", ascending=True)
     max_price = df["prix_m2_median"].max()
 
     fig = go.Figure(
@@ -231,6 +283,18 @@ app.layout = html.Div(
                         ),
                     ]
                 ),
+                html.Div(
+                    [
+                        html.Div("Nombre de pièces", className="filter-label"),
+                        dcc.Dropdown(
+                            id="pieces-dropdown",
+                            options=[{"label": "Toutes" if p == "Tous" else p, "value": p} for p in PIECES_OPTIONS],
+                            value="Tous",
+                            clearable=False,
+                            style={"width": "140px", "color": "#0b0b0b"},
+                        ),
+                    ]
+                ),
             ],
             className="filters-row",
         ),
@@ -243,7 +307,22 @@ app.layout = html.Div(
                 [
                     html.Div(
                         [
-                            html.Div(id="map-title", className="chart-title"),
+                            html.Div(
+                                [
+                                    html.Div(id="map-title", className="chart-title"),
+                                    dcc.RadioItems(
+                                        id="map-mode-radio",
+                                        options=[
+                                            {"label": "Niveau", "value": "niveau"},
+                                            {"label": "Évolution", "value": "evolution"},
+                                        ],
+                                        value="niveau",
+                                        inline=True,
+                                        className="mode-radio",
+                                    ),
+                                ],
+                                className="chart-card-head",
+                            ),
                             dcc.Graph(id="map-graph", config={"displayModeBar": False}),
                         ],
                         className="chart-card",
@@ -259,7 +338,22 @@ app.layout = html.Div(
                             ),
                             html.Div(
                                 [
-                                    html.Div(id="bar-title", className="chart-title"),
+                                    html.Div(
+                                        [
+                                            html.Div(id="bar-title", className="chart-title"),
+                                            dcc.RadioItems(
+                                                id="bar-sort-radio",
+                                                options=[
+                                                    {"label": "+ chers", "value": "desc"},
+                                                    {"label": "- chers", "value": "asc"},
+                                                ],
+                                                value="desc",
+                                                inline=True,
+                                                className="mode-radio",
+                                            ),
+                                        ],
+                                        className="chart-card-head",
+                                    ),
                                     dcc.Graph(id="bar-graph", config={"displayModeBar": False}),
                                 ],
                                 className="chart-card",
@@ -295,15 +389,26 @@ app.layout = html.Div(
     Output("table-container", "children"),
     Input("year-dropdown", "value"),
     Input("type-radio", "value"),
+    Input("pieces-dropdown", "value"),
+    Input("map-mode-radio", "value"),
+    Input("bar-sort-radio", "value"),
     Input("table-toggle", "value"),
     Input("data-version", "data"),
 )
-def update_dashboard(year, type_local, table_toggle, _version):
+def update_dashboard(year, type_local, pieces, map_mode, bar_sort, table_toggle, _version):
     by_dept, by_month, meta, geo = load_data()
 
-    cur = by_dept[(by_dept["annee"] == year) & (by_dept["type_local"] == type_local)]
+    cur = by_dept[
+        (by_dept["annee"] == year)
+        & (by_dept["type_local"] == type_local)
+        & (by_dept["pieces_cat"] == pieces)
+    ]
     prev_year = year - 1
-    prev = by_dept[(by_dept["annee"] == prev_year) & (by_dept["type_local"] == type_local)]
+    prev = by_dept[
+        (by_dept["annee"] == prev_year)
+        & (by_dept["type_local"] == type_local)
+        & (by_dept["pieces_cat"] == pieces)
+    ]
 
     median_price = cur["prix_m2_median"].median()
     total_transactions = int(cur["transactions"].sum())
@@ -330,16 +435,17 @@ def update_dashboard(year, type_local, table_toggle, _version):
         f"{top_dept_row['prix_m2_median'].iloc[0]:,.0f} €/m²" if not top_dept_row.empty else "—"
     )
 
+    active_filters = type_local + (f" · {pieces}" if pieces != "Tous" else "")
     kpis = [
         kpi_card("Prix médian national", f"{median_price:,.0f} €/m²", delta_children, delta_class),
         kpi_card("Transactions", f"{total_transactions:,.0f}"),
         kpi_card("Département le plus cher", top_dept_name, top_dept_value),
-        kpi_card("Type de bien", type_local),
+        kpi_card("Filtres actifs", active_filters),
     ]
 
-    map_fig = make_map(by_dept, geo, year, type_local)
-    trend_fig = make_trend(by_month, type_local)
-    bar_fig = make_top_departments(by_dept, year, type_local, geo)
+    map_fig = make_map(by_dept, geo, year, type_local, pieces, map_mode)
+    trend_fig = make_trend(by_month, type_local, pieces)
+    bar_fig = make_top_departments(by_dept, year, type_local, pieces, geo, ascending=bar_sort == "asc")
 
     updated = datetime.fromisoformat(meta["last_updated"]).strftime("%d/%m/%Y %H:%M UTC")
     last_updated_text = f"Données mises à jour le {updated} · années {meta['years'][0]}–{meta['years'][-1]}"
@@ -371,9 +477,13 @@ def update_dashboard(year, type_local, table_toggle, _version):
             sort_action="native",
         )
 
-    map_title = f"Prix médian au m² par département — {year}"
+    if map_mode == "niveau":
+        map_title = f"Prix médian au m² par département — {year}"
+    else:
+        base_year = int(by_dept["annee"].min())
+        map_title = f"Évolution du prix médian au m² depuis {base_year} — {year}"
     trend_title = "Évolution du prix médian au m² (national)"
-    bar_title = f"Top 15 départements les plus chers — {year}"
+    bar_title = f"Top 15 départements les {'moins' if bar_sort == 'asc' else 'plus'} chers — {year}"
 
     return (
         kpis, map_fig, map_title, trend_fig, trend_title, bar_fig, bar_title,

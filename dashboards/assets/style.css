@@ -171,6 +171,29 @@ body {
   margin: 4px 4px 0;
 }
 
+.chart-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chart-card-head .chart-title {
+  margin: 0;
+}
+
+.mode-radio label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.mode-radio input {
+  margin-right: 3px;
+}
+
 .right-col {
   display: flex;
   flex-direction: column;

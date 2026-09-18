@@ -16,7 +16,14 @@ const SEQUENTIAL_BLUE = [
   [0.89, "#6da7ec"], [1.0, "#86b6ef"],
 ];
 
-const state = { deptData: [], monthData: [], geo: null, meta: null, deptNames: {} };
+const DIVERGING_BLUE_RED = [
+  [0.0, "#b23b3b"], [0.25, "#d97a7a"], [0.5, "#383835"], [0.75, "#5598e7"], [1.0, "#2a78d6"],
+];
+
+const state = {
+  deptData: [], monthData: [], geo: null, meta: null, deptNames: {},
+  mapMode: "niveau", barSort: "desc",
+};
 
 function baseLayout(height, topMargin) {
   return {
@@ -36,6 +43,14 @@ function fmtEuro(v) {
 
 function fmtInt(v) {
   return v.toLocaleString("fr-FR");
+}
+
+function currentFilters() {
+  return {
+    year: parseInt(document.getElementById("year-select").value, 10),
+    type: document.querySelector('input[name="type"]:checked').value,
+    pieces: document.getElementById("pieces-select").value,
+  };
 }
 
 async function loadData() {
@@ -72,9 +87,13 @@ function renderMeta() {
     `Données mises à jour le ${formatted} · années ${years[0]}–${years[years.length - 1]}`;
 }
 
-function renderKPIs(year, type) {
-  const cur = state.deptData.filter((d) => d.annee === year && d.type_local === type);
-  const prev = state.deptData.filter((d) => d.annee === year - 1 && d.type_local === type);
+function renderKPIs(year, type, pieces) {
+  const cur = state.deptData.filter(
+    (d) => d.annee === year && d.type_local === type && d.pieces_cat === pieces
+  );
+  const prev = state.deptData.filter(
+    (d) => d.annee === year - 1 && d.type_local === type && d.pieces_cat === pieces
+  );
 
   const median = (arr, key) => {
     const vals = arr.map((d) => d[key]).sort((a, b) => a - b);
@@ -87,7 +106,7 @@ function renderKPIs(year, type) {
   const totalTransactions = cur.reduce((s, d) => s + d.transactions, 0);
 
   let deltaHtml = "";
-  if (prev.length) {
+  if (prev.length && medianPrice !== null) {
     const prevMedian = median(prev, "prix_m2_median");
     const pct = ((medianPrice - prevMedian) / prevMedian) * 100;
     const cls = pct >= 0 ? "good" : "critical";
@@ -117,46 +136,99 @@ function renderKPIs(year, type) {
       <div class="kpi-delta">${topValue}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">Type de bien</div>
-      <div class="kpi-value">${type}</div>
+      <div class="kpi-label">Filtres actifs</div>
+      <div class="kpi-value">${type}${pieces !== "Tous" ? " · " + pieces : ""}</div>
     </div>
   `;
 }
 
-function renderMap(year, type) {
-  const cur = state.deptData.filter((d) => d.annee === year && d.type_local === type);
-  const trace = {
-    type: "choropleth",
-    geojson: state.geo,
-    featureidkey: "properties.code",
-    locations: cur.map((d) => d.code_departement),
-    z: cur.map((d) => d.prix_m2_median),
-    text: cur.map((d) => state.deptNames[d.code_departement] || d.code_departement),
-    customdata: cur.map((d) => [d.prix_m2_median, d.transactions]),
-    colorscale: SEQUENTIAL_BLUE,
-    marker: { line: { color: BASELINE, width: 0.6 } },
-    colorbar: {
-      title: { text: "€/m²", font: { color: TEXT_SECONDARY } },
-      tickfont: { color: TEXT_SECONDARY },
-      len: 0.75,
-    },
-    hovertemplate:
-      "<b>%{text}</b><br>Prix médian : %{customdata[0]:,.0f} €/m²<br>Transactions : %{customdata[1]:,.0f}<extra></extra>",
-  };
-  document.getElementById("map-title").textContent = `Prix médian au m² par département — ${year}`;
+function computeEvolution(year, type, pieces) {
+  const years = [...new Set(state.deptData.map((d) => d.annee))].sort();
+  const baseYear = years[0];
+  const rows = state.deptData.filter((d) => d.type_local === type && d.pieces_cat === pieces);
+
+  const byDept = {};
+  rows.forEach((d) => {
+    byDept[d.code_departement] = byDept[d.code_departement] || {};
+    byDept[d.code_departement][d.annee] = d.prix_m2_median;
+  });
+
+  return Object.entries(byDept)
+    .map(([code, byYear]) => {
+      const base = byYear[baseYear];
+      const cur = byYear[year];
+      if (base == null || cur == null) return null;
+      return { code_departement: code, pct: ((cur - base) / base) * 100 };
+    })
+    .filter((d) => d && state.deptNames[d.code_departement]);
+}
+
+function renderMap(year, type, pieces) {
+  document.getElementById("map-title").textContent =
+    state.mapMode === "niveau"
+      ? `Prix médian au m² par département — ${year}`
+      : `Évolution du prix médian au m² depuis ${Math.min(...state.deptData.map((d) => d.annee))} — ${year}`;
+
   const layout = baseLayout(560, 10);
   layout.margin.l = 10;
   layout.margin.r = 60;
   layout.geo = { visible: false, fitbounds: "locations", bgcolor: SURFACE, showcountries: false };
+
+  let trace;
+  if (state.mapMode === "niveau") {
+    const cur = state.deptData.filter(
+      (d) => d.annee === year && d.type_local === type && d.pieces_cat === pieces
+    );
+    trace = {
+      type: "choropleth",
+      geojson: state.geo,
+      featureidkey: "properties.code",
+      locations: cur.map((d) => d.code_departement),
+      z: cur.map((d) => d.prix_m2_median),
+      text: cur.map((d) => state.deptNames[d.code_departement] || d.code_departement),
+      customdata: cur.map((d) => [d.prix_m2_median, d.transactions]),
+      colorscale: SEQUENTIAL_BLUE,
+      marker: { line: { color: BASELINE, width: 0.6 } },
+      colorbar: {
+        title: { text: "€/m²", font: { color: TEXT_SECONDARY } },
+        tickfont: { color: TEXT_SECONDARY },
+        len: 0.75,
+      },
+      hovertemplate:
+        "<b>%{text}</b><br>Prix médian : %{customdata[0]:,.0f} €/m²<br>Transactions : %{customdata[1]:,.0f}<extra></extra>",
+    };
+  } else {
+    const evo = computeEvolution(year, type, pieces);
+    trace = {
+      type: "choropleth",
+      geojson: state.geo,
+      featureidkey: "properties.code",
+      locations: evo.map((d) => d.code_departement),
+      z: evo.map((d) => d.pct),
+      zmid: 0,
+      text: evo.map((d) => state.deptNames[d.code_departement] || d.code_departement),
+      customdata: evo.map((d) => d.pct),
+      colorscale: DIVERGING_BLUE_RED,
+      marker: { line: { color: BASELINE, width: 0.6 } },
+      colorbar: {
+        title: { text: "% var.", font: { color: TEXT_SECONDARY } },
+        tickfont: { color: TEXT_SECONDARY },
+        ticksuffix: " %",
+        len: 0.75,
+      },
+      hovertemplate: "<b>%{text}</b><br>Variation : %{customdata:+.1f} %<extra></extra>",
+    };
+  }
+
   Plotly.react("map-graph", [trace], layout, { displayModeBar: false, responsive: true });
 }
 
-function renderTrend(type) {
+function renderTrend(type, pieces) {
   const traces = [];
   const series = type === "Tous" ? [["Appartement", ORANGE], ["Maison", BLUE]] : [[type, BLUE]];
   for (const [name, color] of series) {
     const d = state.monthData
-      .filter((r) => r.type_local === name)
+      .filter((r) => r.type_local === name && r.pieces_cat === pieces)
       .sort((a, b) => (a.mois > b.mois ? 1 : -1));
     traces.push({
       x: d.map((r) => r.mois),
@@ -181,10 +253,13 @@ function renderTrend(type) {
   Plotly.react("trend-graph", traces, layout, { displayModeBar: false, responsive: true });
 }
 
-function renderBar(year, type) {
-  const cur = [...state.deptData.filter((d) => d.annee === year && d.type_local === type)]
+function renderBar(year, type, pieces) {
+  const ascending = state.barSort === "asc";
+  const cur = [...state.deptData.filter(
+    (d) => d.annee === year && d.type_local === type && d.pieces_cat === pieces
+  )]
     .filter((d) => state.deptNames[d.code_departement])
-    .sort((a, b) => b.prix_m2_median - a.prix_m2_median)
+    .sort((a, b) => (ascending ? a.prix_m2_median - b.prix_m2_median : b.prix_m2_median - a.prix_m2_median))
     .slice(0, 15)
     .reverse();
   const names = cur.map((d) => state.deptNames[d.code_departement] || d.code_departement);
@@ -203,7 +278,8 @@ function renderBar(year, type) {
     textfont: { color: TEXT_SECONDARY, size: 11 },
     hovertemplate: "%{customdata}<br>%{x:,.0f} €/m²<extra></extra>",
   };
-  document.getElementById("bar-title").textContent = `Top 15 départements les plus chers — ${year}`;
+  document.getElementById("bar-title").textContent =
+    `Top 15 départements les ${ascending ? "moins" : "plus"} chers — ${year}`;
   const layout = baseLayout(560, 10);
   layout.xaxis = {
     showgrid: true, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE,
@@ -215,15 +291,15 @@ function renderBar(year, type) {
   Plotly.react("bar-graph", [trace], layout, { displayModeBar: false, responsive: true });
 }
 
-function renderTable(year, type) {
+function renderTable(year, type, pieces) {
   const container = document.getElementById("table-container");
   if (!document.getElementById("table-toggle").checked) {
     container.innerHTML = "";
     return;
   }
-  const cur = [...state.deptData.filter((d) => d.annee === year && d.type_local === type)].sort(
-    (a, b) => b.prix_m2_median - a.prix_m2_median
-  );
+  const cur = [...state.deptData.filter(
+    (d) => d.annee === year && d.type_local === type && d.pieces_cat === pieces
+  )].sort((a, b) => b.prix_m2_median - a.prix_m2_median);
   const rows = cur
     .map(
       (d) => `
@@ -244,13 +320,23 @@ function renderTable(year, type) {
 }
 
 function renderAll() {
-  const year = parseInt(document.getElementById("year-select").value, 10);
-  const type = document.querySelector('input[name="type"]:checked').value;
-  renderKPIs(year, type);
-  renderMap(year, type);
-  renderTrend(type);
-  renderBar(year, type);
-  renderTable(year, type);
+  const { year, type, pieces } = currentFilters();
+  renderKPIs(year, type, pieces);
+  renderMap(year, type, pieces);
+  renderTrend(type, pieces);
+  renderBar(year, type, pieces);
+  renderTable(year, type, pieces);
+}
+
+function setupSegmented(containerId, dataAttr, onChange) {
+  const container = document.getElementById(containerId);
+  container.querySelectorAll(".segmented-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      container.querySelectorAll(".segmented-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      onChange(btn.dataset[dataAttr]);
+    });
+  });
 }
 
 async function init() {
@@ -262,11 +348,19 @@ async function init() {
   renderAll();
 
   document.getElementById("year-select").addEventListener("change", renderAll);
+  document.getElementById("pieces-select").addEventListener("change", renderAll);
   document.querySelectorAll('input[name="type"]').forEach((el) => el.addEventListener("change", renderAll));
-  document.getElementById("table-toggle").addEventListener("change", () => {
-    const year = parseInt(document.getElementById("year-select").value, 10);
-    const type = document.querySelector('input[name="type"]:checked').value;
-    renderTable(year, type);
+  document.getElementById("table-toggle").addEventListener("change", renderAll);
+
+  setupSegmented("map-mode-toggle", "mode", (mode) => {
+    state.mapMode = mode;
+    const { year, type, pieces } = currentFilters();
+    renderMap(year, type, pieces);
+  });
+  setupSegmented("bar-sort-toggle", "sort", (sort) => {
+    state.barSort = sort;
+    const { year, type, pieces } = currentFilters();
+    renderBar(year, type, pieces);
   });
 }
 
