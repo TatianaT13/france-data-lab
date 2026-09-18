@@ -54,17 +54,16 @@ def load_data():
 DEPT_NAMES = {}
 
 
-def base_layout(title: str, height: int = 380) -> dict:
+def base_layout(height: int = 380, top_margin: int = 10) -> dict:
     return dict(
-        title=dict(text=title, font=dict(color=TEXT_PRIMARY, size=14, family=FONT)),
         paper_bgcolor=SURFACE,
         plot_bgcolor=SURFACE,
         font=dict(family=FONT, color=TEXT_SECONDARY, size=12),
-        margin=dict(l=10, r=10, t=40, b=10),
+        margin=dict(l=10, r=10, t=top_margin, b=10),
         height=height,
         hoverlabel=dict(bgcolor="#0d0d0d", font=dict(color=TEXT_PRIMARY, family=FONT)),
         legend=dict(
-            orientation="h", yanchor="bottom", y=1.02, x=0,
+            orientation="h", yanchor="top", y=1, x=0,
             font=dict(color=TEXT_SECONDARY),
         ),
     )
@@ -99,7 +98,8 @@ def make_map(by_dept: pd.DataFrame, geo: dict, year: int, type_local: str) -> go
         visible=False, fitbounds="locations",
         bgcolor=SURFACE, showcountries=False,
     )
-    fig.update_layout(**base_layout(f"Prix médian au m² par département — {year}", height=560))
+    fig.update_layout(**base_layout(height=560))
+    fig.update_layout(margin=dict(l=10, r=60, t=10, b=10))
     return fig
 
 
@@ -120,33 +120,45 @@ def make_trend(by_month: pd.DataFrame, type_local: str) -> go.Figure:
             )
         )
 
-    fig.update_layout(**base_layout("Évolution du prix médian au m² (national)"))
+    top_margin = 36 if type_local == "Tous" else 10
+    fig.update_layout(**base_layout(top_margin=top_margin))
+    fig.update_layout(margin=dict(l=55, r=20, t=top_margin, b=10))
     fig.update_xaxes(showgrid=False, color=TEXT_MUTED, linecolor=BASELINE)
-    fig.update_yaxes(gridcolor=GRIDLINE, zeroline=False, color=TEXT_MUTED, linecolor=BASELINE)
-    fig.update_layout(hovermode="x unified")
+    fig.update_yaxes(
+        gridcolor=GRIDLINE, zeroline=False, color=TEXT_MUTED, linecolor=BASELINE,
+        tickformat=",.0f", ticksuffix=" €",
+    )
+    fig.update_layout(hovermode="x unified", showlegend=type_local == "Tous")
     return fig
 
 
 def make_top_departments(by_dept: pd.DataFrame, year: int, type_local: str, geo: dict) -> go.Figure:
     names = {f["properties"]["code"]: f["properties"]["nom"] for f in geo["features"]}
     df = by_dept[(by_dept["annee"] == year) & (by_dept["type_local"] == type_local)].copy()
-    df["nom"] = df["code_departement"].map(names).fillna(df["code_departement"])
+    df = df[df["code_departement"].isin(names)]
+    df["nom"] = df["code_departement"].map(names)
+    df["label"] = df["code_departement"] + " · " + df["nom"]
     df = df.sort_values("prix_m2_median", ascending=False).head(15).sort_values("prix_m2_median")
+    max_price = df["prix_m2_median"].max()
 
     fig = go.Figure(
         go.Bar(
-            x=df["prix_m2_median"], y=df["nom"], orientation="h",
+            x=df["prix_m2_median"], y=df["label"], orientation="h",
             marker_color=BLUE,
             text=[f"{v:,.0f} €" for v in df["prix_m2_median"]],
             textposition="outside",
+            cliponaxis=False,
             textfont=dict(color=TEXT_SECONDARY, size=11),
             hovertemplate="%{y}<br>%{x:,.0f} €/m²<extra></extra>",
         )
     )
-    fig.update_layout(**base_layout(f"Top 15 départements les plus chers — {year}", height=560))
-    fig.update_xaxes(showgrid=True, gridcolor=GRIDLINE, color=TEXT_MUTED, linecolor=BASELINE)
+    fig.update_layout(**base_layout(height=560))
+    fig.update_xaxes(
+        showgrid=True, gridcolor=GRIDLINE, color=TEXT_MUTED, linecolor=BASELINE,
+        range=[0, max_price * 1.2],
+    )
     fig.update_yaxes(showgrid=False, color=TEXT_SECONDARY, linecolor=BASELINE)
-    fig.update_layout(showlegend=False, margin=dict(l=10, r=60, t=40, b=10))
+    fig.update_layout(showlegend=False, margin=dict(l=165, r=20, t=10, b=30))
     return fig
 
 
@@ -230,17 +242,26 @@ app.layout = html.Div(
             html.Div(
                 [
                     html.Div(
-                        [dcc.Graph(id="map-graph", config={"displayModeBar": False})],
+                        [
+                            html.Div(id="map-title", className="chart-title"),
+                            dcc.Graph(id="map-graph", config={"displayModeBar": False}),
+                        ],
                         className="chart-card",
                     ),
                     html.Div(
                         [
                             html.Div(
-                                [dcc.Graph(id="trend-graph", config={"displayModeBar": False})],
+                                [
+                                    html.Div(id="trend-title", className="chart-title"),
+                                    dcc.Graph(id="trend-graph", config={"displayModeBar": False}),
+                                ],
                                 className="chart-card",
                             ),
                             html.Div(
-                                [dcc.Graph(id="bar-graph", config={"displayModeBar": False})],
+                                [
+                                    html.Div(id="bar-title", className="chart-title"),
+                                    dcc.Graph(id="bar-graph", config={"displayModeBar": False}),
+                                ],
                                 className="chart-card",
                             ),
                         ],
@@ -265,8 +286,11 @@ app.layout = html.Div(
 @app.callback(
     Output("kpi-row", "children"),
     Output("map-graph", "figure"),
+    Output("map-title", "children"),
     Output("trend-graph", "figure"),
+    Output("trend-title", "children"),
     Output("bar-graph", "figure"),
+    Output("bar-title", "children"),
     Output("last-updated", "children"),
     Output("table-container", "children"),
     Input("year-dropdown", "value"),
@@ -293,8 +317,12 @@ def update_dashboard(year, type_local, table_toggle, _version):
         delta_class = "good" if pct >= 0 else "critical"
         delta_children = f"{arrow} {pct:+.1f} % vs {prev_year}"
 
-    top_dept_row = cur.sort_values("prix_m2_median", ascending=False).head(1)
     names = {f["properties"]["code"]: f["properties"]["nom"] for f in geo["features"]}
+    top_dept_row = (
+        cur[cur["code_departement"].isin(names)]
+        .sort_values("prix_m2_median", ascending=False)
+        .head(1)
+    )
     top_dept_name = (
         names.get(top_dept_row["code_departement"].iloc[0], "—") if not top_dept_row.empty else "—"
     )
@@ -343,7 +371,14 @@ def update_dashboard(year, type_local, table_toggle, _version):
             sort_action="native",
         )
 
-    return kpis, map_fig, trend_fig, bar_fig, last_updated_text, table
+    map_title = f"Prix médian au m² par département — {year}"
+    trend_title = "Évolution du prix médian au m² (national)"
+    bar_title = f"Top 15 départements les plus chers — {year}"
+
+    return (
+        kpis, map_fig, map_title, trend_fig, trend_title, bar_fig, bar_title,
+        last_updated_text, table,
+    )
 
 
 @app.callback(

@@ -18,16 +18,15 @@ const SEQUENTIAL_BLUE = [
 
 const state = { deptData: [], monthData: [], geo: null, meta: null, deptNames: {} };
 
-function baseLayout(title, height) {
+function baseLayout(height, topMargin) {
   return {
-    title: { text: title, font: { color: TEXT_PRIMARY, size: 14, family: FONT } },
     paper_bgcolor: SURFACE,
     plot_bgcolor: SURFACE,
     font: { family: FONT, color: TEXT_SECONDARY, size: 12 },
-    margin: { l: 10, r: 10, t: 40, b: 10 },
+    margin: { l: 10, r: 10, t: topMargin, b: 10 },
     height: height,
     hoverlabel: { bgcolor: "#0d0d0d", font: { color: TEXT_PRIMARY, family: FONT } },
-    legend: { orientation: "h", yanchor: "bottom", y: 1.02, x: 0, font: { color: TEXT_SECONDARY } },
+    legend: { orientation: "h", yanchor: "top", y: 1, x: 0, font: { color: TEXT_SECONDARY } },
   };
 }
 
@@ -96,7 +95,9 @@ function renderKPIs(year, type) {
     deltaHtml = `<div class="kpi-delta ${cls}">${arrow} ${pct >= 0 ? "+" : ""}${pct.toFixed(1)} % vs ${year - 1}</div>`;
   }
 
-  const topDept = [...cur].sort((a, b) => b.prix_m2_median - a.prix_m2_median)[0];
+  const topDept = [...cur]
+    .filter((d) => state.deptNames[d.code_departement])
+    .sort((a, b) => b.prix_m2_median - a.prix_m2_median)[0];
   const topName = topDept ? state.deptNames[topDept.code_departement] || topDept.code_departement : "—";
   const topValue = topDept ? fmtEuro(topDept.prix_m2_median) : "—";
 
@@ -142,7 +143,10 @@ function renderMap(year, type) {
     hovertemplate:
       "<b>%{text}</b><br>Prix médian : %{customdata[0]:,.0f} €/m²<br>Transactions : %{customdata[1]:,.0f}<extra></extra>",
   };
-  const layout = baseLayout(`Prix médian au m² par département — ${year}`, 560);
+  document.getElementById("map-title").textContent = `Prix médian au m² par département — ${year}`;
+  const layout = baseLayout(560, 10);
+  layout.margin.l = 10;
+  layout.margin.r = 60;
   layout.geo = { visible: false, fitbounds: "locations", bgcolor: SURFACE, showcountries: false };
   Plotly.react("map-graph", [trace], layout, { displayModeBar: false, responsive: true });
 }
@@ -163,35 +167,51 @@ function renderTrend(type) {
       hovertemplate: "%{x}<br>%{y:,.0f} €/m²<extra>" + name + "</extra>",
     });
   }
-  const layout = baseLayout("Évolution du prix médian au m² (national)", 380);
+  document.getElementById("trend-title").textContent = "Évolution du prix médian au m² (national)";
+  const layout = baseLayout(380, type === "Tous" ? 36 : 10);
+  layout.margin.l = 55;
+  layout.margin.r = 20;
   layout.xaxis = { showgrid: false, color: TEXT_MUTED, linecolor: BASELINE };
-  layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_MUTED, linecolor: BASELINE };
+  layout.yaxis = {
+    gridcolor: GRIDLINE, zeroline: false, color: TEXT_MUTED, linecolor: BASELINE,
+    tickformat: ",.0f", ticksuffix: " €",
+  };
   layout.hovermode = "x unified";
+  layout.showlegend = type === "Tous";
   Plotly.react("trend-graph", traces, layout, { displayModeBar: false, responsive: true });
 }
 
 function renderBar(year, type) {
   const cur = [...state.deptData.filter((d) => d.annee === year && d.type_local === type)]
+    .filter((d) => state.deptNames[d.code_departement])
     .sort((a, b) => b.prix_m2_median - a.prix_m2_median)
     .slice(0, 15)
     .reverse();
   const names = cur.map((d) => state.deptNames[d.code_departement] || d.code_departement);
+  const labels = cur.map((d) => `${d.code_departement} · ${state.deptNames[d.code_departement] || ""}`);
+  const maxPrice = Math.max(...cur.map((d) => d.prix_m2_median), 0);
   const trace = {
     type: "bar",
     orientation: "h",
     x: cur.map((d) => d.prix_m2_median),
-    y: names,
+    y: labels,
+    customdata: names,
     marker: { color: BLUE },
     text: cur.map((d) => fmtEuro(d.prix_m2_median)),
     textposition: "outside",
+    cliponaxis: false,
     textfont: { color: TEXT_SECONDARY, size: 11 },
-    hovertemplate: "%{y}<br>%{x:,.0f} €/m²<extra></extra>",
+    hovertemplate: "%{customdata}<br>%{x:,.0f} €/m²<extra></extra>",
   };
-  const layout = baseLayout(`Top 15 départements les plus chers — ${year}`, 560);
-  layout.xaxis = { showgrid: true, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE };
+  document.getElementById("bar-title").textContent = `Top 15 départements les plus chers — ${year}`;
+  const layout = baseLayout(560, 10);
+  layout.xaxis = {
+    showgrid: true, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE,
+    range: [0, maxPrice * 1.2],
+  };
   layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
   layout.showlegend = false;
-  layout.margin = { l: 10, r: 60, t: 40, b: 10 };
+  layout.margin = { l: 165, r: 20, t: 10, b: 30 };
   Plotly.react("bar-graph", [trace], layout, { displayModeBar: false, responsive: true });
 }
 

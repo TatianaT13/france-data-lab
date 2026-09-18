@@ -22,6 +22,7 @@ body {
   background: var(--page-plane);
   color: var(--text-primary);
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  overflow-x: hidden;
 }
 
 a {
@@ -41,6 +42,10 @@ a {
   flex-wrap: wrap;
   gap: 16px;
   margin-bottom: 24px;
+}
+
+.app-header > div {
+  min-width: 0;
 }
 
 .app-title {
@@ -112,14 +117,14 @@ select#year-select {
 
 .kpi-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
   margin-bottom: 20px;
 }
 
 @media (max-width: 900px) {
   .kpi-row {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -161,13 +166,13 @@ select#year-select {
 
 .charts-grid {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
   gap: 16px;
 }
 
 @media (max-width: 900px) {
   .charts-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -176,6 +181,13 @@ select#year-select {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 16px;
+}
+
+.chart-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 8px 4px;
 }
 
 .right-col {
