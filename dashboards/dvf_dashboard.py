@@ -21,27 +21,28 @@ from src.extract.build_dataset import build  # noqa: E402
 PROCESSED_DIR = ROOT / "data" / "processed"
 GEO_PATH = ROOT / "data" / "raw" / "departements.geojson"
 
-# --- Palette (dataviz skill — validé pour surface sombre #1a1a19) ---
-BLUE = "#3987e5"
-ORANGE = "#d95926"
-AQUA = "#199e70"
+# --- Palette (dataviz skill — validé pour surface claire #fcfcfb) ---
+BLUE = "#2a78d6"
+ORANGE = "#eb6834"
+AQUA = "#1baf7a"
 GOOD = "#0ca30c"
-CRITICAL = "#e66767"
-SURFACE = "#1a1a19"
-TEXT_PRIMARY = "#ffffff"
-TEXT_SECONDARY = "#c3c2b7"
+CRITICAL = "#d03b3b"
+SURFACE = "#ffffff"
+TEXT_PRIMARY = "#0b0b0b"
+TEXT_SECONDARY = "#52514e"
 TEXT_MUTED = "#898781"
-GRIDLINE = "#2c2c2a"
-BASELINE = "#383835"
+GRIDLINE = "#ececE7"
+BASELINE = "#d8d6cf"
 FONT = "system-ui, -apple-system, Segoe UI, sans-serif"
 
+# Rampe séquentielle pastel -> bleu
 SEQUENTIAL_BLUE = [
-    "#0d0d0d", "#104281", "#184f95", "#1c5cab", "#256abf",
-    "#2a78d6", "#3987e5", "#5598e7", "#6da7ec", "#86b6ef",
+    "#e7f0fc", "#cde2fb", "#b7d3f6", "#9ec5f4", "#86b6ef",
+    "#6da7ec", "#5598e7", "#3987e5", "#2a78d6", "#1c5cab",
 ]
 
 DIVERGING_BLUE_RED = [
-    [0.0, "#b23b3b"], [0.25, "#d97a7a"], [0.5, "#383835"], [0.75, "#5598e7"], [1.0, "#2a78d6"],
+    [0.0, "#c23b3a"], [0.25, "#e8a29f"], [0.5, "#f0efec"], [0.75, "#9ec5f4"], [1.0, "#2a78d6"],
 ]
 
 TYPE_OPTIONS = ["Tous", "Appartement", "Maison"]
@@ -66,7 +67,7 @@ def base_layout(height: int = 380, top_margin: int = 10) -> dict:
         font=dict(family=FONT, color=TEXT_SECONDARY, size=12),
         margin=dict(l=10, r=10, t=top_margin, b=10),
         height=height,
-        hoverlabel=dict(bgcolor="#0d0d0d", font=dict(color=TEXT_PRIMARY, family=FONT)),
+        hoverlabel=dict(bgcolor="#ffffff", bordercolor=BASELINE, font=dict(color=TEXT_PRIMARY, family=FONT)),
         legend=dict(
             orientation="h", yanchor="top", y=1, x=0,
             font=dict(color=TEXT_SECONDARY),
@@ -140,6 +141,7 @@ def make_map(
     fig.update_geos(
         visible=False, fitbounds="locations",
         bgcolor=SURFACE, showcountries=False,
+        projection_type="mercator",
     )
     fig.update_layout(**base_layout(height=560))
     fig.update_layout(margin=dict(l=10, r=60, t=10, b=10))
@@ -189,7 +191,7 @@ def make_top_departments(
     df = df[df["code_departement"].isin(names)]
     df["nom"] = df["code_departement"].map(names)
     df["label"] = df["code_departement"] + " · " + df["nom"]
-    df = df.sort_values("prix_m2_median", ascending=not ascending).head(15)
+    df = df.sort_values("prix_m2_median", ascending=ascending).head(15)
     df = df.sort_values("prix_m2_median", ascending=True)
     max_price = df["prix_m2_median"].max()
 
@@ -305,6 +307,15 @@ app.layout = html.Div(
         dcc.Loading(
             html.Div(
                 [
+                    html.Div(id="trend-title", className="chart-title"),
+                    dcc.Graph(id="trend-graph", config={"displayModeBar": False}),
+                ],
+                className="chart-card full-width",
+            ),
+        ),
+        dcc.Loading(
+            html.Div(
+                [
                     html.Div(
                         [
                             html.Div(
@@ -331,35 +342,23 @@ app.layout = html.Div(
                         [
                             html.Div(
                                 [
-                                    html.Div(id="trend-title", className="chart-title"),
-                                    dcc.Graph(id="trend-graph", config={"displayModeBar": False}),
-                                ],
-                                className="chart-card",
-                            ),
-                            html.Div(
-                                [
-                                    html.Div(
-                                        [
-                                            html.Div(id="bar-title", className="chart-title"),
-                                            dcc.RadioItems(
-                                                id="bar-sort-radio",
-                                                options=[
-                                                    {"label": "+ chers", "value": "desc"},
-                                                    {"label": "- chers", "value": "asc"},
-                                                ],
-                                                value="desc",
-                                                inline=True,
-                                                className="mode-radio",
-                                            ),
+                                    html.Div(id="bar-title", className="chart-title"),
+                                    dcc.RadioItems(
+                                        id="bar-sort-radio",
+                                        options=[
+                                            {"label": "+ chers", "value": "desc"},
+                                            {"label": "- chers", "value": "asc"},
                                         ],
-                                        className="chart-card-head",
+                                        value="desc",
+                                        inline=True,
+                                        className="mode-radio",
                                     ),
-                                    dcc.Graph(id="bar-graph", config={"displayModeBar": False}),
                                 ],
-                                className="chart-card",
+                                className="chart-card-head",
                             ),
+                            dcc.Graph(id="bar-graph", config={"displayModeBar": False}),
                         ],
-                        className="right-col",
+                        className="chart-card",
                     ),
                 ],
                 className="charts-grid",

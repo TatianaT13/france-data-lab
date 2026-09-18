@@ -1,23 +1,24 @@
 // Observatoire immobilier français — dashboard statique (Plotly.js, sans backend)
 
-const BLUE = "#3987e5";
-const ORANGE = "#d95926";
-const SURFACE = "#1a1a19";
-const TEXT_PRIMARY = "#ffffff";
-const TEXT_SECONDARY = "#c3c2b7";
+const BLUE = "#2a78d6";
+const ORANGE = "#eb6834";
+const SURFACE = "#ffffff";
+const TEXT_PRIMARY = "#0b0b0b";
+const TEXT_SECONDARY = "#52514e";
 const TEXT_MUTED = "#898781";
-const GRIDLINE = "#2c2c2a";
-const BASELINE = "#383835";
+const GRIDLINE = "#ececE7";
+const BASELINE = "#d8d6cf";
 const FONT = "system-ui, -apple-system, Segoe UI, sans-serif";
 
+// Rampe séquentielle pastel -> bleu (palette validée, surface claire)
 const SEQUENTIAL_BLUE = [
-  [0.0, "#0d0d0d"], [0.11, "#104281"], [0.22, "#184f95"], [0.33, "#1c5cab"],
-  [0.44, "#256abf"], [0.56, "#2a78d6"], [0.67, "#3987e5"], [0.78, "#5598e7"],
-  [0.89, "#6da7ec"], [1.0, "#86b6ef"],
+  [0.0, "#e7f0fc"], [0.11, "#cde2fb"], [0.22, "#b7d3f6"], [0.33, "#9ec5f4"],
+  [0.44, "#86b6ef"], [0.56, "#6da7ec"], [0.67, "#5598e7"], [0.78, "#3987e5"],
+  [0.89, "#2a78d6"], [1.0, "#1c5cab"],
 ];
 
 const DIVERGING_BLUE_RED = [
-  [0.0, "#b23b3b"], [0.25, "#d97a7a"], [0.5, "#383835"], [0.75, "#5598e7"], [1.0, "#2a78d6"],
+  [0.0, "#c23b3a"], [0.25, "#e8a29f"], [0.5, "#f0efec"], [0.75, "#9ec5f4"], [1.0, "#2a78d6"],
 ];
 
 const state = {
@@ -32,7 +33,7 @@ function baseLayout(height, topMargin) {
     font: { family: FONT, color: TEXT_SECONDARY, size: 12 },
     margin: { l: 10, r: 10, t: topMargin, b: 10 },
     height: height,
-    hoverlabel: { bgcolor: "#0d0d0d", font: { color: TEXT_PRIMARY, family: FONT } },
+    hoverlabel: { bgcolor: "#ffffff", bordercolor: BASELINE, font: { color: TEXT_PRIMARY, family: FONT } },
     legend: { orientation: "h", yanchor: "top", y: 1, x: 0, font: { color: TEXT_SECONDARY } },
   };
 }
@@ -172,7 +173,10 @@ function renderMap(year, type, pieces) {
   const layout = baseLayout(560, 10);
   layout.margin.l = 10;
   layout.margin.r = 60;
-  layout.geo = { visible: false, fitbounds: "locations", bgcolor: SURFACE, showcountries: false };
+  layout.geo = {
+    visible: false, fitbounds: "locations", bgcolor: SURFACE, showcountries: false,
+    projection: { type: "mercator" },
+  };
 
   let trace;
   if (state.mapMode === "niveau") {
