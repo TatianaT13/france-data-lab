@@ -9,8 +9,14 @@ from src.extract.energie import (
     fetch_national_history,
     fetch_national_latest,
     fetch_regional_latest,
+    fetch_regional_yearly,
 )
-from src.transform.energie import build_neighbor_exchanges, clean_national_record, clean_regional_record
+from src.transform.energie import (
+    build_neighbor_exchanges,
+    clean_national_record,
+    clean_regional_record,
+    clean_yearly,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 PROCESSED_DIR = ROOT / "data" / "processed"
@@ -31,6 +37,15 @@ def build(history_hours: int = 48) -> None:
     regional_raw = fetch_regional_latest()
     regional = [clean_regional_record(r) for r in regional_raw]
 
+    print("[energie] historique annuel par région...")
+    region_names = {
+        "11": "Île-de-France", "24": "Centre-Val de Loire", "27": "Bourgogne-Franche-Comté",
+        "28": "Normandie", "32": "Hauts-de-France", "44": "Grand Est", "52": "Pays de la Loire",
+        "53": "Bretagne", "75": "Nouvelle-Aquitaine", "76": "Occitanie", "84": "Auvergne-Rhône-Alpes",
+        "93": "Provence-Alpes-Côte d'Azur", "94": "Corse",
+    }
+    yearly = clean_yearly(fetch_regional_yearly(), region_names)
+
     download_regions_geojson()
 
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
@@ -41,6 +56,7 @@ def build(history_hours: int = 48) -> None:
         ("energie_exchanges.json", exchanges),
         ("energie_history.json", history),
         ("energie_regional.json", regional),
+        ("energie_yearly.json", yearly),
     ]:
         text = json.dumps(payload)
         (WEBSITE_DATA_DIR / name).write_text(text)

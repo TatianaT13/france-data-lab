@@ -29,6 +29,24 @@
       <div class="kpi-row" id="kpi-row"></div>
 
       <div class="chart-card full-width">
+        <div class="chart-card-head">
+          <div class="chart-title" id="yearly-title"></div>
+          <div class="year-play-row">
+            <div class="segmented" id="yearly-metric-toggle">
+              <button type="button" class="segmented-btn active" data-metric="part_renouvelable">Renouvelable</button>
+              <button type="button" class="segmented-btn" data-metric="part_eolien">Éolien</button>
+              <button type="button" class="segmented-btn" data-metric="part_solaire">Solaire</button>
+              <button type="button" class="segmented-btn" data-metric="part_nucleaire">Nucléaire</button>
+            </div>
+            <button type="button" id="play-btn" class="play-btn">▶ Animer</button>
+          </div>
+        </div>
+        <input type="range" id="yearly-slider" class="year-slider" />
+        <div id="yearly-graph"></div>
+        <p class="chart-note">Part de la production régionale, moyenne annuelle (éCO2mix consolidé, depuis 2013). L'année en cours est partielle.</p>
+      </div>
+
+      <div class="chart-card full-width">
         <div class="chart-title">Mix de production électrique — dernières 48h</div>
         <div id="mix-graph"></div>
       </div>

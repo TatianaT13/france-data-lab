@@ -65,3 +65,29 @@ def clean_regional_record(rec: dict) -> dict:
         "consommation": rec.get("consommation") or 0,
         "part_renouvelable": round(renouvelable / total * 100, 1),
     }
+
+
+def clean_yearly(records: list[dict], names: dict) -> list[dict]:
+    out = []
+    for r in records:
+        year = r.get("year(date_heure)")
+        if year is None or year < 2013 or r["code_insee_region"] not in names:
+            continue
+        g = lambda k: r.get(k) or 0
+        eolien = g("eol_t") + g("eol_o")
+        parts = {
+            "thermique": g("thermique"), "nucleaire": g("nucleaire"), "eolien": eolien,
+            "solaire": g("solaire"), "hydraulique": g("hydraulique"), "bioenergies": g("bioenergies"),
+        }
+        total = sum(parts.values()) or 1
+        out.append({
+            "code_insee_region": r["code_insee_region"],
+            "libelle_region": names[r["code_insee_region"]],
+            "annee": year,
+            "consommation": round(g("consommation")),
+            "part_renouvelable": round((eolien + parts["solaire"] + parts["hydraulique"] + parts["bioenergies"]) / total * 100, 1),
+            "part_eolien": round(eolien / total * 100, 1),
+            "part_solaire": round(parts["solaire"] / total * 100, 1),
+            "part_nucleaire": round(parts["nucleaire"] / total * 100, 1),
+        })
+    return out

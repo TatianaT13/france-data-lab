@@ -86,3 +86,29 @@ def download_regions_geojson(force: bool = True) -> Path:
     response.raise_for_status()
     REGIONS_GEO_PATH.write_bytes(response.content)
     return REGIONS_GEO_PATH
+
+
+def fetch_regional_yearly() -> list[dict]:
+    """Moyennes annuelles par région (éCO2mix consolidé, depuis 2013), agrégées côté API."""
+    select = (
+        "code_insee_region, year(date_heure) as an, avg(consommation) as consommation, "
+        "avg(thermique) as thermique, avg(nucleaire) as nucleaire, avg(solaire) as solaire, "
+        "avg(hydraulique) as hydraulique, avg(bioenergies) as bioenergies, "
+        "avg(eolien_terrestre) as eol_t, avg(eolien_offshore) as eol_o"
+    )
+    records, offset = [], 0
+    while True:
+        data = _get(
+            "eco2mix-regional-cons-def",
+            select=select,
+            group_by="code_insee_region, year(date_heure)",
+            order_by="an",
+            limit=100,
+            offset=offset,
+        )
+        batch = data["results"]
+        records.extend(batch)
+        if len(batch) < 100:
+            break
+        offset += 100
+    return records

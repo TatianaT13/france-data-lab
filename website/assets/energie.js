@@ -34,7 +34,7 @@ const MIX_SERIES = [
 ];
 
 const state = {
-  latest: null, exchanges: [], history: [], regional: [], geo: null, meta: null, regionNames: {},
+  latest: null, exchanges: [], history: [], regional: [], yearly: [], metric: "part_renouvelable", yearIdx: 0, years: [], timer: null, geo: null, meta: null, regionNames: {},
   mapMode: "consommation", barSort: "desc",
 };
 
@@ -55,16 +55,80 @@ function fmtMW(v) {
 }
 
 async function loadData() {
-  const [latest, exchanges, history, regional, geo, meta] = await Promise.all([
+  const [latest, exchanges, history, regional, yearly, geo, meta] = await Promise.all([
     fetch("data/energie_latest.json").then((r) => r.json()),
     fetch("data/energie_exchanges.json").then((r) => r.json()),
     fetch("data/energie_history.json").then((r) => r.json()),
     fetch("data/energie_regional.json").then((r) => r.json()),
+    fetch("data/energie_yearly.json").then((r) => r.json()),
     fetch("data/regions.geojson").then((r) => r.json()),
     fetch("data/energie_meta.json").then((r) => r.json()),
   ]);
-  Object.assign(state, { latest, exchanges, history, regional, geo, meta });
+  Object.assign(state, { latest, exchanges, history, regional, yearly, geo, meta });
+  state.years = [...new Set(yearly.map((d) => d.annee))].sort();
+  state.yearIdx = state.years.length - 1;
   state.regionNames = Object.fromEntries(geo.features.map((f) => [f.properties.code, f.properties.nom]));
+}
+
+
+const METRIC_LABELS = {
+  part_renouvelable: "Part renouvelable", part_eolien: "Part éolienne",
+  part_solaire: "Part solaire", part_nucleaire: "Part nucléaire",
+};
+
+function renderYearly() {
+  const year = state.years[state.yearIdx];
+  const rows = state.yearly.filter((d) => d.annee === year);
+  const all = state.yearly.map((d) => d[state.metric]);
+  document.getElementById("yearly-title").textContent =
+    `${METRIC_LABELS[state.metric]} de la production régionale — ${year}`;
+  document.getElementById("yearly-slider").value = state.yearIdx;
+  const layout = baseLayout(480, 10);
+  layout.margin.r = 60;
+  layout.geo = {
+    visible: false, fitbounds: "locations", bgcolor: SURFACE, showcountries: false,
+    projection: { type: "mercator" },
+  };
+  layout.transition = { duration: 600, easing: "cubic-in-out" };
+  const trace = {
+    type: "choropleth",
+    geojson: state.geo,
+    featureidkey: "properties.code",
+    locations: rows.map((d) => d.code_insee_region),
+    z: rows.map((d) => d[state.metric]),
+    zmin: 0,
+    zmax: Math.max(...all),
+    text: rows.map((d) => d.libelle_region),
+    colorscale: SEQUENTIAL_BLUE,
+    marker: { line: { color: BASELINE, width: 0.6 } },
+    colorbar: { title: { text: "%", font: { color: TEXT_SECONDARY } }, tickfont: { color: TEXT_SECONDARY }, len: 0.75 },
+    hovertemplate: "<b>%{text}</b><br>" + METRIC_LABELS[state.metric] + " : %{z:.1f} %<extra></extra>",
+  };
+  Plotly.react("yearly-graph", [trace], layout, { displayModeBar: false, responsive: true });
+}
+
+function stopPlayback() {
+  clearInterval(state.timer);
+  state.timer = null;
+  const btn = document.getElementById("play-btn");
+  btn.textContent = "▶ Animer";
+  btn.classList.remove("playing");
+}
+
+function togglePlayback() {
+  if (state.timer) return stopPlayback();
+  const btn = document.getElementById("play-btn");
+  btn.textContent = "⏸ Pause";
+  btn.classList.add("playing");
+  if (state.yearIdx >= state.years.length - 1) state.yearIdx = -1;
+  state.timer = setInterval(() => {
+    state.yearIdx += 1;
+    if (state.yearIdx >= state.years.length) {
+      state.yearIdx = state.years.length - 1;
+      return stopPlayback();
+    }
+    renderYearly();
+  }, 900);
 }
 
 function renderMeta() {
@@ -295,6 +359,20 @@ async function init() {
   renderMeta();
   document.getElementById("app-loading").classList.add("hidden");
   document.getElementById("app-content").classList.remove("hidden");
+  const slider = document.getElementById("yearly-slider");
+  slider.min = 0;
+  slider.max = state.years.length - 1;
+  slider.addEventListener("input", () => {
+    stopPlayback();
+    state.yearIdx = parseInt(slider.value, 10);
+    renderYearly();
+  });
+  document.getElementById("play-btn").addEventListener("click", togglePlayback);
+  setupSegmented("yearly-metric-toggle", "metric", (m) => {
+    state.metric = m;
+    renderYearly();
+  });
+  renderYearly();
   renderKPIs();
   renderMix();
   renderCO2();
