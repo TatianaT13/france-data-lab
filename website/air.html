@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Observatoire de la qualité de l'air</title>
+  <meta name="description" content="Concentrations de polluants (NO2, PM10, PM2.5, ozone) par région en France, données LCSQA / Géod'air (data.gouv.fr)." />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <nav class="site-nav">
+      <a href="index.html">Immobilier</a>
+      <a href="emploi.html">Emploi</a>
+      <a href="energie.html">Énergie</a>
+      <a href="air.html" class="active">Air</a>
+    </nav>
+    <div class="app-header">
+      <div>
+        <h1 class="app-title">Observatoire de la qualité de l'air 🇫🇷</h1>
+        <p class="app-subtitle">Concentrations de polluants par région — LCSQA / Géod'air, data.gouv.fr</p>
+      </div>
+      <div class="app-meta" id="last-updated"></div>
+    </div>
+
+    <div id="app-loading" class="loading">Chargement des données…</div>
+
+    <div id="app-content" class="hidden">
+      <div class="kpi-row" id="kpi-row"></div>
+
+      <div class="chart-card full-width">
+        <div class="chart-card-head">
+          <div class="chart-title" id="anim-title"></div>
+          <div class="year-play-row">
+            <div class="segmented" id="pollutant-toggle">
+              <button type="button" class="segmented-btn active" data-p="no2">NO₂</button>
+              <button type="button" class="segmented-btn" data-p="pm10">PM10</button>
+              <button type="button" class="segmented-btn" data-p="pm25">PM2.5</button>
+              <button type="button" class="segmented-btn" data-p="o3">Ozone</button>
+            </div>
+            <button type="button" id="play-btn" class="play-btn">▶ Animer</button>
+          </div>
+        </div>
+        <input type="range" id="month-slider" class="year-slider" />
+        <div id="anim-graph"></div>
+        <p class="chart-note">Moyenne par région des stations de mesure, un relevé par mois (le 15) depuis 2021. Concentrations en µg/m³.</p>
+      </div>
+
+      <div class="chart-card full-width">
+        <div class="chart-title">Évolution nationale des concentrations (moyenne des régions, un relevé par mois)</div>
+        <div id="trend-graph"></div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title" id="hourly-title"></div>
+          <div id="hourly-graph"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title" id="bar-title"></div>
+          <div id="bar-graph"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-footer">
+      Données : <a href="https://www.data.gouv.fr/datasets/5b98b648634f415309d52a50/" target="_blank" rel="noopener">data.gouv.fr</a>
+      (LCSQA / Géod'air, stations des AASQA) · Mis à jour automatiquement chaque semaine ·
+      <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
+    </div>
+  </div>
+
+  <script src="assets/air.js"></script>
+</body>
+</html>

@@ -9,6 +9,7 @@ Ce dossier documente les **sources** de données utilisées par le projet, pas f
 | Emploi | Taux de chômage localisé INSEE, via data.gouv.fr | [dataset](https://www.data.gouv.fr/fr/datasets/6a0eb9ef4780a16c39e21b76/) | CSV |
 | Immobilier | DVF (Demandes de Valeurs Foncières), via geo-dvf/Etalab | [files.data.gouv.fr/geo-dvf](https://files.data.gouv.fr/geo-dvf/latest/csv/) | CSV (gzip) |
 | Énergie | éCO2mix RTE (consommation, mix de production, échanges) | [opendata.reseaux-energies.fr](https://opendata.reseaux-energies.fr/) | API (OpenDataSoft) |
+| Air | LCSQA / Géod'air (concentrations horaires, stations des AASQA) | [dataset](https://www.data.gouv.fr/datasets/5b98b648634f415309d52a50/) | CSV (un fichier par jour) |
 | Accidents | Base des accidents corporels de la circulation | à compléter | CSV |
 
 ### Immobilier (DVF)
@@ -58,6 +59,19 @@ python -m src.extract.build_energie
   rafraîchit qu'une fois par semaine (comme les autres pages) — la carte et les courbes
   affichent donc un instantané figé au moment du dernier déploiement, pas du "live".
 - Visualisé dans [`website/energie.html`](../website/energie.html).
+
+### Air (LCSQA / Géod'air)
+
+Récupéré par [`src/extract/build_air.py`](../src/extract/build_air.py) :
+
+```bash
+python -m src.extract.build_air
+```
+
+- Source : fichiers CSV quotidiens (~12 Mo, ~450 stations) de concentrations horaires de NO2, PM10, PM2.5 et ozone.
+- Historique : un relevé par mois (le 15) depuis 2021, moyenné par station puis par région (le rattachement régional vient du code de zone ZAS). Instantané : dernier jour complet.
+- Limites : échantillon mensuel, donc pas une moyenne mensuelle exacte ; les DOM ne sont pas cartographiés.
+- Visualisé dans [`website/air.html`](../website/air.html).
 
 ## Organisation suggérée
 
