@@ -7,6 +7,7 @@ from pathlib import Path
 from src.extract.energie import (
     download_regions_geojson,
     fetch_national_history,
+    fetch_national_co2_monthly,
     fetch_national_latest,
     fetch_regional_latest,
     fetch_regional_yearly,
@@ -46,6 +47,8 @@ def build(history_hours: int = 48) -> None:
     }
     yearly = clean_yearly(fetch_regional_yearly(), region_names)
 
+    co2_monthly = fetch_national_co2_monthly()
+
     download_regions_geojson()
 
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
@@ -57,6 +60,7 @@ def build(history_hours: int = 48) -> None:
         ("energie_history.json", history),
         ("energie_regional.json", regional),
         ("energie_yearly.json", yearly),
+        ("energie_co2_monthly.json", co2_monthly),
     ]:
         text = json.dumps(payload)
         (WEBSITE_DATA_DIR / name).write_text(text)

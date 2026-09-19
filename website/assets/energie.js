@@ -55,16 +55,18 @@ function fmtMW(v) {
 }
 
 async function loadData() {
-  const [latest, exchanges, history, regional, yearly, geo, meta] = await Promise.all([
+  const [latest, exchanges, history, regional, yearly, co2monthly, geo, meta] = await Promise.all([
     fetch("data/energie_latest.json").then((r) => r.json()),
     fetch("data/energie_exchanges.json").then((r) => r.json()),
     fetch("data/energie_history.json").then((r) => r.json()),
     fetch("data/energie_regional.json").then((r) => r.json()),
     fetch("data/energie_yearly.json").then((r) => r.json()),
+    fetch("data/energie_co2_monthly.json").then((r) => r.json()),
     fetch("data/regions.geojson").then((r) => r.json()),
     fetch("data/energie_meta.json").then((r) => r.json()),
   ]);
-  Object.assign(state, { latest, exchanges, history, regional, yearly, geo, meta });
+  Object.assign(state, { latest, exchanges, history, regional, yearly, co2monthly, geo, meta });
+  state.co2Shown = co2monthly.length;
   state.years = [...new Set(yearly.map((d) => d.annee))].sort();
   state.yearIdx = state.years.length - 1;
   state.regionNames = Object.fromEntries(geo.features.map((f) => [f.properties.code, f.properties.nom]));
@@ -129,6 +131,54 @@ function togglePlayback() {
     }
     renderYearly();
   }, 900);
+}
+
+
+function renderCO2Anim() {
+  const all = state.co2monthly;
+  const shown = all.slice(0, state.co2Shown);
+  const last = shown[shown.length - 1];
+  document.getElementById("co2anim-title").textContent =
+    `Intensité carbone de l'électricité en France — ${last ? last.mois : ""}`;
+  const trace = {
+    x: shown.map((d) => d.mois), y: shown.map((d) => d.co2), mode: "lines",
+    line: { color: BLUE, width: 2 }, fill: "tozeroy", fillcolor: "rgba(42, 120, 214, 0.10)",
+    hovertemplate: "%{x}<br>%{y:.0f} gCO₂/kWh<extra></extra>",
+  };
+  const layout = baseLayout(300, 10);
+  layout.margin.l = 55;
+  layout.margin.r = 20;
+  layout.xaxis = { showgrid: false, color: TEXT_MUTED, linecolor: BASELINE, range: [all[0].mois, all[all.length - 1].mois] };
+  layout.yaxis = {
+    gridcolor: GRIDLINE, zeroline: false, color: TEXT_MUTED, linecolor: BASELINE,
+    ticksuffix: " g", range: [0, Math.max(...all.map((d) => d.co2)) * 1.1],
+  };
+  Plotly.react("co2anim-graph", [trace], layout, { displayModeBar: false, responsive: true });
+}
+
+function toggleCO2Playback() {
+  const btn = document.getElementById("co2-play-btn");
+  if (state.co2Timer) {
+    clearInterval(state.co2Timer);
+    state.co2Timer = null;
+    btn.textContent = "▶ Animer";
+    btn.classList.remove("playing");
+    return;
+  }
+  btn.textContent = "⏸ Pause";
+  btn.classList.add("playing");
+  if (state.co2Shown >= state.co2monthly.length) state.co2Shown = 1;
+  state.co2Timer = setInterval(() => {
+    state.co2Shown += 2;
+    if (state.co2Shown >= state.co2monthly.length) {
+      state.co2Shown = state.co2monthly.length;
+      clearInterval(state.co2Timer);
+      state.co2Timer = null;
+      btn.textContent = "▶ Animer";
+      btn.classList.remove("playing");
+    }
+    renderCO2Anim();
+  }, 60);
 }
 
 function renderMeta() {
@@ -373,6 +423,8 @@ async function init() {
     renderYearly();
   });
   renderYearly();
+  renderCO2Anim();
+  document.getElementById("co2-play-btn").addEventListener("click", toggleCO2Playback);
   renderKPIs();
   renderMix();
   renderCO2();

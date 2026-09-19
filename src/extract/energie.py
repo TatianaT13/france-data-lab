@@ -112,3 +112,28 @@ def fetch_regional_yearly() -> list[dict]:
             break
         offset += 100
     return records
+
+
+def fetch_national_co2_monthly() -> list[dict]:
+    """Intensité carbone moyenne mensuelle nationale (éCO2mix consolidé, depuis 2012)."""
+    records, offset = [], 0
+    while True:
+        data = _get(
+            "eco2mix-national-cons-def",
+            select="avg(taux_co2) as co2",
+            group_by="year(date_heure), month(date_heure)",
+            order_by="year(date_heure), month(date_heure)",
+            limit=100,
+            offset=offset,
+        )
+        batch = data["results"]
+        records.extend(batch)
+        if len(batch) < 100:
+            break
+        offset += 100
+    rows = [
+        {"mois": f"{r['year(date_heure)']}-{r['month(date_heure)']:02d}", "co2": round(r["co2"], 1)}
+        for r in records
+        if r.get("co2") is not None and r["year(date_heure)"] >= 2012
+    ]
+    return sorted(rows, key=lambda r: r["mois"])
