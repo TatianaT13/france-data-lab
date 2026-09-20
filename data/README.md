@@ -26,7 +26,7 @@ python -m src.extract.build_dataset          # télécharge 2021-2024 et régén
   mensuelle), `dvf_meta.json` (date de mise à jour).
 - Rafraîchi automatiquement chaque semaine par `.github/workflows/update-data.yml`.
 - Visualisé dans [`dashboards/dvf_dashboard.py`](../dashboards/dvf_dashboard.py) et
-  [`website/index.html`](../website/index.html).
+  [`website/immobilier.html`](../website/immobilier.html).
 
 ### Emploi (taux de chômage)
 

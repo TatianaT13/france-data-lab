@@ -3,148 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Observatoire immobilier français</title>
-  <meta name="description" content="Prix de l'immobilier par département en France, à partir des données DVF (data.gouv.fr)." />
+  <title>France Data Lab : immobilier, emploi, énergie, air en open data</title>
+  <meta name="description" content="Quatre observatoires interactifs sur données ouvertes françaises : prix de l'immobilier, chômage, mix électrique et qualité de l'air, par département ou région." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#2a78d6" />
+  <meta name="author" content="Tatiana Tarasenko" />
+  <link rel="canonical" href="https://tatianat13.github.io/france-data-lab/" />
+  <link rel="alternate" hreflang="fr" href="https://tatianat13.github.io/france-data-lab/" />
+  <link rel="alternate" hreflang="x-default" href="https://tatianat13.github.io/france-data-lab/" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/icon-512.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="France Data Lab" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:title" content="France Data Lab : immobilier, emploi, énergie, air en open data" />
+  <meta property="og:description" content="Quatre observatoires interactifs sur données ouvertes françaises : prix de l'immobilier, chômage, mix électrique et qualité de l'air, par département ou région." />
+  <meta property="og:url" content="https://tatianat13.github.io/france-data-lab/" />
+  <meta property="og:image" content="https://tatianat13.github.io/france-data-lab/assets/og-home.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="France Data Lab : immobilier, emploi, énergie, air en open data" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="France Data Lab : immobilier, emploi, énergie, air en open data" />
+  <meta name="twitter:description" content="Quatre observatoires interactifs sur données ouvertes françaises : prix de l'immobilier, chômage, mix électrique et qualité de l'air, par département ou région." />
+  <meta name="twitter:image" content="https://tatianat13.github.io/france-data-lab/assets/og-home.png" />
+  <link rel="preconnect" href="https://cdn.plot.ly" crossorigin />
   <link rel="stylesheet" href="assets/style.css" />
-  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/", "inLanguage": "fr-FR", "description": "Quatre observatoires interactifs sur données ouvertes françaises : prix de l'immobilier, chômage, mix électrique et qualité de l'air, par département ou région."}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://tatianat13.github.io/france-data-lab/"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "CollectionPage", "name": "France Data Lab : immobilier, emploi, énergie, air en open data", "url": "https://tatianat13.github.io/france-data-lab/", "description": "Quatre observatoires interactifs sur données ouvertes françaises : prix de l'immobilier, chômage, mix électrique et qualité de l'air, par département ou région.", "inLanguage": "fr-FR", "hasPart": [{"@type": "WebPage", "name": "Immobilier", "url": "https://tatianat13.github.io/france-data-lab/immobilier.html"}, {"@type": "WebPage", "name": "Emploi", "url": "https://tatianat13.github.io/france-data-lab/emploi.html"}, {"@type": "WebPage", "name": "Énergie", "url": "https://tatianat13.github.io/france-data-lab/energie.html"}, {"@type": "WebPage", "name": "Air", "url": "https://tatianat13.github.io/france-data-lab/air.html"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Tatiana Tarasenko", "sameAs": ["https://github.com/TatianaT13"], "url": "https://tatianat13.github.io/france-data-lab/"}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Qu'est-ce que France Data Lab ?", "acceptedAnswer": {"@type": "Answer", "text": "Un ensemble d'observatoires interactifs bâtis sur des données ouvertes françaises. Chaque page transforme un jeu de données publié par une administration en cartes, courbes et classements lisibles."}}, {"@type": "Question", "name": "D'où viennent les données ?", "acceptedAnswer": {"@type": "Answer", "text": "De data.gouv.fr et des portails ouverts de l'INSEE, de la DGFiP, de RTE et du LCSQA. Chaque page indique sa source, sa méthode et ses limites."}}, {"@type": "Question", "name": "Les données sont-elles à jour ?", "acceptedAnswer": {"@type": "Answer", "text": "Oui : les sites se régénèrent automatiquement (chaque jour ou chaque semaine selon la source). La date de dernière mise à jour est affichée sur chaque page."}}, {"@type": "Question", "name": "Puis-je réutiliser les données ou le code ?", "acceptedAnswer": {"@type": "Answer", "text": "Le code est public sur GitHub. Les données agrégées sont téléchargeables au format JSON depuis le dossier data du site, dans le respect des licences des sources d'origine."}}]}</script>
 </head>
 <body>
-  <div class="app-shell">
-    <nav class="site-nav">
-      <a href="index.html" class="active">Immobilier</a>
+  <main class="app-shell">
+    <nav class="site-nav" aria-label="Navigation principale">
+      <a href="index.html" class="active">Accueil</a>
+      <a href="immobilier.html">Immobilier</a>
       <a href="emploi.html">Emploi</a>
       <a href="energie.html">Énergie</a>
       <a href="air.html">Air</a>
     </nav>
-    <div class="app-header">
+    <header class="app-header">
       <div>
-        <h1 class="app-title">Observatoire immobilier français 🇫🇷</h1>
-        <p class="app-subtitle">Prix de l'immobilier par département — DVF, data.gouv.fr</p>
+        <h1 class="app-title">France Data Lab 🇫🇷</h1>
+        <p class="app-subtitle">Des données ouvertes françaises, rendues lisibles : quatre observatoires interactifs mis à jour automatiquement.</p>
       </div>
-      <div class="app-meta" id="last-updated"></div>
-    </div>
+    </header>
 
-    <div id="app-loading" class="loading">Chargement des données…</div>
+    <section class="hub-grid" aria-label="Les observatoires">
+        <article class="hub-card">
+          <h2><a href="immobilier.html">Immobilier</a></h2>
+          <p class="hub-sub">Prix au m² par département</p>
+          <p>Où les prix sont-ils les plus élevés, et comment ont-ils évolué depuis 2021 ? Carte animée, classement, maison contre appartement.</p>
+          <p class="hub-meta"><strong>Source :</strong> Ventes réelles (DVF, DGFiP / Etalab)<br /><strong>Mise à jour :</strong> Chaque semaine</p>
+          <a class="play-btn hub-cta" href="immobilier.html">Explorer : immobilier</a>
+        </article>
+        <article class="hub-card">
+          <h2><a href="emploi.html">Emploi</a></h2>
+          <p class="hub-sub">Taux de chômage par département</p>
+          <p>Quels départements sont les plus touchés par le chômage, et où le taux a-t-il monté en un an ? Carte, classement et outre-mer.</p>
+          <p class="hub-meta"><strong>Source :</strong> Taux de chômage localisé (INSEE)<br /><strong>Mise à jour :</strong> Chaque jour (nouveau trimestre tous les 3 mois)</p>
+          <a class="play-btn hub-cta" href="emploi.html">Explorer : emploi</a>
+        </article>
+        <article class="hub-card">
+          <h2><a href="energie.html">Énergie</a></h2>
+          <p class="hub-sub">Mix électrique et CO₂</p>
+          <p>Comment la France produit et consomme son électricité : nucléaire, solaire, éolien, intensité carbone et échanges avec les voisins.</p>
+          <p class="hub-meta"><strong>Source :</strong> RTE éCO2mix<br /><strong>Mise à jour :</strong> Chaque jour</p>
+          <a class="play-btn hub-cta" href="energie.html">Explorer : énergie</a>
+        </article>
+        <article class="hub-card">
+          <h2><a href="air.html">Air</a></h2>
+          <p class="hub-sub">Qualité de l'air par région</p>
+          <p>Dioxyde d'azote, particules fines et ozone depuis 2021, avec les repères de l'OMS et la saisonnalité.</p>
+          <p class="hub-meta"><strong>Source :</strong> LCSQA / Géod'air (stations de mesure)<br /><strong>Mise à jour :</strong> Chaque jour</p>
+          <a class="play-btn hub-cta" href="air.html">Explorer : air</a>
+        </article>
+    </section>
 
-    <div id="app-content" class="hidden">
-      <div class="filters-row">
-        <div class="filter-group">
-          <label class="filter-label" for="year-select">Année</label>
-          <div class="year-play-row">
-            <select id="year-select"></select>
-            <button type="button" id="play-btn" class="play-btn" title="Animer l'évolution année par année">▶ Animer</button>
-          </div>
-        </div>
-        <div class="filter-group">
-          <span class="filter-label">Type de bien</span>
-          <div class="radio-group">
-            <label><input type="radio" name="type" value="Tous" checked /> Tous</label>
-            <label><input type="radio" name="type" value="Appartement" /> Appartement</label>
-            <label><input type="radio" name="type" value="Maison" /> Maison</label>
-          </div>
-        </div>
-        <div class="filter-group">
-          <label class="filter-label" for="pieces-select">Nombre de pièces</label>
-          <select id="pieces-select">
-            <option value="Tous">Toutes</option>
-            <option value="Studio">Studio</option>
-            <option value="T2">T2</option>
-            <option value="T3">T3</option>
-            <option value="T4">T4</option>
-            <option value="T5+">T5+</option>
-          </select>
-        </div>
-      </div>
+    <details class="doc" open>
+      <summary>À propos de France Data Lab</summary>
+      <h3>Notre approche</h3>
+      <p>Chaque observatoire part d'un jeu de données <strong>officiel et ouvert</strong>, l'agrège de façon transparente et le présente avec des cartes, des courbes et des classements. Les méthodes de calcul, les sources et les limites sont expliquées sur chaque page, pour que les chiffres puissent être compris, vérifiés et critiqués.</p>
+      <h3>Mises à jour automatiques</h3>
+      <p>Des tâches planifiées sur GitHub récupèrent les nouvelles données, recalculent les indicateurs et redéploient le site sans intervention manuelle.</p>
+      <h3>Questions fréquentes</h3>
+      <dl>
+        <dt>Qu'est-ce que France Data Lab ?</dt><dd>Un ensemble d'observatoires interactifs bâtis sur des données ouvertes françaises. Chaque page transforme un jeu de données publié par une administration en cartes, courbes et classements lisibles.</dd>
+        <dt>D'où viennent les données ?</dt><dd>De data.gouv.fr et des portails ouverts de l'INSEE, de la DGFiP, de RTE et du LCSQA. Chaque page indique sa source, sa méthode et ses limites.</dd>
+        <dt>Les données sont-elles à jour ?</dt><dd>Oui : les sites se régénèrent automatiquement (chaque jour ou chaque semaine selon la source). La date de dernière mise à jour est affichée sur chaque page.</dd>
+        <dt>Puis-je réutiliser les données ou le code ?</dt><dd>Le code est public sur GitHub. Les données agrégées sont téléchargeables au format JSON depuis le dossier data du site, dans le respect des licences des sources d'origine.</dd>
+      </dl>
+      <div class="doc-bottom"></div>
+    </details>
 
-      <div class="kpi-row" id="kpi-row"></div>
-
-      <div class="insights" id="insights"></div>
-
-      <div class="chart-card full-width">
-        <div class="chart-title" id="trend-title"></div>
-        <div id="trend-graph"></div>
-      </div>
-
-      <div class="charts-grid">
-        <div class="chart-card">
-          <div class="chart-card-head">
-            <div class="chart-title" id="map-title"></div>
-            <div class="segmented" id="map-mode-toggle">
-              <button type="button" class="segmented-btn active" data-mode="niveau">Niveau</button>
-              <button type="button" class="segmented-btn" data-mode="evolution">Évolution</button>
-            </div>
-          </div>
-          <div id="map-graph"></div>
-        </div>
-        <div class="chart-card">
-          <div class="chart-card-head">
-            <div class="chart-title" id="bar-title"></div>
-            <div class="segmented" id="bar-sort-toggle">
-              <button type="button" class="segmented-btn active" data-sort="desc">+ chers</button>
-              <button type="button" class="segmented-btn" data-sort="asc">- chers</button>
-            </div>
-          </div>
-          <div id="bar-graph"></div>
-        </div>
-      </div>
-
-      <div class="charts-grid">
-        <div class="chart-card">
-          <div class="chart-title" id="movers-title"></div>
-          <div id="movers-graph"></div>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title" id="scatter-title"></div>
-          <div id="scatter-graph"></div>
-          <p class="chart-note">Chaque point est un département. Au-dessus de la ligne, la maison est plus chère au m² que l'appartement.</p>
-        </div>
-      </div>
-
-      <label class="table-toggle">
-        <input type="checkbox" id="table-toggle" /> Voir les données en tableau
-      </label>
-      <div id="table-container"></div>
-    </div>
-
-      <details class="doc" open>
-        <summary>À propos des données</summary>
-        <h3>Comment lire cette page</h3>
-        <ul>
-          <li>Le <strong>prix au m²</strong> est celui d'un bien « médian » : la moitié des ventes du département se font en dessous, l'autre moitié au-dessus. La médiane évite qu'une vente de luxe fausse le résultat.</li>
-          <li>La carte <strong>Niveau</strong> montre le prix de l'année choisie ; la carte <strong>Évolution</strong> montre de combien il a varié depuis la première année disponible.</li>
-          <li>Le bouton <strong>Animer</strong> fait défiler les années pour voir les prix bouger.</li>
-        </ul>
-        <h3>D'où viennent les données</h3>
-        <p>Les <strong>Demandes de valeurs foncières (DVF)</strong> : registre officiel des ventes immobilières publié par la Direction générale des Finances publiques, retraité par Etalab et diffusé sur <a href="https://www.data.gouv.fr/datasets/demandes-de-valeurs-foncieres-geolocalisees/" target="_blank" rel="noopener">data.gouv.fr</a>. Chaque ligne est une vente réellement enregistrée chez le notaire.</p>
-        <h3>Comment c'est calculé</h3>
-        <ul>
-          <li>On garde uniquement les <strong>ventes</strong> de maisons et d'appartements (pas les terrains, locaux d'activité, ni les échanges).</li>
-          <li>Prix au m² = valeur de la vente ÷ surface bâtie. On écarte les surfaces de moins de 8 m² et les prix hors de 300–25 000 €/m² (erreurs de saisie probables).</li>
-          <li>On calcule ensuite la médiane par département, année, type de bien et nombre de pièces.</li>
-        </ul>
-        <h3>Mise à jour</h3>
-        <p>Toutes les semaines, avec les années publiées par l'administration. Il y a un décalage de plusieurs mois entre une vente et sa publication : la dernière année peut être incomplète.</p>
-        <h3>Limites à connaître</h3>
-        <ul>
-          <li>Les départements du <strong>Bas-Rhin, Haut-Rhin et de la Moselle</strong> ne figurent pas dans DVF (régime foncier différent) : ils sont absents de la carte.</li>
-          <li>Les DOM apparaissent dans le tableau mais pas sur la carte.</li>
-          <li>Le prix ne tient pas compte de l'état du bien, de l'étage ou du quartier. Dans un département avec peu de ventes, la médiane bouge beaucoup d'une année à l'autre.</li>
-        </ul>
-        <h3>Glossaire</h3>
-        <dl>
-          <dt>Médiane</dt><dd>Valeur qui coupe les ventes en deux moitiés égales.</dd>
-          <dt>Studio, T2, T3…</dt><dd>Nombre de pièces principales (T3 = 3 pièces).</dd>
-        </dl>
-        <div class="doc-bottom"></div>
-      </details>
-
-    <div class="app-footer">
-      Données : <a href="https://www.data.gouv.fr/" target="_blank" rel="noopener">data.gouv.fr</a>
-      (DVF / Etalab) · Mis à jour automatiquement chaque semaine ·
-      <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
-    </div>
-  </div>
-
-  <script src="assets/app.js"></script>
+    <footer class="app-footer">
+      Données : <a href="https://www.data.gouv.fr/" target="_blank" rel="noopener">data.gouv.fr</a>, INSEE, RTE, LCSQA ·
+      <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source sur GitHub</a>
+    </footer>
+  </main>
 </body>
 </html>

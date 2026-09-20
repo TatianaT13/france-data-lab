@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prix de l'immobilier par département (DVF) | France Data Lab</title>
+  <meta name="description" content="Prix au m² des maisons et appartements par département en France, de 2021 à aujourd'hui : carte animée, évolutions, classement. Données DVF officielles." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#2a78d6" />
+  <meta name="author" content="Tatiana Tarasenko" />
+  <link rel="canonical" href="https://tatianat13.github.io/france-data-lab/immobilier.html" />
+  <link rel="alternate" hreflang="fr" href="https://tatianat13.github.io/france-data-lab/immobilier.html" />
+  <link rel="alternate" hreflang="x-default" href="https://tatianat13.github.io/france-data-lab/immobilier.html" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/icon-512.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="France Data Lab" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:title" content="Prix de l'immobilier par département (DVF) | France Data Lab" />
+  <meta property="og:description" content="Prix au m² des maisons et appartements par département en France, de 2021 à aujourd'hui : carte animée, évolutions, classement. Données DVF officielles." />
+  <meta property="og:url" content="https://tatianat13.github.io/france-data-lab/immobilier.html" />
+  <meta property="og:image" content="https://tatianat13.github.io/france-data-lab/assets/og-immobilier.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Prix de l'immobilier par département (DVF) | France Data Lab" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Prix de l'immobilier par département (DVF) | France Data Lab" />
+  <meta name="twitter:description" content="Prix au m² des maisons et appartements par département en France, de 2021 à aujourd'hui : carte animée, évolutions, classement. Données DVF officielles." />
+  <meta name="twitter:image" content="https://tatianat13.github.io/france-data-lab/assets/og-immobilier.png" />
+  <link rel="preconnect" href="https://cdn.plot.ly" crossorigin />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/", "inLanguage": "fr-FR", "description": "Quatre observatoires interactifs bâtis sur des données ouvertes françaises : prix de l'immobilier, chômage, mix électrique et qualité de l'air, par département ou région."}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://tatianat13.github.io/france-data-lab/"}, {"@type": "ListItem", "position": 2, "name": "Immobilier", "item": "https://tatianat13.github.io/france-data-lab/immobilier.html"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Prix de l'immobilier par département (DVF) | France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/immobilier.html", "description": "Prix au m² des maisons et appartements par département en France, de 2021 à aujourd'hui : carte animée, évolutions, classement. Données DVF officielles.", "inLanguage": "fr-FR", "isPartOf": {"@type": "WebSite", "url": "https://tatianat13.github.io/france-data-lab/", "name": "France Data Lab"}}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "Prix de l'immobilier par département en France (DVF, agrégé)", "description": "Prix médian au m² des ventes de maisons et d'appartements par département, année, type de bien et nombre de pièces, calculé à partir des Demandes de valeurs foncières (DVF).", "url": "https://tatianat13.github.io/france-data-lab/immobilier.html", "inLanguage": "fr-FR", "keywords": ["immobilier", "prix au m²", "DVF", "département", "maison", "appartement"], "creator": {"@type": "Organization", "name": "Direction générale des Finances publiques / Etalab"}, "isBasedOn": "https://www.data.gouv.fr/datasets/demandes-de-valeurs-foncieres-geolocalisees/", "temporalCoverage": "2021-01-01/..", "spatialCoverage": {"@type": "Place", "name": "France"}, "isAccessibleForFree": true, "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/dvf_dept_year.json"}, {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/dvf_month.json"}], "license": "https://www.etalab.gouv.fr/licence-ouverte-open-licence/"}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Comment est calculé le prix au m² ?", "acceptedAnswer": {"@type": "Answer", "text": "On divise la valeur de chaque vente par la surface bâtie, on écarte les valeurs aberrantes (moins de 8 m² ou hors de 300 à 25 000 €/m²) puis on prend la médiane par département."}}, {"@type": "Question", "name": "D'où viennent les données ?", "acceptedAnswer": {"@type": "Answer", "text": "Des Demandes de valeurs foncières (DVF), le registre officiel des ventes immobilières publié par la Direction générale des Finances publiques et diffusé sur data.gouv.fr."}}, {"@type": "Question", "name": "Pourquoi le Bas-Rhin, le Haut-Rhin et la Moselle sont-ils absents ?", "acceptedAnswer": {"@type": "Answer", "text": "Ces départements relèvent d'un régime foncier différent (livre foncier) et ne figurent pas dans la base DVF."}}, {"@type": "Question", "name": "Les prix affichés sont-ils à jour ?", "acceptedAnswer": {"@type": "Answer", "text": "Le site se met à jour chaque semaine avec les années publiées, mais l'administration publie les ventes avec plusieurs mois de décalage : la dernière année peut être incomplète."}}]}</script>
+</head>
+<body>
+  <main class="app-shell">
+    <nav class="site-nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="immobilier.html" class="active">Immobilier</a>
+      <a href="emploi.html">Emploi</a>
+      <a href="energie.html">Énergie</a>
+      <a href="air.html">Air</a>
+    </nav>
+    <div class="app-header">
+      <div>
+        <h1 class="app-title">Observatoire immobilier français 🇫🇷</h1>
+        <p class="app-subtitle">Prix de l'immobilier par département — DVF, data.gouv.fr</p>
+      </div>
+      <div class="app-meta" id="last-updated"></div>
+    </div>
+
+    <noscript><p class="loading">Cette page affiche des graphiques interactifs et nécessite JavaScript. Les explications sur les données restent lisibles ci-dessous.</p></noscript>
+    <div id="app-loading" class="loading">Chargement des données…</div>
+
+    <div id="app-content" class="hidden">
+      <div class="filters-row">
+        <div class="filter-group">
+          <label class="filter-label" for="year-select">Année</label>
+          <div class="year-play-row">
+            <select id="year-select"></select>
+            <button type="button" id="play-btn" class="play-btn" title="Animer l'évolution année par année">▶ Animer</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Type de bien</span>
+          <div class="radio-group">
+            <label><input type="radio" name="type" value="Tous" checked /> Tous</label>
+            <label><input type="radio" name="type" value="Appartement" /> Appartement</label>
+            <label><input type="radio" name="type" value="Maison" /> Maison</label>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label" for="pieces-select">Nombre de pièces</label>
+          <select id="pieces-select">
+            <option value="Tous">Toutes</option>
+            <option value="Studio">Studio</option>
+            <option value="T2">T2</option>
+            <option value="T3">T3</option>
+            <option value="T4">T4</option>
+            <option value="T5+">T5+</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="kpi-row" id="kpi-row"></div>
+
+      <div class="insights" id="insights"></div>
+
+      <div class="chart-card full-width">
+        <div class="chart-title" role="heading" aria-level="2" id="trend-title"></div>
+        <div id="trend-graph" role="img" aria-label="Courbe de l'évolution du prix médian au m² en France, par type de bien"></div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-card-head">
+            <div class="chart-title" role="heading" aria-level="2" id="map-title"></div>
+            <div class="segmented" id="map-mode-toggle">
+              <button type="button" class="segmented-btn active" data-mode="niveau">Niveau</button>
+              <button type="button" class="segmented-btn" data-mode="evolution">Évolution</button>
+            </div>
+          </div>
+          <div id="map-graph" role="img" aria-label="Carte des prix médians au m² par département"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-head">
+            <div class="chart-title" role="heading" aria-level="2" id="bar-title"></div>
+            <div class="segmented" id="bar-sort-toggle">
+              <button type="button" class="segmented-btn active" data-sort="desc">+ chers</button>
+              <button type="button" class="segmented-btn" data-sort="asc">- chers</button>
+            </div>
+          </div>
+          <div id="bar-graph" role="img" aria-label="Classement des 15 départements les plus ou les moins chers"></div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2" id="movers-title"></div>
+          <div id="movers-graph" role="img" aria-label="Plus fortes hausses et baisses de prix par département"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2" id="scatter-title"></div>
+          <div id="scatter-graph" role="img" aria-label="Nuage de points comparant le prix des maisons et des appartements par département"></div>
+          <p class="chart-note">Chaque point est un département. Au-dessus de la ligne, la maison est plus chère au m² que l'appartement.</p>
+        </div>
+      </div>
+
+      <label class="table-toggle">
+        <input type="checkbox" id="table-toggle" /> Voir les données en tableau
+      </label>
+      <div id="table-container"></div>
+    </div>
+
+      <details class="doc" open>
+        <summary>À propos des données</summary>
+        <h3>Comment lire cette page</h3>
+        <ul>
+          <li>Le <strong>prix au m²</strong> est celui d'un bien « médian » : la moitié des ventes du département se font en dessous, l'autre moitié au-dessus. La médiane évite qu'une vente de luxe fausse le résultat.</li>
+          <li>La carte <strong>Niveau</strong> montre le prix de l'année choisie ; la carte <strong>Évolution</strong> montre de combien il a varié depuis la première année disponible.</li>
+          <li>Le bouton <strong>Animer</strong> fait défiler les années pour voir les prix bouger.</li>
+        </ul>
+        <h3>D'où viennent les données</h3>
+        <p>Les <strong>Demandes de valeurs foncières (DVF)</strong> : registre officiel des ventes immobilières publié par la Direction générale des Finances publiques, retraité par Etalab et diffusé sur <a href="https://www.data.gouv.fr/datasets/demandes-de-valeurs-foncieres-geolocalisees/" target="_blank" rel="noopener">data.gouv.fr</a>. Chaque ligne est une vente réellement enregistrée chez le notaire.</p>
+        <h3>Comment c'est calculé</h3>
+        <ul>
+          <li>On garde uniquement les <strong>ventes</strong> de maisons et d'appartements (pas les terrains, locaux d'activité, ni les échanges).</li>
+          <li>Prix au m² = valeur de la vente ÷ surface bâtie. On écarte les surfaces de moins de 8 m² et les prix hors de 300–25 000 €/m² (erreurs de saisie probables).</li>
+          <li>On calcule ensuite la médiane par département, année, type de bien et nombre de pièces.</li>
+        </ul>
+        <h3>Mise à jour</h3>
+        <p>Toutes les semaines, avec les années publiées par l'administration. Il y a un décalage de plusieurs mois entre une vente et sa publication : la dernière année peut être incomplète.</p>
+        <h3>Limites à connaître</h3>
+        <ul>
+          <li>Les départements du <strong>Bas-Rhin, Haut-Rhin et de la Moselle</strong> ne figurent pas dans DVF (régime foncier différent) : ils sont absents de la carte.</li>
+          <li>Les DOM apparaissent dans le tableau mais pas sur la carte.</li>
+          <li>Le prix ne tient pas compte de l'état du bien, de l'étage ou du quartier. Dans un département avec peu de ventes, la médiane bouge beaucoup d'une année à l'autre.</li>
+        </ul>
+        <h3>Glossaire</h3>
+        <dl>
+          <dt>Médiane</dt><dd>Valeur qui coupe les ventes en deux moitiés égales.</dd>
+          <dt>Studio, T2, T3…</dt><dd>Nombre de pièces principales (T3 = 3 pièces).</dd>
+        </dl>
+        <h3>Questions fréquentes</h3>
+        <dl>
+          <dt>Comment est calculé le prix au m² ?</dt><dd>On divise la valeur de chaque vente par la surface bâtie, on écarte les valeurs aberrantes (moins de 8 m² ou hors de 300 à 25 000 €/m²) puis on prend la médiane par département.</dd>
+          <dt>D'où viennent les données ?</dt><dd>Des Demandes de valeurs foncières (DVF), le registre officiel des ventes immobilières publié par la Direction générale des Finances publiques et diffusé sur data.gouv.fr.</dd>
+          <dt>Pourquoi le Bas-Rhin, le Haut-Rhin et la Moselle sont-ils absents ?</dt><dd>Ces départements relèvent d'un régime foncier différent (livre foncier) et ne figurent pas dans la base DVF.</dd>
+          <dt>Les prix affichés sont-ils à jour ?</dt><dd>Le site se met à jour chaque semaine avec les années publiées, mais l'administration publie les ventes avec plusieurs mois de décalage : la dernière année peut être incomplète.</dd>
+        </dl>
+        <div class="doc-bottom"></div>
+      </details>
+
+    <div class="app-footer">
+      Données : <a href="https://www.data.gouv.fr/" target="_blank" rel="noopener">data.gouv.fr</a>
+      (DVF / Etalab) · Mis à jour automatiquement chaque semaine ·
+      <a href="index.html">Autres observatoires</a> · <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
+    </div>
+  </main>
+
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
+  <script src="assets/app.js" defer></script>
+</body>
+</html>

@@ -3,15 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Observatoire de la qualité de l'air</title>
-  <meta name="description" content="Concentrations de polluants (NO2, PM10, PM2.5, ozone) par région en France, données LCSQA / Géod'air (data.gouv.fr)." />
+  <title>Qualité de l'air par région : NO₂, PM10, ozone | France Data Lab</title>
+  <meta name="description" content="Concentrations de dioxyde d'azote, particules fines (PM10, PM2,5) et ozone par région en France depuis 2021, avec les repères de l'OMS. Données LCSQA / Géod'air." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#2a78d6" />
+  <meta name="author" content="Tatiana Tarasenko" />
+  <link rel="canonical" href="https://tatianat13.github.io/france-data-lab/air.html" />
+  <link rel="alternate" hreflang="fr" href="https://tatianat13.github.io/france-data-lab/air.html" />
+  <link rel="alternate" hreflang="x-default" href="https://tatianat13.github.io/france-data-lab/air.html" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/icon-512.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="France Data Lab" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:title" content="Qualité de l'air par région : NO₂, PM10, ozone | France Data Lab" />
+  <meta property="og:description" content="Concentrations de dioxyde d'azote, particules fines (PM10, PM2,5) et ozone par région en France depuis 2021, avec les repères de l'OMS. Données LCSQA / Géod'air." />
+  <meta property="og:url" content="https://tatianat13.github.io/france-data-lab/air.html" />
+  <meta property="og:image" content="https://tatianat13.github.io/france-data-lab/assets/og-air.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Qualité de l'air par région : NO₂, PM10, ozone | France Data Lab" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Qualité de l'air par région : NO₂, PM10, ozone | France Data Lab" />
+  <meta name="twitter:description" content="Concentrations de dioxyde d'azote, particules fines (PM10, PM2,5) et ozone par région en France depuis 2021, avec les repères de l'OMS. Données LCSQA / Géod'air." />
+  <meta name="twitter:image" content="https://tatianat13.github.io/france-data-lab/assets/og-air.png" />
+  <link rel="preconnect" href="https://cdn.plot.ly" crossorigin />
   <link rel="stylesheet" href="assets/style.css" />
-  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/", "inLanguage": "fr-FR", "description": "Quatre observatoires interactifs bâtis sur des données ouvertes françaises : prix de l'immobilier, chômage, mix électrique et qualité de l'air, par département ou région."}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://tatianat13.github.io/france-data-lab/"}, {"@type": "ListItem", "position": 2, "name": "Air", "item": "https://tatianat13.github.io/france-data-lab/air.html"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Qualité de l'air par région : NO₂, PM10, ozone | France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/air.html", "description": "Concentrations de dioxyde d'azote, particules fines (PM10, PM2,5) et ozone par région en France depuis 2021, avec les repères de l'OMS. Données LCSQA / Géod'air.", "inLanguage": "fr-FR", "isPartOf": {"@type": "WebSite", "url": "https://tatianat13.github.io/france-data-lab/", "name": "France Data Lab"}}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "Concentrations de polluants de l'air par région en France (agrégé)", "description": "Concentrations moyennes de NO2, PM10, PM2,5 et ozone par région, calculées à partir des mesures horaires des stations de surveillance (LCSQA / Géod'air).", "url": "https://tatianat13.github.io/france-data-lab/air.html", "inLanguage": "fr-FR", "keywords": ["qualité de l'air", "pollution", "NO2", "PM10", "PM2,5", "ozone", "OMS"], "creator": {"@type": "Organization", "name": "LCSQA / associations agréées de surveillance de la qualité de l'air"}, "isBasedOn": "https://www.data.gouv.fr/datasets/5b98b648634f415309d52a50/", "temporalCoverage": "2021-01-01/..", "spatialCoverage": {"@type": "Place", "name": "France"}, "isAccessibleForFree": true, "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/air_monthly.json"}, {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/air_latest.json"}], "license": "https://www.etalab.gouv.fr/licence-ouverte-open-licence/"}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Quels polluants sont mesurés ?", "acceptedAnswer": {"@type": "Answer", "text": "Le dioxyde d'azote (NO₂), les particules fines PM10 et PM2,5, et l'ozone (O₃), quatre polluants réglementés surveillés par les stations des associations agréées de surveillance de la qualité de l'air."}}, {"@type": "Question", "name": "Quels sont les seuils recommandés par l'OMS ?", "acceptedAnswer": {"@type": "Answer", "text": "Les lignes directrices 2021 de l'OMS fixent des repères annuels de 10 µg/m³ pour le NO₂, 15 µg/m³ pour les PM10 et 5 µg/m³ pour les PM2,5."}}, {"@type": "Question", "name": "Pourquoi un seul relevé par mois ?", "acceptedAnswer": {"@type": "Answer", "text": "L'historique utilise le 15 de chaque mois pour éviter de télécharger des dizaines de gigaoctets. Il indique les grandes tendances et la saisonnalité, pas une moyenne mensuelle exacte."}}, {"@type": "Question", "name": "L'ozone est-il plus élevé l'été ?", "acceptedAnswer": {"@type": "Answer", "text": "Oui : il se forme par réaction chimique sous l'effet du soleil, avec des pics l'après-midi en période chaude."}}]}</script>
 </head>
 <body>
-  <div class="app-shell">
-    <nav class="site-nav">
-      <a href="index.html">Immobilier</a>
+  <main class="app-shell">
+    <nav class="site-nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="immobilier.html">Immobilier</a>
       <a href="emploi.html">Emploi</a>
       <a href="energie.html">Énergie</a>
       <a href="air.html" class="active">Air</a>
@@ -24,6 +53,7 @@
       <div class="app-meta" id="last-updated"></div>
     </div>
 
+    <noscript><p class="loading">Cette page affiche des graphiques interactifs et nécessite JavaScript. Les explications sur les données restent lisibles ci-dessous.</p></noscript>
     <div id="app-loading" class="loading">Chargement des données…</div>
 
     <div id="app-content" class="hidden">
@@ -33,7 +63,7 @@
 
       <div class="chart-card full-width">
         <div class="chart-card-head">
-          <div class="chart-title" id="anim-title"></div>
+          <div class="chart-title" role="heading" aria-level="2" id="anim-title"></div>
           <div class="year-play-row">
             <div class="segmented" id="pollutant-toggle">
               <button type="button" class="segmented-btn active" data-p="no2">NO₂</button>
@@ -45,29 +75,29 @@
           </div>
         </div>
         <input type="range" id="month-slider" class="year-slider" />
-        <div id="anim-graph"></div>
+        <div id="anim-graph" role="img" aria-label="Carte animée des concentrations de polluants par région depuis 2021"></div>
         <p class="chart-note">Moyenne par région des stations de mesure, un relevé par mois (le 15) depuis 2021. Concentrations en µg/m³.</p>
       </div>
 
       <div class="chart-card full-width">
-        <div class="chart-title">Évolution nationale des concentrations (moyenne des régions, un relevé par mois)</div>
-        <div id="trend-graph"></div>
+        <div class="chart-title" role="heading" aria-level="2">Évolution nationale des concentrations (moyenne des régions, un relevé par mois)</div>
+        <div id="trend-graph" role="img" aria-label="Courbes de l'évolution nationale des quatre polluants"></div>
       </div>
 
       <div class="chart-card full-width">
-        <div class="chart-title" id="heat-title"></div>
-        <div id="heat-graph"></div>
+        <div class="chart-title" role="heading" aria-level="2" id="heat-title"></div>
+        <div id="heat-graph" role="img" aria-label="Grille saisonnière des concentrations par mois et par année"></div>
         <p class="chart-note">Chaque case est la moyenne nationale d'un relevé mensuel. Les saisons se lisent d'un coup d'œil : particules et NO₂ montent en hiver, l'ozone en été.</p>
       </div>
 
       <div class="charts-grid">
         <div class="chart-card">
-          <div class="chart-title" id="hourly-title"></div>
-          <div id="hourly-graph"></div>
+          <div class="chart-title" role="heading" aria-level="2" id="hourly-title"></div>
+          <div id="hourly-graph" role="img" aria-label="Profil horaire des concentrations sur la dernière journée complète"></div>
         </div>
         <div class="chart-card">
-          <div class="chart-title" id="bar-title"></div>
-          <div id="bar-graph"></div>
+          <div class="chart-title" role="heading" aria-level="2" id="bar-title"></div>
+          <div id="bar-graph" role="img" aria-label="Classement des régions par concentration avec le repère OMS"></div>
         </div>
       </div>
     </div>
@@ -103,16 +133,24 @@
           <dt>Ozone (O₃)</dt><dd>Formé par réaction chimique sous le soleil : il est plus élevé l'été, l'après-midi.</dd>
           <dt>µg/m³</dt><dd>Microgramme par mètre cube d'air.</dd>
         </dl>
+        <h3>Questions fréquentes</h3>
+        <dl>
+          <dt>Quels polluants sont mesurés ?</dt><dd>Le dioxyde d'azote (NO₂), les particules fines PM10 et PM2,5, et l'ozone (O₃), quatre polluants réglementés surveillés par les stations des associations agréées de surveillance de la qualité de l'air.</dd>
+          <dt>Quels sont les seuils recommandés par l'OMS ?</dt><dd>Les lignes directrices 2021 de l'OMS fixent des repères annuels de 10 µg/m³ pour le NO₂, 15 µg/m³ pour les PM10 et 5 µg/m³ pour les PM2,5.</dd>
+          <dt>Pourquoi un seul relevé par mois ?</dt><dd>L'historique utilise le 15 de chaque mois pour éviter de télécharger des dizaines de gigaoctets. Il indique les grandes tendances et la saisonnalité, pas une moyenne mensuelle exacte.</dd>
+          <dt>L'ozone est-il plus élevé l'été ?</dt><dd>Oui : il se forme par réaction chimique sous l'effet du soleil, avec des pics l'après-midi en période chaude.</dd>
+        </dl>
         <div class="doc-bottom"></div>
       </details>
 
     <div class="app-footer">
       Données : <a href="https://www.data.gouv.fr/datasets/5b98b648634f415309d52a50/" target="_blank" rel="noopener">data.gouv.fr</a>
       (LCSQA / Géod'air, stations des AASQA) · Mis à jour automatiquement chaque jour ·
-      <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
+      <a href="index.html">Autres observatoires</a> · <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
     </div>
-  </div>
+  </main>
 
-  <script src="assets/air.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
+  <script src="assets/air.js" defer></script>
 </body>
 </html>

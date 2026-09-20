@@ -3,15 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Observatoire de l'emploi français</title>
-  <meta name="description" content="Taux de chômage par département en France, à partir des données INSEE (data.gouv.fr)." />
+  <title>Taux de chômage par département (INSEE) | France Data Lab</title>
+  <meta name="description" content="Taux de chômage localisé par département en France (INSEE) : carte, évolution sur un an, classement des départements et comparaison avec l'outre-mer." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#2a78d6" />
+  <meta name="author" content="Tatiana Tarasenko" />
+  <link rel="canonical" href="https://tatianat13.github.io/france-data-lab/emploi.html" />
+  <link rel="alternate" hreflang="fr" href="https://tatianat13.github.io/france-data-lab/emploi.html" />
+  <link rel="alternate" hreflang="x-default" href="https://tatianat13.github.io/france-data-lab/emploi.html" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/icon-512.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="France Data Lab" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:title" content="Taux de chômage par département (INSEE) | France Data Lab" />
+  <meta property="og:description" content="Taux de chômage localisé par département en France (INSEE) : carte, évolution sur un an, classement des départements et comparaison avec l'outre-mer." />
+  <meta property="og:url" content="https://tatianat13.github.io/france-data-lab/emploi.html" />
+  <meta property="og:image" content="https://tatianat13.github.io/france-data-lab/assets/og-emploi.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Taux de chômage par département (INSEE) | France Data Lab" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Taux de chômage par département (INSEE) | France Data Lab" />
+  <meta name="twitter:description" content="Taux de chômage localisé par département en France (INSEE) : carte, évolution sur un an, classement des départements et comparaison avec l'outre-mer." />
+  <meta name="twitter:image" content="https://tatianat13.github.io/france-data-lab/assets/og-emploi.png" />
+  <link rel="preconnect" href="https://cdn.plot.ly" crossorigin />
   <link rel="stylesheet" href="assets/style.css" />
-  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/", "inLanguage": "fr-FR", "description": "Quatre observatoires interactifs bâtis sur des données ouvertes françaises : prix de l'immobilier, chômage, mix électrique et qualité de l'air, par département ou région."}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://tatianat13.github.io/france-data-lab/"}, {"@type": "ListItem", "position": 2, "name": "Emploi", "item": "https://tatianat13.github.io/france-data-lab/emploi.html"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Taux de chômage par département (INSEE) | France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/emploi.html", "description": "Taux de chômage localisé par département en France (INSEE) : carte, évolution sur un an, classement des départements et comparaison avec l'outre-mer.", "inLanguage": "fr-FR", "isPartOf": {"@type": "WebSite", "url": "https://tatianat13.github.io/france-data-lab/", "name": "France Data Lab"}}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "Taux de chômage localisé par département en France", "description": "Taux de chômage localisé au sens du BIT (INSEE) pour chaque département : trimestre le plus récent, trimestre précédent et même trimestre un an plus tôt.", "url": "https://tatianat13.github.io/france-data-lab/emploi.html", "inLanguage": "fr-FR", "keywords": ["chômage", "emploi", "INSEE", "département", "taux de chômage"], "creator": {"@type": "Organization", "name": "INSEE, republié par le Département de la Seine-Saint-Denis"}, "isBasedOn": "https://www.data.gouv.fr/datasets/6a0eb9ef4780a16c39e21b76/", "temporalCoverage": "2024-10-01/..", "spatialCoverage": {"@type": "Place", "name": "France"}, "isAccessibleForFree": true, "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/chomage_dept.json"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Quelle différence entre le taux de chômage de l'INSEE et le nombre d'inscrits à France Travail ?", "acceptedAnswer": {"@type": "Answer", "text": "Le taux de l'INSEE suit la définition internationale du BIT (sans emploi, disponible, en recherche active) alors que France Travail compte les personnes inscrites, qui n'ont pas toutes les mêmes situations."}}, {"@type": "Question", "name": "Que signifie « (p) » à côté d'un trimestre ?", "acceptedAnswer": {"@type": "Answer", "text": "Le chiffre est provisoire : l'INSEE le révisera dans les publications suivantes."}}, {"@type": "Question", "name": "Qu'est-ce qu'un point de pourcentage ?", "acceptedAnswer": {"@type": "Answer", "text": "C'est l'écart entre deux taux : passer de 7,3 % à 7,9 % représente une hausse de 0,6 point, et non de 0,6 %."}}]}</script>
 </head>
 <body>
-  <div class="app-shell">
-    <nav class="site-nav">
-      <a href="index.html">Immobilier</a>
+  <main class="app-shell">
+    <nav class="site-nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="immobilier.html">Immobilier</a>
       <a href="emploi.html" class="active">Emploi</a>
       <a href="energie.html">Énergie</a>
       <a href="air.html">Air</a>
@@ -24,6 +53,7 @@
       <div class="app-meta" id="last-updated"></div>
     </div>
 
+    <noscript><p class="loading">Cette page affiche des graphiques interactifs et nécessite JavaScript. Les explications sur les données restent lisibles ci-dessous.</p></noscript>
     <div id="app-loading" class="loading">Chargement des données…</div>
 
     <div id="app-content" class="hidden">
@@ -34,40 +64,40 @@
       <div class="charts-grid">
         <div class="chart-card">
           <div class="chart-card-head">
-            <div class="chart-title" id="map-title"></div>
+            <div class="chart-title" role="heading" aria-level="2" id="map-title"></div>
             <div class="segmented" id="map-mode-toggle">
               <button type="button" class="segmented-btn active" data-mode="niveau">Niveau</button>
               <button type="button" class="segmented-btn" data-mode="evolution">Évolution</button>
             </div>
           </div>
-          <div id="map-graph"></div>
+          <div id="map-graph" role="img" aria-label="Carte du taux de chômage par département"></div>
         </div>
         <div class="chart-card">
           <div class="chart-card-head">
-            <div class="chart-title" id="bar-title"></div>
+            <div class="chart-title" role="heading" aria-level="2" id="bar-title"></div>
             <div class="segmented" id="bar-sort-toggle">
               <button type="button" class="segmented-btn active" data-sort="desc">+ touchés</button>
               <button type="button" class="segmented-btn" data-sort="asc">- touchés</button>
             </div>
           </div>
-          <div id="bar-graph"></div>
+          <div id="bar-graph" role="img" aria-label="Classement des départements les plus ou les moins touchés par le chômage"></div>
         </div>
       </div>
 
       <div class="chart-card full-width">
-        <div class="chart-title" id="dumbbell-title"></div>
-        <div id="dumbbell-graph"></div>
+        <div class="chart-title" role="heading" aria-level="2" id="dumbbell-title"></div>
+        <div id="dumbbell-graph" role="img" aria-label="Évolution du taux de chômage sur un an pour les 20 départements les plus touchés"></div>
         <p class="chart-note">Chaque ligne relie le taux d'il y a un an (rond vide) au taux actuel (rond plein) pour les 20 départements où il est le plus élevé.</p>
       </div>
 
       <div class="charts-grid">
         <div class="chart-card">
-          <div class="chart-title">Combien de départements pour chaque niveau de chômage ?</div>
-          <div id="hist-graph"></div>
+          <div class="chart-title" role="heading" aria-level="2">Combien de départements pour chaque niveau de chômage ?</div>
+          <div id="hist-graph" role="img" aria-label="Histogramme de la répartition des départements par niveau de chômage"></div>
         </div>
         <div class="chart-card">
-          <div class="chart-title">Outre-mer et France : taux de chômage</div>
-          <div id="dom-graph"></div>
+          <div class="chart-title" role="heading" aria-level="2">Outre-mer et France : taux de chômage</div>
+          <div id="dom-graph" role="img" aria-label="Taux de chômage dans les départements d'outre-mer comparé à la France"></div>
           <p class="chart-note">Les DOM ne figurent pas sur la carte mais sont dans le tableau et ici.</p>
         </div>
       </div>
@@ -101,6 +131,12 @@
           <dt>Au sens du BIT</dt><dd>Définition internationale : sans emploi, disponible et à la recherche d'un emploi. Elle diffère du nombre d'inscrits à France Travail.</dd>
           <dt>Population active</dt><dd>Personnes ayant un emploi ou en recherchant un.</dd>
         </dl>
+        <h3>Questions fréquentes</h3>
+        <dl>
+          <dt>Quelle différence entre le taux de chômage de l'INSEE et le nombre d'inscrits à France Travail ?</dt><dd>Le taux de l'INSEE suit la définition internationale du BIT (sans emploi, disponible, en recherche active) alors que France Travail compte les personnes inscrites, qui n'ont pas toutes les mêmes situations.</dd>
+          <dt>Que signifie « (p) » à côté d'un trimestre ?</dt><dd>Le chiffre est provisoire : l'INSEE le révisera dans les publications suivantes.</dd>
+          <dt>Qu'est-ce qu'un point de pourcentage ?</dt><dd>C'est l'écart entre deux taux : passer de 7,3 % à 7,9 % représente une hausse de 0,6 point, et non de 0,6 %.</dd>
+        </dl>
         <div class="doc-bottom"></div>
       </details>
 
@@ -108,10 +144,11 @@
       Données : <a href="https://www.data.gouv.fr/" target="_blank" rel="noopener">data.gouv.fr</a>
       (taux de chômage localisé INSEE, republié par le Département de Seine-Saint-Denis) ·
       Vérifié automatiquement chaque jour ·
-      <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
+      <a href="index.html">Autres observatoires</a> · <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
     </div>
-  </div>
+  </main>
 
-  <script src="assets/emploi.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
+  <script src="assets/emploi.js" defer></script>
 </body>
 </html>

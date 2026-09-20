@@ -3,15 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Observatoire de l'énergie français</title>
-  <meta name="description" content="Consommation, mix de production électrique et échanges internationaux en France, en temps quasi réel (RTE éCO2mix)." />
+  <title>Mix électrique, consommation et CO₂ en France | France Data Lab</title>
+  <meta name="description" content="Consommation d'électricité, mix de production (nucléaire, solaire, éolien…), intensité carbone et échanges avec les pays voisins en France. Données RTE éCO2mix." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#2a78d6" />
+  <meta name="author" content="Tatiana Tarasenko" />
+  <link rel="canonical" href="https://tatianat13.github.io/france-data-lab/energie.html" />
+  <link rel="alternate" hreflang="fr" href="https://tatianat13.github.io/france-data-lab/energie.html" />
+  <link rel="alternate" hreflang="x-default" href="https://tatianat13.github.io/france-data-lab/energie.html" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/icon-512.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="France Data Lab" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:title" content="Mix électrique, consommation et CO₂ en France | France Data Lab" />
+  <meta property="og:description" content="Consommation d'électricité, mix de production (nucléaire, solaire, éolien…), intensité carbone et échanges avec les pays voisins en France. Données RTE éCO2mix." />
+  <meta property="og:url" content="https://tatianat13.github.io/france-data-lab/energie.html" />
+  <meta property="og:image" content="https://tatianat13.github.io/france-data-lab/assets/og-energie.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Mix électrique, consommation et CO₂ en France | France Data Lab" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Mix électrique, consommation et CO₂ en France | France Data Lab" />
+  <meta name="twitter:description" content="Consommation d'électricité, mix de production (nucléaire, solaire, éolien…), intensité carbone et échanges avec les pays voisins en France. Données RTE éCO2mix." />
+  <meta name="twitter:image" content="https://tatianat13.github.io/france-data-lab/assets/og-energie.png" />
+  <link rel="preconnect" href="https://cdn.plot.ly" crossorigin />
   <link rel="stylesheet" href="assets/style.css" />
-  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/", "inLanguage": "fr-FR", "description": "Quatre observatoires interactifs bâtis sur des données ouvertes françaises : prix de l'immobilier, chômage, mix électrique et qualité de l'air, par département ou région."}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://tatianat13.github.io/france-data-lab/"}, {"@type": "ListItem", "position": 2, "name": "Énergie", "item": "https://tatianat13.github.io/france-data-lab/energie.html"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Mix électrique, consommation et CO₂ en France | France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/energie.html", "description": "Consommation d'électricité, mix de production (nucléaire, solaire, éolien…), intensité carbone et échanges avec les pays voisins en France. Données RTE éCO2mix.", "inLanguage": "fr-FR", "isPartOf": {"@type": "WebSite", "url": "https://tatianat13.github.io/france-data-lab/", "name": "France Data Lab"}}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "Consommation et mix de production électrique en France (éCO2mix, agrégé)", "description": "Consommation, production par filière, intensité carbone et échanges physiques d'électricité en France, au niveau national et régional, issus de RTE éCO2mix.", "url": "https://tatianat13.github.io/france-data-lab/energie.html", "inLanguage": "fr-FR", "keywords": ["électricité", "énergie", "nucléaire", "solaire", "éolien", "CO2", "RTE", "éCO2mix"], "creator": {"@type": "Organization", "name": "RTE"}, "isBasedOn": "https://opendata.reseaux-energies.fr/", "temporalCoverage": "2012-01-01/..", "spatialCoverage": {"@type": "Place", "name": "France"}, "isAccessibleForFree": true, "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/energie_latest.json"}, {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/energie_history.json"}, {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/energie_yearly.json"}, {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/energie_co2_monthly.json"}], "license": "https://www.etalab.gouv.fr/licence-ouverte-open-licence/"}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Qu'est-ce que l'intensité carbone de l'électricité ?", "acceptedAnswer": {"@type": "Answer", "text": "C'est la quantité de CO₂ émise pour produire un kilowattheure, exprimée en grammes par kWh. Elle est basse quand le nucléaire, l'hydraulique, l'éolien et le solaire dominent."}}, {"@type": "Question", "name": "Quelle est la différence entre MW et MWh ?", "acceptedAnswer": {"@type": "Answer", "text": "Le mégawatt (MW) mesure une puissance à un instant donné, le mégawattheure (MWh) une énergie produite ou consommée sur une durée. Cette page affiche des puissances en MW."}}, {"@type": "Question", "name": "Pourquoi la part renouvelable d'une région n'est-elle pas ce qu'elle consomme ?", "acceptedAnswer": {"@type": "Answer", "text": "Elle porte sur l'électricité produite dans la région. Les régions sont interconnectées : certaines, comme l'Île-de-France, produisent peu et importent l'essentiel de leur consommation."}}, {"@type": "Question", "name": "Ces données sont-elles en direct ?", "acceptedAnswer": {"@type": "Answer", "text": "Elles viennent de mesures au pas de 15 minutes, mais le site n'est régénéré qu'une fois par jour : la page montre l'état du réseau lors de la dernière mise à jour."}}]}</script>
 </head>
 <body>
-  <div class="app-shell">
-    <nav class="site-nav">
-      <a href="index.html">Immobilier</a>
+  <main class="app-shell">
+    <nav class="site-nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="immobilier.html">Immobilier</a>
       <a href="emploi.html">Emploi</a>
       <a href="energie.html" class="active">Énergie</a>
       <a href="air.html">Air</a>
@@ -24,6 +53,7 @@
       <div class="app-meta" id="last-updated"></div>
     </div>
 
+    <noscript><p class="loading">Cette page affiche des graphiques interactifs et nécessite JavaScript. Les explications sur les données restent lisibles ci-dessous.</p></noscript>
     <div id="app-loading" class="loading">Chargement des données…</div>
 
     <div id="app-content" class="hidden">
@@ -33,7 +63,7 @@
 
       <div class="chart-card full-width">
         <div class="chart-card-head">
-          <div class="chart-title" id="yearly-title"></div>
+          <div class="chart-title" role="heading" aria-level="2" id="yearly-title"></div>
           <div class="year-play-row">
             <div class="segmented" id="yearly-metric-toggle">
               <button type="button" class="segmented-btn active" data-metric="part_renouvelable">Renouvelable</button>
@@ -45,67 +75,67 @@
           </div>
         </div>
         <input type="range" id="yearly-slider" class="year-slider" />
-        <div id="yearly-graph"></div>
+        <div id="yearly-graph" role="img" aria-label="Carte animée de la part de chaque source dans la production régionale depuis 2013"></div>
         <p class="chart-note">Part de la production régionale, moyenne annuelle (éCO2mix consolidé, depuis 2013). L'année en cours est partielle.</p>
       </div>
 
       <div class="chart-card full-width">
         <div class="chart-card-head">
-          <div class="chart-title" id="co2anim-title"></div>
+          <div class="chart-title" role="heading" aria-level="2" id="co2anim-title"></div>
           <button type="button" id="co2-play-btn" class="play-btn">▶ Animer</button>
         </div>
-        <div id="co2anim-graph"></div>
+        <div id="co2anim-graph" role="img" aria-label="Courbe animée de l'intensité carbone de l'électricité en France depuis 2012"></div>
         <p class="chart-note">Intensité carbone moyenne mensuelle de l'électricité produite en France (éCO2mix consolidé, depuis 2012).</p>
       </div>
 
       <div class="chart-card full-width">
-        <div class="chart-title">Mix de production électrique — dernières 48h</div>
-        <div id="mix-graph"></div>
+        <div class="chart-title" role="heading" aria-level="2">Mix de production électrique — dernières 48h</div>
+        <div id="mix-graph" role="img" aria-label="Aire empilée du mix de production électrique sur 48 heures"></div>
       </div>
 
       <div class="chart-card full-width">
-        <div class="chart-title">Intensité carbone de l'électricité — dernières 48h</div>
-        <div id="co2-graph"></div>
+        <div class="chart-title" role="heading" aria-level="2">Intensité carbone de l'électricité — dernières 48h</div>
+        <div id="co2-graph" role="img" aria-label="Courbe de l'intensité carbone sur 48 heures"></div>
       </div>
 
       <div class="charts-grid">
         <div class="chart-card">
           <div class="chart-card-head">
-            <div class="chart-title" id="map-title"></div>
+            <div class="chart-title" role="heading" aria-level="2" id="map-title"></div>
             <div class="segmented" id="map-mode-toggle">
               <button type="button" class="segmented-btn active" data-mode="consommation">Consommation</button>
               <button type="button" class="segmented-btn" data-mode="renouvelable">% Renouvelable</button>
             </div>
           </div>
-          <div id="map-graph"></div>
+          <div id="map-graph" role="img" aria-label="Carte de la consommation électrique par région"></div>
         </div>
         <div class="chart-card">
           <div class="chart-card-head">
-            <div class="chart-title" id="bar-title"></div>
+            <div class="chart-title" role="heading" aria-level="2" id="bar-title"></div>
             <div class="segmented" id="bar-sort-toggle">
               <button type="button" class="segmented-btn active" data-sort="desc">+ conso.</button>
               <button type="button" class="segmented-btn" data-sort="asc">- conso.</button>
             </div>
           </div>
-          <div id="bar-graph"></div>
+          <div id="bar-graph" role="img" aria-label="Classement des régions par consommation"></div>
         </div>
       </div>
 
       <div class="charts-grid">
         <div class="chart-card">
-          <div class="chart-title" id="donut-title"></div>
-          <div id="donut-graph"></div>
+          <div class="chart-title" role="heading" aria-level="2" id="donut-title"></div>
+          <div id="donut-graph" role="img" aria-label="Répartition instantanée de la production par source"></div>
         </div>
         <div class="chart-card">
-          <div class="chart-title">Consommation nationale — dernières 48h</div>
-          <div id="conso-graph"></div>
+          <div class="chart-title" role="heading" aria-level="2">Consommation nationale — dernières 48h</div>
+          <div id="conso-graph" role="img" aria-label="Courbe de la consommation nationale sur 48 heures"></div>
           <p class="chart-note">On voit le rythme d'une journée : creux la nuit, pointes le matin et en fin de journée.</p>
         </div>
       </div>
 
       <div class="chart-card full-width">
-        <div class="chart-title">Échanges commerciaux avec les pays voisins (instantané)</div>
-        <div id="exchange-graph"></div>
+        <div class="chart-title" role="heading" aria-level="2">Échanges commerciaux avec les pays voisins (instantané)</div>
+        <div id="exchange-graph" role="img" aria-label="Échanges d'électricité avec les pays voisins"></div>
       </div>
 
       <label class="table-toggle">
@@ -141,16 +171,24 @@
           <dt>Mix</dt><dd>Répartition de la production entre les sources d'énergie.</dd>
           <dt>Bioénergies</dt><dd>Électricité produite à partir de déchets, de biomasse ou de biogaz.</dd>
         </dl>
+        <h3>Questions fréquentes</h3>
+        <dl>
+          <dt>Qu'est-ce que l'intensité carbone de l'électricité ?</dt><dd>C'est la quantité de CO₂ émise pour produire un kilowattheure, exprimée en grammes par kWh. Elle est basse quand le nucléaire, l'hydraulique, l'éolien et le solaire dominent.</dd>
+          <dt>Quelle est la différence entre MW et MWh ?</dt><dd>Le mégawatt (MW) mesure une puissance à un instant donné, le mégawattheure (MWh) une énergie produite ou consommée sur une durée. Cette page affiche des puissances en MW.</dd>
+          <dt>Pourquoi la part renouvelable d'une région n'est-elle pas ce qu'elle consomme ?</dt><dd>Elle porte sur l'électricité produite dans la région. Les régions sont interconnectées : certaines, comme l'Île-de-France, produisent peu et importent l'essentiel de leur consommation.</dd>
+          <dt>Ces données sont-elles en direct ?</dt><dd>Elles viennent de mesures au pas de 15 minutes, mais le site n'est régénéré qu'une fois par jour : la page montre l'état du réseau lors de la dernière mise à jour.</dd>
+        </dl>
         <div class="doc-bottom"></div>
       </details>
 
     <div class="app-footer">
       Données : <a href="https://www.data.gouv.fr/" target="_blank" rel="noopener">data.gouv.fr</a>
       (RTE éCO2mix, temps quasi réel) · Mis à jour automatiquement chaque jour ·
-      <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
+      <a href="index.html">Autres observatoires</a> · <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
     </div>
-  </div>
+  </main>
 
-  <script src="assets/energie.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
+  <script src="assets/energie.js" defer></script>
 </body>
 </html>

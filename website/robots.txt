@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tatianat13.github.io/france-data-lab/sitemap.xml
