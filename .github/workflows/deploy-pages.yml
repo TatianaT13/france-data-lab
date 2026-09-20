@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - "website/**"
+  workflow_run:
+    workflows: ["Update data (daily)", "Update DVF data (weekly)"]
+    types: [completed]
   workflow_dispatch: {}
 
 permissions:

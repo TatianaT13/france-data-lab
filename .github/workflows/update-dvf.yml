@@ -1,8 +1,8 @@
-name: Update data (daily)
+name: Update DVF data (weekly)
 
 on:
   schedule:
-    - cron: "0 5 * * *" # tous les jours à 5h UTC
+    - cron: "0 6 * * 1" # tous les lundis à 6h UTC
   workflow_dispatch: {}
 
 jobs:
@@ -18,17 +18,14 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run daily extraction scripts
-        run: |
-          python -m src.extract.build_chomage
-          python -m src.extract.build_energie
-          python -m src.extract.build_air
+      - name: Run DVF extraction (toutes les années publiées)
+        run: python -m src.extract.build_dataset
 
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/processed/ website/data/
-          git diff --cached --quiet || git commit -m "chore: update data (daily) [automated]"
+          git diff --cached --quiet || git commit -m "chore: update DVF data [automated]"
           git pull --rebase
           git push

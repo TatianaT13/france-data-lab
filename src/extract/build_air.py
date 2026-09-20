@@ -24,8 +24,11 @@ def region_means(df):
 
 def build() -> None:
     print("[air] échantillon mensuel...")
-    days = fetch_days(sampled_days())
-    monthly = []
+    existing_path = WEBSITE_DATA_DIR / "air_monthly.json"
+    monthly = json.loads(existing_path.read_text()) if existing_path.exists() else []
+    known = {r["mois"] for r in monthly}
+    days = fetch_days([d for d in sampled_days() if d.strftime("%Y-%m") not in known])
+    print(f"[air] {len(days)} nouveau(x) mois")
     for day, df in sorted(days.items()):
         table = region_means(df)
         for region, row in table.iterrows():
@@ -65,14 +68,15 @@ def build() -> None:
 
     WEBSITE_DATA_DIR.mkdir(parents=True, exist_ok=True)
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+    monthly.sort(key=lambda r: (r["mois"], r["code_insee_region"]))
     for name, payload in [("air_monthly.json", monthly), ("air_latest.json", latest)]:
         text = json.dumps(payload)
         (WEBSITE_DATA_DIR / name).write_text(text)
         (PROCESSED_DIR / name).write_text(text)
-    meta = {"last_updated": datetime.now(timezone.utc).isoformat(), "sampled_days": len(days)}
+    meta = {"last_updated": datetime.now(timezone.utc).isoformat(), "months": len({r["mois"] for r in monthly})}
     (WEBSITE_DATA_DIR / "air_meta.json").write_text(json.dumps(meta))
     (PROCESSED_DIR / "air_meta.json").write_text(json.dumps(meta))
-    print(f"[air] terminé : {len(days)} jours échantillonnés, dernier jour {last_day}")
+    print(f"[air] terminé : {len({r['mois'] for r in monthly})} mois, dernier jour {last_day}")
 
 
 if __name__ == "__main__":

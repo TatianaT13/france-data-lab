@@ -11,17 +11,29 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
+import requests
 
-from src.extract.dvf import DATA_DIR, GEO_PATH, download_geojson, download_year
+from src.extract.dvf import DATA_DIR, DVF_BASE_URL, GEO_PATH, download_geojson, download_year
 from src.transform.dvf import aggregate_by_department, aggregate_by_month, load_year
 
-DEFAULT_YEARS = [2021, 2022, 2023, 2024]
+FIRST_YEAR = 2021
+DEFAULT_YEARS = None  # résolu dynamiquement : toutes les années publiées depuis FIRST_YEAR
 PROCESSED_DIR = DATA_DIR / "processed"
 WEBSITE_DATA_DIR = DATA_DIR.parent / "website" / "data"
 
 
+def available_years() -> list[int]:
+    """Années dont le fichier national DVF est publié (2021 -> année en cours)."""
+    years = []
+    for year in range(FIRST_YEAR, datetime.now().year + 1):
+        with requests.get(f"{DVF_BASE_URL}/{year}/full.csv.gz", stream=True, timeout=30) as r:
+            if r.status_code == 200:
+                years.append(year)
+    return years
+
+
 def build(years: list[int] = None, force_download: bool = False) -> None:
-    years = years or DEFAULT_YEARS
+    years = years or available_years()
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
     frames = []
@@ -67,7 +79,7 @@ def export_website_data(by_dept: pd.DataFrame, by_month: pd.DataFrame, meta: dic
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Construit le dataset DVF agrégé")
-    parser.add_argument("--years", nargs="+", type=int, default=DEFAULT_YEARS)
+    parser.add_argument("--years", nargs="+", type=int, default=None)
     parser.add_argument("--force-download", action="store_true")
     args = parser.parse_args()
     build(years=args.years, force_download=args.force_download)
