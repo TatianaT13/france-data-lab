@@ -181,6 +181,60 @@ function toggleCO2Playback() {
   }, 60);
 }
 
+
+function renderInsights() {
+  const l = state.latest;
+  const co2 = state.co2monthly;
+  const first = co2.filter((d) => d.mois.startsWith("2012"));
+  const recent = co2.slice(-12);
+  const avg = (a) => a.reduce((s, d) => s + d.co2, 0) / a.length;
+  const bullets = [
+    `Le nucléaire fournit <strong>${l.part_nucleaire.toFixed(0)} %</strong> de l'électricité produite en ce moment, les énergies renouvelables <strong>${l.part_renouvelable.toFixed(0)} %</strong>.`,
+    `Chaque kWh émet <strong>${l.taux_co2} g de CO₂</strong> à cet instant.`,
+  ];
+  if (first.length && recent.length) {
+    bullets[1] += ` Sur les 12 derniers mois, la moyenne est de <strong>${avg(recent).toFixed(0)} g</strong>, contre ${avg(first).toFixed(0)} g en 2012.`;
+  }
+  bullets.push(
+    l.ech_physiques < 0
+      ? `La France <strong>exporte</strong> ${fmtMW(Math.abs(l.ech_physiques))} vers ses voisins : elle produit plus qu'elle ne consomme.`
+      : `La France <strong>importe</strong> ${fmtMW(l.ech_physiques)} de ses voisins pour couvrir sa consommation.`
+  );
+  document.getElementById("insights").innerHTML =
+    `<h2>À retenir</h2><ul>${bullets.map((b) => `<li>${b}</li>`).join("")}</ul>`;
+}
+
+function renderDonut() {
+  const l = state.latest;
+  document.getElementById("donut-title").textContent =
+    `Qui produit l'électricité en ce moment ? (${new Date(l.date_heure).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })})`;
+  const trace = {
+    type: "pie", hole: 0.55, sort: false, direction: "clockwise",
+    labels: MIX_SERIES.map((s) => s.name), values: MIX_SERIES.map((s) => l[s.key]),
+    marker: { colors: MIX_SERIES.map((s) => s.color), line: { color: "#ffffff", width: 2 } },
+    textinfo: "percent", textfont: { color: "#ffffff", size: 12 },
+    hovertemplate: "%{label}<br>%{value:,.0f} MW (%{percent})<extra></extra>",
+  };
+  const layout = baseLayout(380, 10);
+  layout.showlegend = true;
+  layout.legend = { orientation: "v", x: 1, y: 0.5, font: { color: TEXT_SECONDARY } };
+  layout.margin = { l: 10, r: 10, t: 10, b: 10 };
+  Plotly.react("donut-graph", [trace], layout, { displayModeBar: false, responsive: true });
+}
+
+function renderConso() {
+  const trace = {
+    x: state.history.map((h) => h.date_heure), y: state.history.map((h) => h.consommation), mode: "lines",
+    line: { color: BLUE, width: 2 }, fill: "tozeroy", fillcolor: "rgba(42, 120, 214, 0.10)",
+    hovertemplate: "%{y:,.0f} MW<extra></extra>",
+  };
+  const layout = baseLayout(380, 10);
+  layout.margin = { l: 60, r: 20, t: 10, b: 30 };
+  layout.xaxis = { showgrid: false, color: TEXT_MUTED, linecolor: BASELINE };
+  layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_MUTED, linecolor: BASELINE, ticksuffix: " MW", rangemode: "tozero" };
+  Plotly.react("conso-graph", [trace], layout, { displayModeBar: false, responsive: true });
+}
+
 function renderMeta() {
   const d = new Date(state.meta.last_updated);
   const formatted = d.toLocaleString("fr-FR", {
@@ -426,6 +480,9 @@ async function init() {
   renderCO2Anim();
   document.getElementById("co2-play-btn").addEventListener("click", toggleCO2Playback);
   renderKPIs();
+  renderInsights();
+  renderDonut();
+  renderConso();
   renderMix();
   renderCO2();
   renderMap();

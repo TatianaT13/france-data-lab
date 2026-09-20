@@ -140,7 +140,59 @@ function renderBar() {
   layout.xaxis = { showgrid: true, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE, range: [0, max * 1.2] };
   layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
   layout.showlegend = false;
+  if (p.who) {
+    layout.xaxis.range = [0, Math.max(max * 1.2, p.who * 1.2)];
+    layout.shapes = [{ type: "line", x0: p.who, x1: p.who, y0: 0, y1: 1, yref: "paper", line: { color: "#d03b3b", width: 2, dash: "dash" } }];
+    layout.annotations = [{ x: p.who, y: 1, yref: "paper", text: "Repère OMS", showarrow: false, xanchor: "left", yanchor: "bottom", font: { color: "#d03b3b", size: 11 } }];
+  }
   Plotly.react("bar-graph", [trace], layout, { displayModeBar: false, responsive: true });
+}
+
+
+function renderInsights() {
+  const n = state.latest.national;
+  const regs = state.latest.regions.filter((d) => d.no2 != null && state.names[d.code_insee_region]);
+  const sorted = [...regs].sort((a, b) => b.no2 - a.no2);
+  const bullets = [];
+  const over = ["no2", "pm10", "pm25"].filter((k) => n[k] != null && n[k] > POLLUTANTS[k].who);
+  bullets.push(
+    over.length
+      ? `Le ${new Date(state.latest.date).toLocaleDateString("fr-FR")}, la moyenne nationale dépasse le repère OMS annuel pour <strong>${over.map((k) => POLLUTANTS[k].label).join(", ")}</strong> (à titre indicatif : le repère porte sur une année).`
+      : `Le ${new Date(state.latest.date).toLocaleDateString("fr-FR")}, la moyenne nationale reste <strong>sous les repères OMS annuels</strong> pour le NO₂, les PM10 et les PM2,5.`
+  );
+  if (sorted.length > 1) {
+    bullets.push(
+      `Le NO₂ est le plus élevé en <strong>${state.names[sorted[0].code_insee_region]}</strong> (${sorted[0].no2.toFixed(1)} µg/m³) et le plus bas en <strong>${state.names[sorted[sorted.length - 1].code_insee_region]}</strong> (${sorted[sorted.length - 1].no2.toFixed(1)} µg/m³).`
+    );
+  }
+  bullets.push("L'ozone suit une logique inverse des autres polluants : il monte avec le soleil, en été et l'après-midi.");
+  document.getElementById("insights").innerHTML =
+    `<h2>À retenir</h2><ul>${bullets.map((b) => `<li>${b}</li>`).join("")}</ul>`;
+}
+
+function renderHeat() {
+  const k = state.pollutant;
+  const p = POLLUTANTS[k];
+  const years = [...new Set(state.months.map((m) => m.slice(0, 4)))];
+  const z = years.map((y) =>
+    Array.from({ length: 12 }, (_, i) => {
+      const m = `${y}-${String(i + 1).padStart(2, "0")}`;
+      const vals = state.monthly.filter((d) => d.mois === m && d[k] != null).map((d) => d[k]);
+      return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+    })
+  );
+  document.getElementById("heat-title").textContent = `Saisonnalité du ${p.label} — moyenne nationale par mois et par année`;
+  const trace = {
+    type: "heatmap", z, x: ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"], y: years,
+    colorscale: SEQUENTIAL_BLUE, xgap: 2, ygap: 2, hoverongaps: false,
+    colorbar: { title: { text: "µg/m³", font: { color: TEXT_SECONDARY } }, tickfont: { color: TEXT_SECONDARY } },
+    hovertemplate: "%{y} · %{x}<br>" + p.label + " : %{z:.1f} µg/m³<extra></extra>",
+  };
+  const layout = baseLayout(90 + years.length * 34, 10);
+  layout.margin = { l: 50, r: 20, t: 10, b: 30 };
+  layout.xaxis = { color: TEXT_MUTED, side: "bottom" };
+  layout.yaxis = { color: TEXT_SECONDARY, autorange: "reversed", type: "category" };
+  Plotly.react("heat-graph", [trace], layout, { displayModeBar: false, responsive: true });
 }
 
 function stopPlayback() {
@@ -191,9 +243,10 @@ async function init() {
       state.pollutant = btn.dataset.p;
       renderAnim();
       renderBar();
+      renderHeat();
     });
   });
-  renderKPIs(); renderAnim(); renderTrend(); renderHourly(); renderBar();
+  renderKPIs(); renderInsights(); renderAnim(); renderHeat(); renderTrend(); renderHourly(); renderBar();
 }
 
 init();

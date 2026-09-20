@@ -29,6 +29,8 @@
     <div id="app-content" class="hidden">
       <div class="kpi-row" id="kpi-row"></div>
 
+      <div class="insights" id="insights"></div>
+
       <div class="chart-card full-width">
         <div class="chart-card-head">
           <div class="chart-title" id="yearly-title"></div>
@@ -89,6 +91,18 @@
         </div>
       </div>
 
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title" id="donut-title"></div>
+          <div id="donut-graph"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Consommation nationale — dernières 48h</div>
+          <div id="conso-graph"></div>
+          <p class="chart-note">On voit le rythme d'une journée : creux la nuit, pointes le matin et en fin de journée.</p>
+        </div>
+      </div>
+
       <div class="chart-card full-width">
         <div class="chart-title">Échanges commerciaux avec les pays voisins (instantané)</div>
         <div id="exchange-graph"></div>
@@ -100,9 +114,39 @@
       <div id="table-container"></div>
     </div>
 
+      <details class="doc" open>
+        <summary>À propos des données</summary>
+        <h3>Comment lire cette page</h3>
+        <ul>
+          <li>Les valeurs sont en <strong>mégawatts (MW)</strong> : c'est une puissance à un instant donné, comme la vitesse d'une voiture. Un réacteur nucléaire fournit environ 900 à 1 500 MW.</li>
+          <li>Le <strong>mix de production</strong> montre, heure après heure, quelles sources alimentent le réseau. Le solaire apparaît en journée, l'éolien varie avec le vent.</li>
+          <li>L'<strong>intensité carbone</strong> indique combien de CO₂ est émis pour produire 1 kWh. Plus le nucléaire, l'hydraulique, l'éolien et le solaire dominent, plus elle est basse.</li>
+          <li>Le <strong>solde international</strong> compare ce que la France envoie et reçoit : un solde « export » signifie qu'elle produit plus qu'elle ne consomme.</li>
+        </ul>
+        <h3>D'où viennent les données</h3>
+        <p><strong>éCO2mix</strong>, l'outil du gestionnaire du réseau <strong>RTE</strong>, via son portail <a href="https://opendata.reseaux-energies.fr/" target="_blank" rel="noopener">opendata.reseaux-energies.fr</a>. Les données sont mesurées au pas de 15 minutes.</p>
+        <h3>Mise à jour</h3>
+        <p>Le site se régénère chaque jour : la page montre donc l'état du réseau au moment de la dernière mise à jour, pas un direct. Les données « temps réel » sont provisoires ; RTE les consolide ensuite (c'est ce qu'utilisent les cartes par année et la courbe CO₂ depuis 2012).</p>
+        <h3>Limites à connaître</h3>
+        <ul>
+          <li>La <strong>part renouvelable régionale</strong> concerne la production faite dans la région, pas l'électricité qu'elle consomme : l'Île-de-France produit peu et importe presque tout ce qu'elle consomme.</li>
+          <li>La Corse n'est pas raccordée au réseau continental et n'est pas incluse dans les relevés régionaux récents.</li>
+          <li>Certaines régions publient avec du retard : le dernier relevé de chaque région est indiqué dans le tableau.</li>
+          <li>L'année en cours est partielle dans les moyennes annuelles.</li>
+        </ul>
+        <h3>Glossaire</h3>
+        <dl>
+          <dt>MW / GW</dt><dd>Mégawatt et gigawatt (1 GW = 1 000 MW) : unités de puissance.</dd>
+          <dt>gCO₂/kWh</dt><dd>Grammes de CO₂ émis par kilowattheure d'électricité produit.</dd>
+          <dt>Mix</dt><dd>Répartition de la production entre les sources d'énergie.</dd>
+          <dt>Bioénergies</dt><dd>Électricité produite à partir de déchets, de biomasse ou de biogaz.</dd>
+        </dl>
+        <div class="doc-bottom"></div>
+      </details>
+
     <div class="app-footer">
       Données : <a href="https://www.data.gouv.fr/" target="_blank" rel="noopener">data.gouv.fr</a>
-      (RTE éCO2mix, temps quasi réel) · Mis à jour automatiquement chaque semaine ·
+      (RTE éCO2mix, temps quasi réel) · Mis à jour automatiquement chaque jour ·
       <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
     </div>
   </div>

@@ -1,6 +1,7 @@
 // Observatoire de l'emploi français — taux de chômage par département (Plotly.js, sans backend)
 
 const BLUE = "#2a78d6";
+const ORANGE = "#eb6834";
 const SURFACE = "#ffffff";
 const TEXT_PRIMARY = "#0b0b0b";
 const TEXT_SECONDARY = "#52514e";
@@ -207,6 +208,93 @@ function renderTable() {
   `;
 }
 
+
+function renderInsights() {
+  const nat = state.meta.national;
+  const named = state.deptData.filter((d) => state.deptNames[d.code_departement]);
+  const up = named.filter((d) => d.evolution_pts > 0).length;
+  const sorted = [...named].sort((a, b) => b.taux_actuel - a.taux_actuel);
+  const hi = sorted[0];
+  const lo = sorted[sorted.length - 1];
+  const diff = nat.taux_actuel - nat.taux_an_dernier;
+  const bullets = [
+    `Au niveau national, le taux de chômage est de <strong>${fmtPct(nat.taux_actuel)}</strong> (${state.meta.labels.actuel}), soit <strong>${diff >= 0 ? "+" : ""}${diff.toFixed(1).replace(".", ",")} point</strong> en un an.`,
+    `Il a augmenté dans <strong>${up} départements sur ${named.length}</strong> depuis ${state.meta.labels.an_dernier}.`,
+    `L'écart est large : <strong>${state.deptNames[hi.code_departement]}</strong> (${fmtPct(hi.taux_actuel)}) contre <strong>${state.deptNames[lo.code_departement]}</strong> (${fmtPct(lo.taux_actuel)}), soit ${(hi.taux_actuel / lo.taux_actuel).toFixed(1).replace(".", ",")} fois plus.`,
+  ];
+  document.getElementById("insights").innerHTML =
+    `<h2>À retenir</h2><ul>${bullets.map((b) => `<li>${b}</li>`).join("")}</ul>`;
+}
+
+function renderDumbbell() {
+  const rows = [...state.deptData.filter((d) => state.deptNames[d.code_departement])]
+    .sort((a, b) => b.taux_actuel - a.taux_actuel)
+    .slice(0, 20)
+    .reverse();
+  document.getElementById("dumbbell-title").textContent =
+    `Les 20 départements les plus touchés : ${state.meta.labels.an_dernier} → ${state.meta.labels.actuel}`;
+  const names = rows.map((d) => state.deptNames[d.code_departement]);
+  const traces = rows.map((d, i) => ({
+    x: [d.taux_an_dernier, d.taux_actuel], y: [names[i], names[i]], mode: "lines",
+    line: { color: BASELINE, width: 3 }, hoverinfo: "skip", showlegend: false,
+  }));
+  traces.push({
+    x: rows.map((d) => d.taux_an_dernier), y: names, mode: "markers", name: state.meta.labels.an_dernier,
+    marker: { color: "#ffffff", size: 11, line: { color: BLUE, width: 2 } },
+    hovertemplate: "%{y}<br>%{x:.1f} %<extra>" + state.meta.labels.an_dernier + "</extra>",
+  });
+  traces.push({
+    x: rows.map((d) => d.taux_actuel), y: names, mode: "markers", name: state.meta.labels.actuel,
+    marker: { color: BLUE, size: 11 },
+    hovertemplate: "%{y}<br>%{x:.1f} %<extra>" + state.meta.labels.actuel + "</extra>",
+  });
+  const layout = baseLayout(560, 36);
+  layout.margin = { l: 170, r: 20, t: 36, b: 30 };
+  layout.xaxis = { gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE, ticksuffix: " %", zeroline: false };
+  layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, automargin: true };
+  layout.legend = { orientation: "h", yanchor: "top", y: 1.08, x: 0, font: { color: TEXT_SECONDARY } };
+  Plotly.react("dumbbell-graph", traces, layout, { displayModeBar: false, responsive: true });
+}
+
+function renderHist() {
+  const vals = state.deptData.filter((d) => state.deptNames[d.code_departement]).map((d) => d.taux_actuel);
+  const trace = {
+    type: "histogram", x: vals, xbins: { start: 4, end: 14, size: 1 }, marker: { color: BLUE, line: { color: "#ffffff", width: 1 } },
+    hovertemplate: "%{x} % : %{y} départements<extra></extra>",
+  };
+  const layout = baseLayout(340, 10);
+  layout.margin = { l: 45, r: 20, t: 10, b: 45 };
+  layout.bargap = 0.05;
+  layout.xaxis = { title: { text: "Taux de chômage" }, ticksuffix: " %", color: TEXT_MUTED, linecolor: BASELINE };
+  layout.yaxis = { title: { text: "Nombre de départements" }, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE, zeroline: false };
+  layout.shapes = [{
+    type: "line", x0: state.meta.national.taux_actuel, x1: state.meta.national.taux_actuel, y0: 0, y1: 1, yref: "paper",
+    line: { color: ORANGE, width: 2, dash: "dash" },
+  }];
+  layout.annotations = [{
+    x: state.meta.national.taux_actuel, y: 1, yref: "paper", text: "France", showarrow: false, xanchor: "left", yanchor: "top", font: { color: ORANGE, size: 12 },
+  }];
+  Plotly.react("hist-graph", [trace], layout, { displayModeBar: false, responsive: true });
+}
+
+function renderDom() {
+  const dom = state.deptData.filter((d) => ["971", "972", "973", "974"].includes(d.code_departement));
+  const rows = [...dom.map((d) => ({ name: d.departement, v: d.taux_actuel, dom: true })),
+    { name: "France hors Mayotte", v: state.meta.national.taux_actuel, dom: false }].sort((a, b) => a.v - b.v);
+  const trace = {
+    type: "bar", orientation: "h", x: rows.map((r) => r.v), y: rows.map((r) => r.name),
+    marker: { color: rows.map((r) => (r.dom ? BLUE : BASELINE)) },
+    text: rows.map((r) => fmtPct(r.v)), textposition: "outside", cliponaxis: false, textfont: { color: TEXT_SECONDARY, size: 11 },
+    hovertemplate: "%{y}<br>%{x:.1f} %<extra></extra>",
+  };
+  const layout = baseLayout(340, 10);
+  layout.margin = { l: 150, r: 40, t: 10, b: 30 };
+  layout.xaxis = { gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE, ticksuffix: " %", range: [0, Math.max(...rows.map((r) => r.v)) * 1.2] };
+  layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
+  layout.showlegend = false;
+  Plotly.react("dom-graph", [trace], layout, { displayModeBar: false, responsive: true });
+}
+
 function setupSegmented(containerId, dataAttr, onChange) {
   const container = document.getElementById(containerId);
   container.querySelectorAll(".segmented-btn").forEach((btn) => {
@@ -224,6 +312,10 @@ async function init() {
   document.getElementById("app-loading").classList.add("hidden");
   document.getElementById("app-content").classList.remove("hidden");
   renderKPIs();
+  renderInsights();
+  renderDumbbell();
+  renderHist();
+  renderDom();
   renderMap();
   renderBar();
   renderTable();

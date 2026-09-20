@@ -350,3 +350,90 @@ table.dvf-table th {
   font-size: 12px;
   color: var(--text-muted);
 }
+
+.insights {
+  background: var(--page-plane);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--series-blue);
+  border-radius: 12px;
+  padding: 14px 20px;
+  margin-bottom: 16px;
+}
+
+.insights h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin: 0 0 8px;
+}
+
+.insights ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.insights strong {
+  color: var(--text-primary);
+}
+
+.charts-grid + .charts-grid,
+.charts-grid + .chart-card {
+  margin-top: 16px;
+}
+
+.doc {
+  margin-top: 24px;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px 20px;
+}
+
+.doc summary {
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px 0;
+}
+
+.doc h3 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin: 18px 0 6px;
+}
+
+.doc p,
+.doc li {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.doc ul {
+  margin: 0 0 8px;
+  padding-left: 18px;
+}
+
+.doc dt {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.doc dd {
+  margin: 2px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.doc-bottom {
+  height: 12px;
+}

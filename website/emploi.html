@@ -29,6 +29,8 @@
     <div id="app-content" class="hidden">
       <div class="kpi-row" id="kpi-row"></div>
 
+      <div class="insights" id="insights"></div>
+
       <div class="charts-grid">
         <div class="chart-card">
           <div class="chart-card-head">
@@ -52,16 +54,60 @@
         </div>
       </div>
 
+      <div class="chart-card full-width">
+        <div class="chart-title" id="dumbbell-title"></div>
+        <div id="dumbbell-graph"></div>
+        <p class="chart-note">Chaque ligne relie le taux d'il y a un an (rond vide) au taux actuel (rond plein) pour les 20 départements où il est le plus élevé.</p>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title">Combien de départements pour chaque niveau de chômage ?</div>
+          <div id="hist-graph"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Outre-mer et France : taux de chômage</div>
+          <div id="dom-graph"></div>
+          <p class="chart-note">Les DOM ne figurent pas sur la carte mais sont dans le tableau et ici.</p>
+        </div>
+      </div>
+
       <label class="table-toggle">
         <input type="checkbox" id="table-toggle" /> Voir les données en tableau
       </label>
       <div id="table-container"></div>
     </div>
 
+      <details class="doc" open>
+        <summary>À propos des données</summary>
+        <h3>Comment lire cette page</h3>
+        <ul>
+          <li>Le <strong>taux de chômage</strong> est la part des personnes actives (qui travaillent ou cherchent un emploi) qui sont au chômage. À 8 %, environ 8 actifs sur 100 cherchent un emploi.</li>
+          <li>Une variation est exprimée en <strong>points</strong> : passer de 7,3 % à 7,9 % fait +0,6 point (et non +0,6 %).</li>
+          <li>La carte <strong>Évolution</strong> compare le trimestre actuel au même trimestre un an plus tôt, pour neutraliser les effets de saison.</li>
+        </ul>
+        <h3>D'où viennent les données</h3>
+        <p>Le <strong>taux de chômage localisé</strong> de l'INSEE, au sens du Bureau international du travail (BIT), publié chaque trimestre. Le jeu de données est republié sur <a href="https://www.data.gouv.fr/datasets/6a0eb9ef4780a16c39e21b76/" target="_blank" rel="noopener">data.gouv.fr</a> par le Département de la Seine-Saint-Denis.</p>
+        <h3>Mise à jour</h3>
+        <p>Le site vérifie la source chaque jour, mais l'INSEE ne publie qu'un nouveau trimestre environ tous les trois mois. Le « (p) » derrière un trimestre signifie qu'il est <strong>provisoire</strong> et sera révisé.</p>
+        <h3>Limites à connaître</h3>
+        <ul>
+          <li>Ce sont des <strong>estimations</strong> : dans les petits départements, la marge d'erreur est plus grande et un écart de quelques dixièmes de point n'est pas significatif.</li>
+          <li>Seuls trois trimestres sont disponibles (actuel, précédent, un an avant) : la page ne montre donc pas une longue tendance.</li>
+          <li>Un département où le taux est élevé n'est pas forcément un département où l'emploi baisse : lisez le niveau et l'évolution ensemble.</li>
+        </ul>
+        <h3>Glossaire</h3>
+        <dl>
+          <dt>Au sens du BIT</dt><dd>Définition internationale : sans emploi, disponible et à la recherche d'un emploi. Elle diffère du nombre d'inscrits à France Travail.</dd>
+          <dt>Population active</dt><dd>Personnes ayant un emploi ou en recherchant un.</dd>
+        </dl>
+        <div class="doc-bottom"></div>
+      </details>
+
     <div class="app-footer">
       Données : <a href="https://www.data.gouv.fr/" target="_blank" rel="noopener">data.gouv.fr</a>
       (taux de chômage localisé INSEE, republié par le Département de Seine-Saint-Denis) ·
-      Mis à jour automatiquement chaque semaine ·
+      Vérifié automatiquement chaque jour ·
       <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
     </div>
   </div>

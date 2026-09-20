@@ -324,6 +324,88 @@ function renderTable(year, type, pieces) {
   `;
 }
 
+
+function renderMovers(year, type, pieces) {
+  const evo = computeEvolution(year, type, pieces).sort((a, b) => b.pct - a.pct);
+  const base = Math.min(...state.deptData.map((d) => d.annee));
+  document.getElementById("movers-title").textContent =
+    `Plus fortes hausses et baisses depuis ${base} (${base} → ${year})`;
+  const rows = [...evo.slice(0, 8), ...evo.slice(-8)].reverse();
+  const trace = {
+    type: "bar", orientation: "h",
+    x: rows.map((d) => d.pct),
+    y: rows.map((d) => `${d.code_departement} · ${state.deptNames[d.code_departement]}`),
+    marker: { color: rows.map((d) => (d.pct >= 0 ? BLUE : ORANGE)) },
+    text: rows.map((d) => `${d.pct >= 0 ? "+" : ""}${d.pct.toFixed(1)} %`),
+    textposition: "outside", cliponaxis: false, textfont: { color: TEXT_SECONDARY, size: 11 },
+    hovertemplate: "%{y}<br>%{x:+.1f} %<extra></extra>",
+  };
+  const maxAbs = Math.max(...rows.map((d) => Math.abs(d.pct)), 1);
+  const layout = baseLayout(480, 10);
+  layout.margin = { l: 170, r: 30, t: 10, b: 30 };
+  layout.xaxis = {
+    showgrid: true, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE,
+    range: [-maxAbs * 1.3, maxAbs * 1.3], ticksuffix: " %", zeroline: true, zerolinecolor: BASELINE,
+  };
+  layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
+  layout.showlegend = false;
+  Plotly.react("movers-graph", [trace], layout, { displayModeBar: false, responsive: true });
+}
+
+function renderScatter(year, pieces) {
+  const pick = (t) =>
+    Object.fromEntries(
+      state.deptData
+        .filter((d) => d.annee === year && d.type_local === t && d.pieces_cat === pieces && state.deptNames[d.code_departement])
+        .map((d) => [d.code_departement, d.prix_m2_median])
+    );
+  const app = pick("Appartement");
+  const mai = pick("Maison");
+  const codes = Object.keys(app).filter((c) => mai[c] != null);
+  document.getElementById("scatter-title").textContent = `Maison vs appartement : prix au m² par département — ${year}`;
+  const max = Math.max(...codes.map((c) => Math.max(app[c], mai[c])), 1000) * 1.05;
+  const traces = [
+    { x: [0, max], y: [0, max], mode: "lines", line: { color: BASELINE, dash: "dash", width: 1 }, hoverinfo: "skip", showlegend: false },
+    {
+      x: codes.map((c) => app[c]), y: codes.map((c) => mai[c]), mode: "markers", showlegend: false,
+      text: codes.map((c) => state.deptNames[c]),
+      marker: { color: BLUE, size: 8, opacity: 0.75, line: { color: "#ffffff", width: 1 } },
+      hovertemplate: "<b>%{text}</b><br>Appartement : %{x:,.0f} €/m²<br>Maison : %{y:,.0f} €/m²<extra></extra>",
+    },
+  ];
+  const layout = baseLayout(480, 10);
+  layout.margin = { l: 60, r: 20, t: 10, b: 50 };
+  layout.xaxis = { title: { text: "Appartement (€/m²)" }, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE, range: [0, max], zeroline: false };
+  layout.yaxis = { title: { text: "Maison (€/m²)" }, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE, range: [0, max], zeroline: false };
+  Plotly.react("scatter-graph", traces, layout, { displayModeBar: false, responsive: true });
+}
+
+function renderInsights(year, type, pieces) {
+  const cur = state.deptData.filter(
+    (d) => d.annee === year && d.type_local === type && d.pieces_cat === pieces && state.deptNames[d.code_departement]
+  );
+  if (!cur.length) return;
+  const sorted = [...cur].sort((a, b) => b.prix_m2_median - a.prix_m2_median);
+  const hi = sorted[0];
+  const lo = sorted[sorted.length - 1];
+  const evo = computeEvolution(year, type, pieces).sort((a, b) => b.pct - a.pct);
+  const base = Math.min(...state.deptData.map((d) => d.annee));
+  const name = (c) => state.deptNames[c];
+  const bullets = [
+    `Le département le plus cher est <strong>${name(hi.code_departement)}</strong> (${fmtEuro(hi.prix_m2_median)}), soit <strong>${(hi.prix_m2_median / lo.prix_m2_median).toFixed(1).replace(".", ",")} fois</strong> le moins cher, <strong>${name(lo.code_departement)}</strong> (${fmtEuro(lo.prix_m2_median)}).`,
+  ];
+  if (evo.length && year > base) {
+    const up = evo[0];
+    const down = evo[evo.length - 1];
+    bullets.push(
+      `Depuis ${base}, la plus forte hausse est en <strong>${name(up.code_departement)}</strong> (${up.pct >= 0 ? "+" : ""}${up.pct.toFixed(1)} %) et la plus forte baisse en <strong>${name(down.code_departement)}</strong> (${down.pct >= 0 ? "+" : ""}${down.pct.toFixed(1)} %).`
+    );
+  }
+  bullets.push(`Cette lecture porte sur ${fmtInt(cur.reduce((s, d) => s + d.transactions, 0))} ventes en ${year}.`);
+  document.getElementById("insights").innerHTML =
+    `<h2>À retenir</h2><ul>${bullets.map((b) => `<li>${b}</li>`).join("")}</ul>`;
+}
+
 function renderAll() {
   const { year, type, pieces } = currentFilters();
   renderKPIs(year, type, pieces);
@@ -331,6 +413,9 @@ function renderAll() {
   renderTrend(type, pieces);
   renderBar(year, type, pieces);
   renderTable(year, type, pieces);
+  renderInsights(year, type, pieces);
+  renderMovers(year, type, pieces);
+  renderScatter(year, pieces);
 }
 
 let playTimer = null;
