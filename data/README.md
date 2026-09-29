@@ -11,6 +11,7 @@ Ce dossier documente les **sources** de données utilisées par le projet, pas f
 | Énergie | éCO2mix RTE (consommation, mix de production, échanges) | [opendata.reseaux-energies.fr](https://opendata.reseaux-energies.fr/) | API (OpenDataSoft) |
 | Air | LCSQA / Géod'air (concentrations horaires, stations des AASQA) | [dataset](https://www.data.gouv.fr/datasets/5b98b648634f415309d52a50/) | CSV (un fichier par jour) |
 | Fuites de données | Notifications de violations de données à la CNIL | [dataset](https://www.data.gouv.fr/datasets/notifications-a-la-cnil-de-violations-de-donnees-a-caractere-personnel/) | CSV |
+| Urgences | Passages aux urgences par département (DREES, 2017-2023) | [dataset](https://www.data.gouv.fr/datasets/675b7bbf79cf8f76c2b02f3f/) | CSV |
 | Accidents | Base des accidents corporels de la circulation | à compléter | CSV |
 
 ### Immobilier (DVF)
@@ -93,6 +94,26 @@ python -m src.extract.build_fuites
   aucun nom d'organisme n'est publié par la CNIL.
 - Rafraîchi automatiquement chaque semaine par `.github/workflows/update-dvf.yml`.
 - Visualisé dans [`website/fuites.html`](../website/fuites.html).
+
+### Urgences (DREES)
+
+Récupéré par [`src/extract/build_urgences.py`](../src/extract/build_urgences.py) :
+
+```bash
+python -m src.extract.build_urgences
+```
+
+- Source : séries longues corrigées du nombre quotidien de passages aux urgences par
+  département, publiées par la DREES (ministère de la Santé), janvier 2017 à décembre 2023.
+- ⚠️ Étude ponctuelle figée (publiée en décembre 2024), pas un flux continu : aucune
+  nouvelle donnée n'est attendue tant que la DREES ne publie pas de mise à jour. Le site
+  vérifie tout de même la source chaque semaine, via une résolution dynamique de l'URL.
+- Traités (`data/processed/urgences_*.json`) : tendance hebdomadaire nationale (semaines
+  incomplètes écartées), moyenne journalière par département et par année.
+- Limites : valeurs corrigées par la DREES (pas un comptage brut) ; le département de la
+  Lozère (48) est absent, seuls 3 DOM sur 5 sont couverts ; aucune donnée par établissement.
+- Rafraîchi automatiquement chaque semaine par `.github/workflows/update-dvf.yml`.
+- Visualisé dans [`website/urgences.html`](../website/urgences.html).
 
 ## Organisation suggérée
 

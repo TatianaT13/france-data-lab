@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Passages aux urgences par département (2017-2023) | France Data Lab</title>
+  <meta name="description" content="Passages quotidiens aux urgences hospitalières par département en France de 2017 à 2023 : tendance nationale, effet du confinement, carte animée par année. Données DREES." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#2a78d6" />
+  <meta name="author" content="Tatiana Tarasenko" />
+  <link rel="canonical" href="https://tatianat13.github.io/france-data-lab/urgences.html" />
+  <link rel="alternate" hreflang="fr" href="https://tatianat13.github.io/france-data-lab/urgences.html" />
+  <link rel="alternate" hreflang="x-default" href="https://tatianat13.github.io/france-data-lab/urgences.html" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/icon-512.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="France Data Lab" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:title" content="Passages aux urgences par département (2017-2023) | France Data Lab" />
+  <meta property="og:description" content="Passages quotidiens aux urgences hospitalières par département en France de 2017 à 2023 : tendance nationale, effet du confinement, carte animée par année. Données DREES." />
+  <meta property="og:url" content="https://tatianat13.github.io/france-data-lab/urgences.html" />
+  <meta property="og:image" content="https://tatianat13.github.io/france-data-lab/assets/og-urgences.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Passages aux urgences par département (2017-2023) | France Data Lab" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Passages aux urgences par département (2017-2023) | France Data Lab" />
+  <meta name="twitter:description" content="Passages quotidiens aux urgences hospitalières par département en France de 2017 à 2023 : tendance nationale, effet du confinement, carte animée par année. Données DREES." />
+  <meta name="twitter:image" content="https://tatianat13.github.io/france-data-lab/assets/og-urgences.png" />
+  <link rel="preconnect" href="https://cdn.plot.ly" crossorigin />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/", "inLanguage": "fr-FR", "description": "Observatoires interactifs bâtis sur des données ouvertes françaises."}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://tatianat13.github.io/france-data-lab/"}, {"@type": "ListItem", "position": 2, "name": "Urgences hospitalières", "item": "https://tatianat13.github.io/france-data-lab/urgences.html"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Passages aux urgences par département (2017-2023) | France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/urgences.html", "description": "Passages quotidiens aux urgences hospitalières par département en France de 2017 à 2023 : tendance nationale, effet du confinement, carte animée par année. Données DREES.", "inLanguage": "fr-FR", "isPartOf": {"@type": "WebSite", "url": "https://tatianat13.github.io/france-data-lab/", "name": "France Data Lab"}}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "Passages aux urgences par département en France, 2017-2023 (agrégé)", "description": "Nombre quotidien de passages aux urgences hospitalières par département, série corrigée par la DREES, agrégée par semaine (national) et par année (département).", "url": "https://tatianat13.github.io/france-data-lab/urgences.html", "inLanguage": "fr-FR", "keywords": ["urgences", "hôpital", "santé", "DREES", "covid", "confinement"], "creator": {"@type": "Organization", "name": "DREES"}, "isBasedOn": "https://www.data.gouv.fr/datasets/675b7bbf79cf8f76c2b02f3f/", "temporalCoverage": "2017-01-01/2023-12-31", "spatialCoverage": {"@type": "Place", "name": "France"}, "isAccessibleForFree": true, "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/urgences_weekly.json"}, {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/urgences_dept_year.json"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Ces données sont-elles mises à jour ?", "acceptedAnswer": {"@type": "Answer", "text": "Non : il s'agit d'une étude ponctuelle de la DREES publiée fin 2024 et couvrant 2017 à 2023. Le site vérifie la source chaque semaine, mais aucune nouvelle donnée n'est attendue tant que la DREES ne publie pas une version mise à jour."}}, {"@type": "Question", "name": "Pourquoi une telle baisse en mars-avril 2020 ?", "acceptedAnswer": {"@type": "Answer", "text": "C'est le premier confinement lié au Covid-19 : les passages aux urgences hors Covid ont fortement chuté, les patients évitant l'hôpital ou reportant leurs soins non urgents."}}, {"@type": "Question", "name": "Pourquoi Paris a-t-il le plus de passages ?", "acceptedAnswer": {"@type": "Answer", "text": "La moyenne journalière brute dépend fortement de la population et de la densité de services d'urgences du département : elle ne mesure pas la qualité des soins ni un taux par habitant."}}]}</script>
+</head>
+<body>
+  <main class="app-shell">
+    <nav class="site-nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="immobilier.html">Immobilier</a>
+      <a href="emploi.html">Emploi</a>
+      <a href="energie.html">Énergie</a>
+      <a href="air.html">Air</a>
+      <a href="fuites.html">Fuites de données</a>
+      <a href="urgences.html" class="active">Urgences</a>
+    </nav>
+    <div class="app-header">
+      <div>
+        <h1 class="app-title">Passages aux urgences en France 🇫🇷</h1>
+        <p class="app-subtitle">Séries quotidiennes par département, 2017-2023 — DREES, data.gouv.fr</p>
+      </div>
+      <div class="app-meta" id="last-updated"></div>
+    </div>
+
+    <noscript><p class="loading">Cette page affiche des graphiques interactifs et nécessite JavaScript. Les explications sur les données restent lisibles ci-dessous.</p></noscript>
+    <div id="app-loading" class="loading">Chargement des données…</div>
+
+    <div id="app-content" class="hidden">
+      <div class="kpi-row" id="kpi-row"></div>
+
+      <div class="insights" id="insights"></div>
+
+      <div class="chart-card full-width">
+        <div class="chart-title" role="heading" aria-level="2">Passages aux urgences par semaine en France</div>
+        <div id="trend-graph" role="img" aria-label="Courbe hebdomadaire du nombre de passages aux urgences en France, montrant la chute lors du premier confinement en 2020"></div>
+        <p class="chart-note">La chute nette de mars-avril 2020 correspond au premier confinement (voir « À propos des données »).</p>
+      </div>
+
+      <div class="chart-card full-width">
+        <div class="chart-card-head">
+          <div class="chart-title" role="heading" aria-level="2" id="map-title"></div>
+          <div class="year-play-row">
+            <input type="range" id="year-slider" class="year-slider" style="width:200px" />
+            <button type="button" id="play-btn" class="play-btn">▶ Animer</button>
+          </div>
+        </div>
+        <div id="map-graph" role="img" aria-label="Carte animée de la moyenne journalière de passages aux urgences par département, année par année de 2017 à 2023"></div>
+      </div>
+
+      <div class="chart-card full-width">
+        <div class="chart-title" role="heading" aria-level="2" id="bar-title"></div>
+        <div id="bar-graph" role="img" aria-label="Classement des départements par moyenne journalière de passages aux urgences"></div>
+        <p class="chart-note">Chiffres bruts, non rapportés à la population : les grands départements urbains dominent naturellement ce classement.</p>
+      </div>
+    </div>
+
+    <details class="doc" open>
+      <summary>À propos des données</summary>
+      <h3>Comment lire cette page</h3>
+      <ul>
+        <li>Les valeurs sont des <strong>passages aux urgences hospitalières</strong>, tous motifs confondus (pas uniquement le Covid-19).</li>
+        <li>La carte montre la <strong>moyenne journalière</strong> de passages par département pour l'année sélectionnée — pas un total annuel.</li>
+        <li>Le classement est en <strong>nombre brut</strong>, pas par habitant : un grand département peuplé aura toujours plus de passages qu'un petit, sans que ça reflète une meilleure ou moins bonne santé publique.</li>
+      </ul>
+      <h3>D'où viennent les données</h3>
+      <p>La <strong>DREES</strong> (service statistique du ministère de la Santé) publie des <a href="https://www.data.gouv.fr/datasets/675b7bbf79cf8f76c2b02f3f/" target="_blank" rel="noopener">séries longues corrigées</a> du nombre quotidien de passages aux urgences par département, de janvier 2017 à décembre 2023.</p>
+      <h3>Mise à jour</h3>
+      <p>⚠️ Il s'agit d'une <strong>étude ponctuelle figée</strong>, publiée en décembre 2024 et arrêtée à fin 2023 : ce n'est pas un flux continu. Le site vérifie la source chaque semaine par précaution, mais aucune nouvelle donnée n'est attendue tant que la DREES ne publie pas une version mise à jour.</p>
+      <h3>Limites à connaître</h3>
+      <ul>
+        <li>Les valeurs sont des <strong>séries corrigées</strong> par la DREES (ajustées pour les ruptures de déclaration de certains hôpitaux), pas un comptage brut à la source.</li>
+        <li>Le département de la <strong>Lozère (48)</strong> est absent de la source. Seuls trois départements d'outre-mer (Guadeloupe, Guyane, La Réunion) sont couverts ; la Martinique et Mayotte ne le sont pas.</li>
+        <li>Aucune donnée par établissement : impossible de savoir quel hôpital précis est concerné, seulement le département.</li>
+      </ul>
+      <h3>Glossaire</h3>
+      <dl>
+        <dt>Série corrigée</dt><dd>Données ajustées par la DREES pour compenser les interruptions ou anomalies de déclaration de certains établissements.</dd>
+        <dt>Passage aux urgences</dt><dd>Toute prise en charge dans un service d'urgences hospitalier, quel que soit le motif ou la gravité.</dd>
+      </dl>
+      <h3>Questions fréquentes</h3>
+      <dl>
+        <dt>Ces données sont-elles mises à jour ?</dt><dd>Non : il s'agit d'une étude ponctuelle de la DREES publiée fin 2024 et couvrant 2017 à 2023. Le site vérifie la source chaque semaine, mais aucune nouvelle donnée n'est attendue tant que la DREES ne publie pas une version mise à jour.</dd>
+        <dt>Pourquoi une telle baisse en mars-avril 2020 ?</dt><dd>C'est le premier confinement lié au Covid-19 : les passages aux urgences hors Covid ont fortement chuté, les patients évitant l'hôpital ou reportant leurs soins non urgents.</dd>
+        <dt>Pourquoi Paris a-t-il le plus de passages ?</dt><dd>La moyenne journalière brute dépend fortement de la population et de la densité de services d'urgences du département : elle ne mesure pas la qualité des soins ni un taux par habitant.</dd>
+      </dl>
+      <div class="doc-bottom"></div>
+    </details>
+
+    <div class="app-footer">
+      Données : <a href="https://www.data.gouv.fr/" target="_blank" rel="noopener">data.gouv.fr</a>
+      (séries longues des passages aux urgences, DREES) · Étude figée 2017-2023, vérifiée chaque semaine ·
+      <a href="index.html">Autres observatoires</a> ·
+      <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
+    </div>
+  </main>
+
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
+  <script src="assets/urgences.js" defer></script>
+</body>
+</html>

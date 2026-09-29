@@ -27,6 +27,9 @@ jobs:
       - name: Run fuites de données extraction (CNIL)
         run: python -m src.extract.build_fuites
 
+      - name: Run urgences extraction (DREES)
+        run: python -m src.extract.build_urgences
+
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
