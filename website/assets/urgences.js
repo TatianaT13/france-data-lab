@@ -151,7 +151,7 @@ function renderBar() {
     .sort((a, b) => b.moyenne_journaliere - a.moyenne_journaliere)
     .slice(0, 15)
     .reverse();
-  document.getElementById("bar-title").textContent = `Top 15 départements — ${year}`;
+  document.getElementById("bar-title").textContent = `Top 15 départements par passages aux urgences/jour — ${year}`;
   const trace = {
     type: "bar", orientation: "h",
     x: rows.map((d) => d.moyenne_journaliere),
@@ -163,7 +163,7 @@ function renderBar() {
   };
   const layout = baseLayout(480, 10);
   layout.margin = { l: 230, r: 30, t: 10, b: 30 };
-  layout.xaxis = { showgrid: true, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE, range: [0, Math.max(...rows.map((d) => d.moyenne_journaliere)) * 1.2] };
+  layout.xaxis = { showgrid: true, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE, range: [0, Math.max(...rows.map((d) => d.moyenne_journaliere)) * 1.2], ticksuffix: "/j" };
   layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, automargin: true };
   layout.showlegend = false;
   Plotly.react("bar-graph", [trace], layout, { displayModeBar: false, responsive: true });
