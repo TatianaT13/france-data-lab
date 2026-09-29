@@ -10,6 +10,7 @@ Ce dossier documente les **sources** de données utilisées par le projet, pas f
 | Immobilier | DVF (Demandes de Valeurs Foncières), via geo-dvf/Etalab | [files.data.gouv.fr/geo-dvf](https://files.data.gouv.fr/geo-dvf/latest/csv/) | CSV (gzip) |
 | Énergie | éCO2mix RTE (consommation, mix de production, échanges) | [opendata.reseaux-energies.fr](https://opendata.reseaux-energies.fr/) | API (OpenDataSoft) |
 | Air | LCSQA / Géod'air (concentrations horaires, stations des AASQA) | [dataset](https://www.data.gouv.fr/datasets/5b98b648634f415309d52a50/) | CSV (un fichier par jour) |
+| Fuites de données | Notifications de violations de données à la CNIL | [dataset](https://www.data.gouv.fr/datasets/notifications-a-la-cnil-de-violations-de-donnees-a-caractere-personnel/) | CSV |
 | Accidents | Base des accidents corporels de la circulation | à compléter | CSV |
 
 ### Immobilier (DVF)
@@ -17,7 +18,7 @@ Ce dossier documente les **sources** de données utilisées par le projet, pas f
 Récupéré et agrégé automatiquement par [`src/extract/build_dataset.py`](../src/extract/build_dataset.py) :
 
 ```bash
-python -m src.extract.build_dataset          # télécharge 2021-2024 et régénère data/processed/
+python -m src.extract.build_dataset          # détecte les années publiées (2021 → aujourd'hui) et régénère data/processed/
 ```
 
 - Bruts (`data/raw/dvf/*.csv.gz`, non versionnés) : un fichier national par année.
@@ -72,6 +73,26 @@ python -m src.extract.build_air
 - Historique : un relevé par mois (le 15) depuis 2021, moyenné par station puis par région (le rattachement régional vient du code de zone ZAS). Instantané : dernier jour complet.
 - Limites : échantillon mensuel, donc pas une moyenne mensuelle exacte ; les DOM ne sont pas cartographiés.
 - Visualisé dans [`website/air.html`](../website/air.html).
+
+### Fuites de données (CNIL)
+
+Récupéré par [`src/extract/build_fuites.py`](../src/extract/build_fuites.py) :
+
+```bash
+python -m src.extract.build_fuites
+```
+
+- Source : notifications de violations de données à caractère personnel reçues par la CNIL
+  depuis mai 2018 (obligation RGPD), ~43 500 lignes. L'URL du CSV est résolue dynamiquement
+  via l'identifiant stable du jeu de données data.gouv.fr (republication irrégulière).
+- Traités (`data/processed/fuites_*.json`) : tendance mensuelle, répartition par secteur,
+  origine et cause de l'incident, ampleur de la fuite, information des personnes concernées.
+- Pas de dimension géographique dans la source : aucune carte sur cette page.
+- Limites : certains pics mensuels correspondent à un incident unique chez un sous-traitant
+  ayant déclenché de nombreuses notifications distinctes (voir la page pour le détail) ;
+  aucun nom d'organisme n'est publié par la CNIL.
+- Rafraîchi automatiquement chaque semaine par `.github/workflows/update-dvf.yml`.
+- Visualisé dans [`website/fuites.html`](../website/fuites.html).
 
 ## Organisation suggérée
 

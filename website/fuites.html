@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fuites et violations de données en France (CNIL) | France Data Lab</title>
+  <meta name="description" content="Notifications de violations de données à la CNIL depuis 2018 : tendance mensuelle, secteurs les plus touchés, origines des incidents (piratage, erreur interne) et ampleur des fuites." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#2a78d6" />
+  <meta name="author" content="Tatiana Tarasenko" />
+  <link rel="canonical" href="https://tatianat13.github.io/france-data-lab/fuites.html" />
+  <link rel="alternate" hreflang="fr" href="https://tatianat13.github.io/france-data-lab/fuites.html" />
+  <link rel="alternate" hreflang="x-default" href="https://tatianat13.github.io/france-data-lab/fuites.html" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/icon-512.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="France Data Lab" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:title" content="Fuites et violations de données en France (CNIL) | France Data Lab" />
+  <meta property="og:description" content="Notifications de violations de données à la CNIL depuis 2018 : tendance mensuelle, secteurs les plus touchés, origines des incidents (piratage, erreur interne) et ampleur des fuites." />
+  <meta property="og:url" content="https://tatianat13.github.io/france-data-lab/fuites.html" />
+  <meta property="og:image" content="https://tatianat13.github.io/france-data-lab/assets/og-fuites.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Fuites et violations de données en France (CNIL) | France Data Lab" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Fuites et violations de données en France (CNIL) | France Data Lab" />
+  <meta name="twitter:description" content="Notifications de violations de données à la CNIL depuis 2018 : tendance mensuelle, secteurs les plus touchés, origines des incidents (piratage, erreur interne) et ampleur des fuites." />
+  <meta name="twitter:image" content="https://tatianat13.github.io/france-data-lab/assets/og-fuites.png" />
+  <link rel="preconnect" href="https://cdn.plot.ly" crossorigin />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/", "inLanguage": "fr-FR", "description": "Quatre observatoires interactifs bâtis sur des données ouvertes françaises : prix de l'immobilier, chômage, mix électrique et qualité de l'air, par département ou région."}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://tatianat13.github.io/france-data-lab/"}, {"@type": "ListItem", "position": 2, "name": "Fuites de données", "item": "https://tatianat13.github.io/france-data-lab/fuites.html"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Fuites et violations de données en France (CNIL) | France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/fuites.html", "description": "Notifications de violations de données à la CNIL depuis 2018 : tendance mensuelle, secteurs les plus touchés, origines des incidents (piratage, erreur interne) et ampleur des fuites.", "inLanguage": "fr-FR", "isPartOf": {"@type": "WebSite", "url": "https://tatianat13.github.io/france-data-lab/", "name": "France Data Lab"}}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "Notifications de violations de données personnelles à la CNIL (agrégé)", "description": "Nombre de notifications de violations de données reçues par la CNIL depuis 2018, par mois, secteur d'activité, origine et cause de l'incident, et ampleur de la fuite.", "url": "https://tatianat13.github.io/france-data-lab/fuites.html", "inLanguage": "fr-FR", "keywords": ["cybersécurité", "fuite de données", "violation de données", "RGPD", "CNIL", "piratage", "rançongiciel"], "creator": {"@type": "Organization", "name": "CNIL"}, "isBasedOn": "https://www.data.gouv.fr/datasets/notifications-a-la-cnil-de-violations-de-donnees-a-caractere-personnel/", "temporalCoverage": "2018-05-01/..", "spatialCoverage": {"@type": "Place", "name": "France"}, "isAccessibleForFree": true, "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/fuites_monthly.json"}, {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/fuites_sectors.json"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Une notification signifie-t-elle qu'une entreprise a été piratée ?", "acceptedAnswer": {"@type": "Answer", "text": "Pas toujours : le RGPD oblige à notifier la CNIL dès qu'un risque existe pour les personnes concernées, y compris pour des erreurs internes (email envoyé au mauvais destinataire, appareil perdu) qui ne sont pas des cyberattaques."}}, {"@type": "Question", "name": "Pourquoi certains mois ont-ils un pic très élevé ?", "acceptedAnswer": {"@type": "Answer", "text": "Un incident chez un seul sous-traitant peut déclencher des dizaines ou des centaines de notifications distinctes, une par responsable de traitement client concerné, ce qui crée des pics ponctuels sans rapport avec une hausse générale des risques."}}, {"@type": "Question", "name": "Le nombre de fuites augmente-t-il réellement chaque année ?", "acceptedAnswer": {"@type": "Answer", "text": "La hausse du nombre de notifications reflète en partie une meilleure détection et une obligation légale plus respectée depuis 2018, pas uniquement une hausse du nombre réel d'incidents."}}, {"@type": "Question", "name": "Peut-on savoir quelles entreprises ont été touchées ?", "acceptedAnswer": {"@type": "Answer", "text": "Non : la CNIL publie des statistiques agrégées et anonymisées, jamais le nom des organismes concernés."}}]}</script>
+</head>
+<body>
+  <main class="app-shell">
+    <nav class="site-nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="immobilier.html">Immobilier</a>
+      <a href="emploi.html">Emploi</a>
+      <a href="energie.html">Énergie</a>
+      <a href="air.html">Air</a>
+      <a href="fuites.html" class="active">Fuites de données</a>
+    </nav>
+    <div class="app-header">
+      <div>
+        <h1 class="app-title">Fuites et violations de données en France 🇫🇷</h1>
+        <p class="app-subtitle">Notifications reçues par la CNIL depuis 2018 — data.gouv.fr</p>
+      </div>
+      <div class="app-meta" id="last-updated"></div>
+    </div>
+
+    <noscript><p class="loading">Cette page affiche des graphiques interactifs et nécessite JavaScript. Les explications sur les données restent lisibles ci-dessous.</p></noscript>
+    <div id="app-loading" class="loading">Chargement des données…</div>
+
+    <div id="app-content" class="hidden">
+      <div class="kpi-row" id="kpi-row"></div>
+
+      <div class="insights" id="insights"></div>
+
+      <div class="chart-card full-width">
+        <div class="chart-title" role="heading" aria-level="2">Notifications de violations de données par mois</div>
+        <div id="trend-graph" role="img" aria-label="Courbe du nombre mensuel de notifications de violations de données depuis 2018, avec la part impliquant des données sensibles"></div>
+        <p class="chart-note">Certains pics correspondent à un seul incident chez un sous-traitant ayant déclenché de nombreuses notifications distinctes (voir « À propos des données »).</p>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2">Secteurs les plus concernés</div>
+          <div id="sectors-graph" role="img" aria-label="Classement des secteurs d'activité par nombre de notifications de violations de données"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2">Origines des incidents</div>
+          <div id="origins-graph" role="img" aria-label="Classement des origines des incidents à l'origine des violations de données"></div>
+          <p class="chart-note">Une notification peut cumuler plusieurs origines : les pourcentages peuvent dépasser 100 %.</p>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2">Nombre de personnes concernées par fuite</div>
+          <div id="taille-graph" role="img" aria-label="Répartition des notifications par nombre de personnes impactées"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2">Caractère malveillant ou accidentel</div>
+          <div id="causes-graph" role="img" aria-label="Répartition des causes des incidents entre actes malveillants et accidentels, internes ou externes"></div>
+        </div>
+      </div>
+
+      <div class="chart-card full-width">
+        <div class="chart-title" role="heading" aria-level="2">Les personnes concernées sont-elles informées ?</div>
+        <div id="info-graph" role="img" aria-label="Répartition des notifications selon que les personnes concernées ont été informées de la fuite"></div>
+      </div>
+    </div>
+
+    <details class="doc" open>
+      <summary>À propos des données</summary>
+      <h3>Comment lire cette page</h3>
+      <ul>
+        <li>Chaque ligne source est une <strong>notification</strong> envoyée à la CNIL par un organisme, pas nécessairement une cyberattaque confirmée : le RGPD oblige à notifier dès qu'il existe un risque pour les personnes, y compris pour de simples erreurs humaines.</li>
+        <li><strong>« Origines »</strong> et <strong>« causes »</strong> peuvent être multiples pour un même incident : les pourcentages peuvent donc dépasser 100 %.</li>
+        <li>« Données sensibles » signifie que la fuite concernait des données de santé, bancaires, biométriques ou d'autres catégories particulières au sens du RGPD.</li>
+      </ul>
+      <h3>D'où viennent les données</h3>
+      <p>Les <strong>notifications de violations de données à caractère personnel</strong> reçues par la CNIL, publiées sur <a href="https://www.data.gouv.fr/datasets/notifications-a-la-cnil-de-violations-de-donnees-a-caractere-personnel/" target="_blank" rel="noopener">data.gouv.fr</a>. Cette obligation de notification existe depuis l'entrée en application du RGPD en mai 2018.</p>
+      <h3>Mise à jour</h3>
+      <p>La CNIL republie ce fichier de façon irrégulière (plusieurs fois par an). Le site vérifie la source chaque semaine et republie dès qu'une nouvelle extraction est disponible.</p>
+      <h3>Limites à connaître</h3>
+      <ul>
+        <li><strong>Pics ponctuels</strong> : un incident chez un sous-traitant unique peut générer une notification par client concerné, créant des pics qui ne reflètent pas une hausse générale du risque. La CNIL signale explicitement ce phénomène pour certains mois récents.</li>
+        <li><strong>Pas de données géographiques</strong> ni de nom d'organisme : impossible de savoir quelle entreprise précise a été touchée, ni dans quel département.</li>
+        <li><strong>Hausse structurelle</strong> : l'augmentation du nombre de notifications depuis 2018 reflète en partie une obligation légale de mieux en mieux respectée, pas uniquement plus d'incidents.</li>
+        <li>Le champ « données sensibles » ne distingue pas un « non » d'un « non renseigné » : les deux apparaissent comme vides dans la source.</li>
+      </ul>
+      <h3>Glossaire</h3>
+      <dl>
+        <dt>Violation de données</dt><dd>Incident de sécurité entraînant la destruction, la perte, l'altération ou la divulgation non autorisée de données personnelles.</dd>
+        <dt>RGPD</dt><dd>Règlement général sur la protection des données, en vigueur dans l'Union européenne depuis mai 2018.</dd>
+        <dt>Rançongiciel (ransomware)</dt><dd>Logiciel malveillant qui chiffre les données d'une victime pour lui extorquer une rançon.</dd>
+      </dl>
+      <h3>Questions fréquentes</h3>
+      <dl>
+        <dt>Une notification signifie-t-elle qu'une entreprise a été piratée ?</dt><dd>Pas toujours : le RGPD oblige à notifier la CNIL dès qu'un risque existe pour les personnes concernées, y compris pour des erreurs internes (email envoyé au mauvais destinataire, appareil perdu) qui ne sont pas des cyberattaques.</dd>
+        <dt>Pourquoi certains mois ont-ils un pic très élevé ?</dt><dd>Un incident chez un seul sous-traitant peut déclencher des dizaines ou des centaines de notifications distinctes, une par responsable de traitement client concerné, ce qui crée des pics ponctuels sans rapport avec une hausse générale des risques.</dd>
+        <dt>Le nombre de fuites augmente-t-il réellement chaque année ?</dt><dd>La hausse du nombre de notifications reflète en partie une meilleure détection et une obligation légale plus respectée depuis 2018, pas uniquement une hausse du nombre réel d'incidents.</dd>
+        <dt>Peut-on savoir quelles entreprises ont été touchées ?</dt><dd>Non : la CNIL publie des statistiques agrégées et anonymisées, jamais le nom des organismes concernés.</dd>
+      </dl>
+      <div class="doc-bottom"></div>
+    </details>
+
+    <div class="app-footer">
+      Données : <a href="https://www.data.gouv.fr/" target="_blank" rel="noopener">data.gouv.fr</a>
+      (notifications de violations de données, CNIL) · Mis à jour automatiquement chaque semaine ·
+      <a href="index.html">Autres observatoires</a> ·
+      <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
+    </div>
+  </main>
+
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
+  <script src="assets/fuites.js" defer></script>
+</body>
+</html>
