@@ -111,8 +111,13 @@ python -m src.extract.build_urgences
   vérifie tout de même la source chaque semaine, via une résolution dynamique de l'URL.
 - Traités (`data/processed/urgences_*.json`) : tendance hebdomadaire nationale (semaines
   incomplètes écartées), moyenne journalière par département et par année.
-- Limites : valeurs corrigées par la DREES (pas un comptage brut) ; le département de la
-  Lozère (48) est absent, seuls 3 DOM sur 5 sont couverts ; aucune donnée par établissement.
+- Limites : valeurs corrigées par la DREES (pas un comptage brut) ; les départements de la
+  Lozère (48) et de Mayotte ne sont pas diffusés, la Martinique est exclue pour qualité
+  insuffisante ; aucune donnée par établissement. Fenêtres d'observation inégales selon les
+  départements (Guyane à partir de 2020, La Réunion/Corse-du-Sud/Haute-Corse/Territoire de
+  Belfort à partir de 2018 seulement) — le KPI « département le plus actif » est donc calculé
+  sur la dernière année commune plutôt que sur une moyenne pluriannuelle, pour ne pas
+  favoriser les départements suivis depuis plus longtemps.
 - Rafraîchi automatiquement chaque semaine par `.github/workflows/update-dvf.yml`.
 - Visualisé dans [`website/urgences.html`](../website/urgences.html).
 

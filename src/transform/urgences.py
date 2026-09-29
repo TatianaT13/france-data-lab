@@ -34,8 +34,17 @@ def aggregate_dept_year(df: pd.DataFrame) -> list[dict]:
 
 def build_summary(df: pd.DataFrame) -> dict:
     total = int(round(df["nb_passages"].sum()))
-    by_dept_all = df.groupby(["dep", "libelle_dep"])["nb_passages"].mean().round(1)
-    top = by_dept_all.idxmax()
+
+    # Les départements n'ont pas tous la même fenêtre d'observation (la Guyane ne
+    # commence qu'en 2020, La Réunion/Corse/Belfort qu'en 2018) : une moyenne sur
+    # toute la période favoriserait les départements suivis depuis le plus longtemps.
+    # On classe donc sur la dernière année disponible, où tous les départements
+    # présents ont un historique comparable.
+    last_year = int(df["annee"].max())
+    by_dept_last_year = (
+        df[df["annee"] == last_year].groupby(["dep", "libelle_dep"])["nb_passages"].mean().round(1)
+    )
+    top = by_dept_last_year.idxmax()
 
     def month_avg(year: int, month: int) -> float:
         sub = df[(df["date"].dt.year == year) & (df["date"].dt.month == month)]
@@ -49,9 +58,10 @@ def build_summary(df: pd.DataFrame) -> dict:
         "total_passages": total,
         "date_min": df["date"].min().strftime("%Y-%m-%d"),
         "date_max": df["date"].max().strftime("%Y-%m-%d"),
+        "top_dept_annee": last_year,
         "top_dept_code": top[0],
         "top_dept_nom": top[1],
-        "top_dept_valeur": float(by_dept_all.max()),
+        "top_dept_valeur": float(by_dept_last_year.max()),
         "covid_pct_avril": covid_pct,
         "n_departements": int(df["dep"].nunique()),
     }

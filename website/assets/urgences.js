@@ -70,7 +70,7 @@ function renderKPIs() {
       <div class="kpi-value">${m.n_departements}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">Département le plus actif</div>
+      <div class="kpi-label">Département le plus actif (${m.top_dept_annee})</div>
       <div class="kpi-value">${m.top_dept_nom}</div>
       <div class="kpi-delta">${fmtInt(m.top_dept_valeur)} / jour en moyenne</div>
     </div>
@@ -87,7 +87,7 @@ function renderInsights() {
   const bullets = [
     `Entre 2017 et 2023, la France a enregistré environ <strong>${fmtInt(m.total_passages)} passages</strong> aux urgences sur ${m.n_departements} départements suivis.`,
     `En avril 2020, au premier confinement, les passages quotidiens ont chuté de <strong>${Math.abs(m.covid_pct_avril)} %</strong> par rapport à avril 2019 — les patients évitant ou reportant les soins non urgents.`,
-    `<strong>${m.top_dept_nom}</strong> concentre le plus de passages en moyenne journalière (${fmtInt(m.top_dept_valeur)}/jour), ce qui reflète surtout sa population.`,
+    `En ${m.top_dept_annee} (dernière année disponible pour tous les départements), <strong>${m.top_dept_nom}</strong> concentre le plus de passages en moyenne journalière (${fmtInt(m.top_dept_valeur)}/jour), ce qui reflète surtout sa population — le classement est comparé sur une année commune car les départements n'ont pas tous le même historique disponible.`,
   ];
   document.getElementById("insights").innerHTML =
     `<h2>À retenir</h2><ul>${bullets.map((b) => `<li>${b}</li>`).join("")}</ul>`;
