@@ -101,7 +101,7 @@ function renderTrend() {
   });
   const layout = baseLayout(340, 36);
   layout.margin.l = 55; layout.margin.r = 20; layout.margin.b = 30; layout.hovermode = "x unified";
-  layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
+  layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, automargin: true };
   layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE, ticksuffix: " µg" };
   Plotly.react("trend-graph", traces, layout, { displayModeBar: false, responsive: true });
 }
@@ -117,7 +117,7 @@ function renderHourly() {
   }));
   const layout = baseLayout(420, 36);
   layout.margin.l = 55; layout.margin.r = 20; layout.margin.b = 30; layout.hovermode = "x unified";
-  layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, ticksuffix: " h", dtick: 3 };
+  layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, ticksuffix: " h", dtick: 3, automargin: true };
   layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE, ticksuffix: " µg" };
   Plotly.react("hourly-graph", traces, layout, { displayModeBar: false, responsive: true });
 }
@@ -190,8 +190,8 @@ function renderHeat() {
   };
   const layout = baseLayout(90 + years.length * 34, 10);
   layout.margin = { l: 50, r: 20, t: 10, b: 30 };
-  layout.xaxis = { color: TEXT_SECONDARY, side: "bottom" };
-  layout.yaxis = { color: TEXT_SECONDARY, autorange: "reversed", type: "category" };
+  layout.xaxis = { color: TEXT_SECONDARY, side: "bottom", automargin: true };
+  layout.yaxis = { color: TEXT_SECONDARY, autorange: "reversed", type: "category", automargin: true };
   Plotly.react("heat-graph", [trace], layout, { displayModeBar: false, responsive: true });
 }
 

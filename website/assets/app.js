@@ -249,7 +249,7 @@ function renderTrend(type, pieces) {
   layout.margin.l = 55;
   layout.margin.r = 20;
   layout.margin.b = 30;
-  layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
+  layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, automargin: true };
   layout.yaxis = {
     gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE,
     tickformat: ",.0f", ticksuffix: " €",
