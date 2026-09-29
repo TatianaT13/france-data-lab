@@ -148,6 +148,7 @@ function renderCO2Anim() {
   const layout = baseLayout(300, 10);
   layout.margin.l = 55;
   layout.margin.r = 20;
+  layout.margin.b = 30;
   layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, range: [all[0].mois, all[all.length - 1].mois] };
   layout.yaxis = {
     gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE,
@@ -297,6 +298,7 @@ function renderMix() {
   const layout = baseLayout(420, 36);
   layout.margin.l = 55;
   layout.margin.r = 20;
+  layout.margin.b = 30;
   layout.legend.traceorder = "normal";
   layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
   layout.yaxis = {
@@ -319,6 +321,7 @@ function renderCO2() {
   const layout = baseLayout(220, 10);
   layout.margin.l = 55;
   layout.margin.r = 20;
+  layout.margin.b = 30;
   layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
   layout.yaxis = {
     gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE,

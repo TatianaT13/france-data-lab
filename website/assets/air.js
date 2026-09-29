@@ -100,7 +100,7 @@ function renderTrend() {
     };
   });
   const layout = baseLayout(340, 36);
-  layout.margin.l = 55; layout.margin.r = 20; layout.hovermode = "x unified";
+  layout.margin.l = 55; layout.margin.r = 20; layout.margin.b = 30; layout.hovermode = "x unified";
   layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
   layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE, ticksuffix: " µg" };
   Plotly.react("trend-graph", traces, layout, { displayModeBar: false, responsive: true });
@@ -116,7 +116,7 @@ function renderHourly() {
     hovertemplate: "%{x} h — %{y:.1f} µg/m³<extra>" + POLLUTANTS[k].label + "</extra>",
   }));
   const layout = baseLayout(420, 36);
-  layout.margin.l = 55; layout.margin.r = 20; layout.hovermode = "x unified";
+  layout.margin.l = 55; layout.margin.r = 20; layout.margin.b = 30; layout.hovermode = "x unified";
   layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, ticksuffix: " h", dtick: 3 };
   layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE, ticksuffix: " µg" };
   Plotly.react("hourly-graph", traces, layout, { displayModeBar: false, responsive: true });

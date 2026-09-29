@@ -248,6 +248,7 @@ function renderTrend(type, pieces) {
   const layout = baseLayout(380, type === "Tous" ? 36 : 10);
   layout.margin.l = 55;
   layout.margin.r = 20;
+  layout.margin.b = 30;
   layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
   layout.yaxis = {
     gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE,
