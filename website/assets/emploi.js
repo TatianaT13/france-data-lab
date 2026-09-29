@@ -173,7 +173,7 @@ function renderBar() {
     `Top 15 départements les ${ascending ? "moins" : "plus"} touchés par le chômage`;
   const layout = baseLayout(560, 10);
   layout.xaxis = {
-    showgrid: true, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE,
+    showgrid: true, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE,
     range: [0, maxRate * 1.2], ticksuffix: " %",
   };
   layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
@@ -250,7 +250,7 @@ function renderDumbbell() {
   });
   const layout = baseLayout(560, 36);
   layout.margin = { l: 170, r: 20, t: 36, b: 30 };
-  layout.xaxis = { gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE, ticksuffix: " %", zeroline: false };
+  layout.xaxis = { gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE, ticksuffix: " %", zeroline: false };
   layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, automargin: true };
   layout.legend = { orientation: "h", yanchor: "top", y: 1.08, x: 0, font: { color: TEXT_SECONDARY } };
   Plotly.react("dumbbell-graph", traces, layout, { displayModeBar: false, responsive: true });
@@ -265,8 +265,8 @@ function renderHist() {
   const layout = baseLayout(340, 10);
   layout.margin = { l: 45, r: 20, t: 10, b: 45 };
   layout.bargap = 0.05;
-  layout.xaxis = { title: { text: "Taux de chômage" }, ticksuffix: " %", color: TEXT_MUTED, linecolor: BASELINE };
-  layout.yaxis = { title: { text: "Nombre de départements" }, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE, zeroline: false };
+  layout.xaxis = { title: { text: "Taux de chômage" }, ticksuffix: " %", color: TEXT_SECONDARY, linecolor: BASELINE };
+  layout.yaxis = { title: { text: "Nombre de départements" }, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE, zeroline: false };
   layout.shapes = [{
     type: "line", x0: state.meta.national.taux_actuel, x1: state.meta.national.taux_actuel, y0: 0, y1: 1, yref: "paper",
     line: { color: ORANGE, width: 2, dash: "dash" },
@@ -289,7 +289,7 @@ function renderDom() {
   };
   const layout = baseLayout(340, 10);
   layout.margin = { l: 150, r: 40, t: 10, b: 30 };
-  layout.xaxis = { gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE, ticksuffix: " %", range: [0, Math.max(...rows.map((r) => r.v)) * 1.2] };
+  layout.xaxis = { gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE, ticksuffix: " %", range: [0, Math.max(...rows.map((r) => r.v)) * 1.2] };
   layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
   layout.showlegend = false;
   Plotly.react("dom-graph", [trace], layout, { displayModeBar: false, responsive: true });

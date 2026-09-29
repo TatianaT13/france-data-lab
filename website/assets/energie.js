@@ -148,9 +148,9 @@ function renderCO2Anim() {
   const layout = baseLayout(300, 10);
   layout.margin.l = 55;
   layout.margin.r = 20;
-  layout.xaxis = { showgrid: false, color: TEXT_MUTED, linecolor: BASELINE, range: [all[0].mois, all[all.length - 1].mois] };
+  layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, range: [all[0].mois, all[all.length - 1].mois] };
   layout.yaxis = {
-    gridcolor: GRIDLINE, zeroline: false, color: TEXT_MUTED, linecolor: BASELINE,
+    gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE,
     ticksuffix: " g", range: [0, Math.max(...all.map((d) => d.co2)) * 1.1],
   };
   Plotly.react("co2anim-graph", [trace], layout, { displayModeBar: false, responsive: true });
@@ -230,8 +230,8 @@ function renderConso() {
   };
   const layout = baseLayout(380, 10);
   layout.margin = { l: 60, r: 20, t: 10, b: 30 };
-  layout.xaxis = { showgrid: false, color: TEXT_MUTED, linecolor: BASELINE };
-  layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_MUTED, linecolor: BASELINE, ticksuffix: " MW", rangemode: "tozero" };
+  layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
+  layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE, ticksuffix: " MW", rangemode: "tozero" };
   Plotly.react("conso-graph", [trace], layout, { displayModeBar: false, responsive: true });
 }
 
@@ -298,9 +298,9 @@ function renderMix() {
   layout.margin.l = 55;
   layout.margin.r = 20;
   layout.legend.traceorder = "normal";
-  layout.xaxis = { showgrid: false, color: TEXT_MUTED, linecolor: BASELINE };
+  layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
   layout.yaxis = {
-    gridcolor: GRIDLINE, zeroline: false, color: TEXT_MUTED, linecolor: BASELINE,
+    gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE,
     ticksuffix: " MW",
   };
   layout.hovermode = "x unified";
@@ -319,9 +319,9 @@ function renderCO2() {
   const layout = baseLayout(220, 10);
   layout.margin.l = 55;
   layout.margin.r = 20;
-  layout.xaxis = { showgrid: false, color: TEXT_MUTED, linecolor: BASELINE };
+  layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
   layout.yaxis = {
-    gridcolor: GRIDLINE, zeroline: false, color: TEXT_MUTED, linecolor: BASELINE,
+    gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE,
     ticksuffix: " g",
   };
   Plotly.react("co2-graph", [trace], layout, { displayModeBar: false, responsive: true });
@@ -385,7 +385,7 @@ function renderBar() {
     `Régions classées par consommation (${ascending ? "croissant" : "décroissant"})`;
   const layout = baseLayout(520, 10);
   layout.xaxis = {
-    showgrid: true, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE,
+    showgrid: true, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE,
     range: [0, maxVal * 1.2],
   };
   layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
@@ -412,7 +412,7 @@ function renderExchanges() {
   const layout = baseLayout(260, 10);
   const maxAbs = Math.max(...sorted.map((d) => Math.abs(d.solde)), 1);
   layout.xaxis = {
-    showgrid: true, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE,
+    showgrid: true, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE,
     range: [-maxAbs * 1.4, maxAbs * 1.4], zeroline: true, zerolinecolor: BASELINE,
   };
   layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };

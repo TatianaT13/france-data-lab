@@ -248,9 +248,9 @@ function renderTrend(type, pieces) {
   const layout = baseLayout(380, type === "Tous" ? 36 : 10);
   layout.margin.l = 55;
   layout.margin.r = 20;
-  layout.xaxis = { showgrid: false, color: TEXT_MUTED, linecolor: BASELINE };
+  layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
   layout.yaxis = {
-    gridcolor: GRIDLINE, zeroline: false, color: TEXT_MUTED, linecolor: BASELINE,
+    gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE,
     tickformat: ",.0f", ticksuffix: " €",
   };
   layout.hovermode = "x unified";
@@ -287,7 +287,7 @@ function renderBar(year, type, pieces) {
     `Top 15 départements les ${ascending ? "moins" : "plus"} chers — ${year}`;
   const layout = baseLayout(560, 10);
   layout.xaxis = {
-    showgrid: true, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE,
+    showgrid: true, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE,
     range: [0, maxPrice * 1.2],
   };
   layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
@@ -344,7 +344,7 @@ function renderMovers(year, type, pieces) {
   const layout = baseLayout(480, 10);
   layout.margin = { l: 170, r: 30, t: 10, b: 30 };
   layout.xaxis = {
-    showgrid: true, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE,
+    showgrid: true, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE,
     range: [-maxAbs * 1.3, maxAbs * 1.3], ticksuffix: " %", zeroline: true, zerolinecolor: BASELINE,
   };
   layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
@@ -375,8 +375,8 @@ function renderScatter(year, pieces) {
   ];
   const layout = baseLayout(480, 10);
   layout.margin = { l: 60, r: 20, t: 10, b: 50 };
-  layout.xaxis = { title: { text: "Appartement (€/m²)" }, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE, range: [0, max], zeroline: false };
-  layout.yaxis = { title: { text: "Maison (€/m²)" }, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE, range: [0, max], zeroline: false };
+  layout.xaxis = { title: { text: "Appartement (€/m²)" }, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE, range: [0, max], zeroline: false };
+  layout.yaxis = { title: { text: "Maison (€/m²)" }, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE, range: [0, max], zeroline: false };
   Plotly.react("scatter-graph", traces, layout, { displayModeBar: false, responsive: true });
 }
 

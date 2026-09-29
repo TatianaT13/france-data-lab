@@ -101,8 +101,8 @@ function renderTrend() {
   });
   const layout = baseLayout(340, 36);
   layout.margin.l = 55; layout.margin.r = 20; layout.hovermode = "x unified";
-  layout.xaxis = { showgrid: false, color: TEXT_MUTED, linecolor: BASELINE };
-  layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_MUTED, linecolor: BASELINE, ticksuffix: " µg" };
+  layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
+  layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE, ticksuffix: " µg" };
   Plotly.react("trend-graph", traces, layout, { displayModeBar: false, responsive: true });
 }
 
@@ -117,8 +117,8 @@ function renderHourly() {
   }));
   const layout = baseLayout(420, 36);
   layout.margin.l = 55; layout.margin.r = 20; layout.hovermode = "x unified";
-  layout.xaxis = { showgrid: false, color: TEXT_MUTED, linecolor: BASELINE, ticksuffix: " h", dtick: 3 };
-  layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_MUTED, linecolor: BASELINE, ticksuffix: " µg" };
+  layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, ticksuffix: " h", dtick: 3 };
+  layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE, ticksuffix: " µg" };
   Plotly.react("hourly-graph", traces, layout, { displayModeBar: false, responsive: true });
 }
 
@@ -137,7 +137,7 @@ function renderBar() {
   };
   const layout = baseLayout(420, 10);
   layout.margin = { l: 190, r: 30, t: 10, b: 30 };
-  layout.xaxis = { showgrid: true, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE, range: [0, max * 1.2] };
+  layout.xaxis = { showgrid: true, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE, range: [0, max * 1.2] };
   layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
   layout.showlegend = false;
   if (p.who) {
@@ -190,7 +190,7 @@ function renderHeat() {
   };
   const layout = baseLayout(90 + years.length * 34, 10);
   layout.margin = { l: 50, r: 20, t: 10, b: 30 };
-  layout.xaxis = { color: TEXT_MUTED, side: "bottom" };
+  layout.xaxis = { color: TEXT_SECONDARY, side: "bottom" };
   layout.yaxis = { color: TEXT_SECONDARY, autorange: "reversed", type: "category" };
   Plotly.react("heat-graph", [trace], layout, { displayModeBar: false, responsive: true });
 }

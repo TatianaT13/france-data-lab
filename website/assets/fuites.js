@@ -133,8 +133,8 @@ function renderTrend() {
   layout.margin.l = 55;
   layout.margin.r = 20;
   layout.hovermode = "x unified";
-  layout.xaxis = { showgrid: false, color: TEXT_MUTED, linecolor: BASELINE };
-  layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_MUTED, linecolor: BASELINE };
+  layout.xaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE };
+  layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE };
   Plotly.react("trend-graph", [total, sensible], layout, { displayModeBar: false, responsive: true });
 }
 
@@ -149,7 +149,7 @@ function renderSectors() {
   };
   const layout = baseLayout(480, 10);
   layout.margin = { l: 230, r: 30, t: 10, b: 30 };
-  layout.xaxis = { showgrid: true, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE, range: [0, Math.max(...rows.map((d) => d.total)) * 1.2] };
+  layout.xaxis = { showgrid: true, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE, range: [0, Math.max(...rows.map((d) => d.total)) * 1.2] };
   layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, automargin: true };
   layout.showlegend = false;
   Plotly.react("sectors-graph", [trace], layout, { displayModeBar: false, responsive: true });
@@ -168,7 +168,7 @@ function renderOrigins() {
   };
   const layout = baseLayout(480, 10);
   layout.margin = { l: 230, r: 30, t: 10, b: 30 };
-  layout.xaxis = { showgrid: true, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE, ticksuffix: " %" };
+  layout.xaxis = { showgrid: true, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE, ticksuffix: " %" };
   layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, automargin: true };
   layout.showlegend = false;
   Plotly.react("origins-graph", [trace], layout, { displayModeBar: false, responsive: true });
@@ -185,8 +185,8 @@ function renderTaille() {
   };
   const layout = baseLayout(340, 10);
   layout.margin = { l: 50, r: 20, t: 20, b: 40 };
-  layout.xaxis = { color: TEXT_MUTED, linecolor: BASELINE };
-  layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_MUTED, linecolor: BASELINE };
+  layout.xaxis = { color: TEXT_SECONDARY, linecolor: BASELINE };
+  layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE };
   Plotly.react("taille-graph", [trace], layout, { displayModeBar: false, responsive: true });
 }
 
@@ -223,7 +223,7 @@ function renderInfo() {
   };
   const layout = baseLayout(220, 10);
   layout.margin = { l: 260, r: 30, t: 10, b: 30 };
-  layout.xaxis = { showgrid: true, gridcolor: GRIDLINE, color: TEXT_MUTED, linecolor: BASELINE, range: [0, Math.max(...rows.map((d) => d.count)) * 1.2] };
+  layout.xaxis = { showgrid: true, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE, range: [0, Math.max(...rows.map((d) => d.count)) * 1.2] };
   layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, automargin: true };
   layout.showlegend = false;
   Plotly.react("info-graph", [trace], layout, { displayModeBar: false, responsive: true });
