@@ -21,8 +21,11 @@ const CLASSE_COLORS = { A: "#0ca30c", B: "#5598e7", C: "#eda100", D: "#e66767" }
 
 const state = {
   meta: null, esatisTop: [], esatisRegion: [], icshaRegion: [],
-  esatisClassement: [], icshaClassement: [], geo: null, names: {},
+  esatisClassement: [], icshaClassement: [], etablissements: [], geo: null, names: {},
 };
+
+const etabState = { sortCol: "nom", sortDir: "asc", query: "" };
+const ETAB_ROW_LIMIT = 200;
 
 function baseLayout(height, topMargin) {
   return {
@@ -36,16 +39,17 @@ function baseLayout(height, topMargin) {
 }
 
 async function loadData() {
-  const [meta, esatisTop, esatisRegion, icshaRegion, esatisClassement, icshaClassement, geo] = await Promise.all([
+  const [meta, esatisTop, esatisRegion, icshaRegion, esatisClassement, icshaClassement, etablissements, geo] = await Promise.all([
     fetch("data/hopitaux_meta.json").then((r) => r.json()),
     fetch("data/hopitaux_esatis_top.json").then((r) => r.json()),
     fetch("data/hopitaux_esatis_region.json").then((r) => r.json()),
     fetch("data/hopitaux_icsha_region.json").then((r) => r.json()),
     fetch("data/hopitaux_esatis_classement.json").then((r) => r.json()),
     fetch("data/hopitaux_icsha_classement.json").then((r) => r.json()),
+    fetch("data/hopitaux_etablissements.json").then((r) => r.json()),
     fetch("data/regions.geojson").then((r) => r.json()),
   ]);
-  Object.assign(state, { meta, esatisTop, esatisRegion, icshaRegion, esatisClassement, icshaClassement, geo });
+  Object.assign(state, { meta, esatisTop, esatisRegion, icshaRegion, esatisClassement, icshaClassement, etablissements, geo });
   state.names = Object.fromEntries(geo.features.map((f) => [f.properties.code, f.properties.nom]));
 }
 
@@ -146,6 +150,82 @@ function renderClassementDist(elId, data, colorMap) {
   Plotly.react(elId, [trace], layout, { displayModeBar: false, responsive: true });
 }
 
+function normalize(s) {
+  return (s || "").toString().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+}
+
+function sortEtabs(rows, col, dir) {
+  const mul = dir === "asc" ? 1 : -1;
+  return [...rows].sort((a, b) => {
+    const av = a[col], bv = b[col];
+    if (av == null && bv == null) return 0;
+    if (av == null) return 1;
+    if (bv == null) return -1;
+    if (typeof av === "string") return mul * av.localeCompare(bv, "fr");
+    return mul * (av - bv);
+  });
+}
+
+function renderEtabTable() {
+  const q = normalize(etabState.query);
+  let rows = state.etablissements;
+  if (q) {
+    rows = rows.filter(
+      (d) => normalize(d.nom).includes(q) || normalize(d.region).includes(q) || normalize(d.type).includes(q)
+    );
+  }
+  rows = sortEtabs(rows, etabState.sortCol, etabState.sortDir);
+  const total = rows.length;
+  const shown = rows.slice(0, ETAB_ROW_LIMIT);
+
+  document.getElementById("etab-table-body").innerHTML =
+    shown
+      .map(
+        (d) => `
+    <tr>
+      <td>${d.nom}</td>
+      <td>${d.region}</td>
+      <td>${d.type || "—"}</td>
+      <td>${d.score_esatis != null ? d.score_esatis.toFixed(1) : "—"}</td>
+      <td>${d.classe_esatis || "—"}</td>
+      <td>${d.score_icsha != null ? d.score_icsha.toFixed(1) + " %" : "—"}</td>
+      <td>${d.classe_icsha || "—"}</td>
+    </tr>`
+      )
+      .join("") || `<tr><td colspan="7">Aucun établissement ne correspond à la recherche.</td></tr>`;
+
+  document.getElementById("etab-count").textContent =
+    total > shown.length
+      ? `${shown.length} établissements affichés sur ${total} résultats — affinez la recherche pour voir les autres.`
+      : `${total} établissement${total > 1 ? "s" : ""} sur ${state.etablissements.length} au total.`;
+
+  document.querySelectorAll("#etab-table th[data-col]").forEach((th) => {
+    const active = th.dataset.col === etabState.sortCol;
+    th.classList.toggle("sorted", active);
+    th.classList.toggle("asc", active && etabState.sortDir === "asc");
+  });
+}
+
+function initEtabTable() {
+  document.querySelectorAll("#etab-table th[data-col]").forEach((th) => {
+    th.addEventListener("click", () => {
+      const col = th.dataset.col;
+      if (etabState.sortCol === col) {
+        etabState.sortDir = etabState.sortDir === "asc" ? "desc" : "asc";
+      } else {
+        etabState.sortCol = col;
+        etabState.sortDir = col === "nom" || col === "region" || col === "type" ? "asc" : "desc";
+      }
+      renderEtabTable();
+    });
+  });
+  document.getElementById("etab-search").addEventListener("input", (e) => {
+    etabState.query = e.target.value;
+    renderEtabTable();
+  });
+  renderEtabTable();
+}
+
 async function init() {
   await loadData();
   renderMeta();
@@ -158,6 +238,7 @@ async function init() {
   renderRegionMap("map-icsha-graph", state.icshaRegion, "Hygiène des mains", "%");
   renderClassementDist("dist-esatis-graph", state.esatisClassement, CLASSE_COLORS);
   renderClassementDist("dist-icsha-graph", state.icshaClassement, CLASSE_COLORS);
+  initEtabTable();
 }
 
 init();

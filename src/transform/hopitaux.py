@@ -96,6 +96,24 @@ def top_establishments(df: pd.DataFrame, sort_col: str, n: int = 20) -> list[dic
     return valid[cols].replace({np.nan: None}).to_dict("records")
 
 
+def full_establishment_list(esatis: pd.DataFrame, icsha: pd.DataFrame) -> list[dict]:
+    # Liste complète basée sur le périmètre e-Satis (993 établissements MCO notés par
+    # leurs patients), avec le score ICSHA (hygiène des mains) ajouté quand disponible —
+    # l'enquête ICSHA couvre un périmètre plus large (EHPAD, HAD...) hors du champ hôpital.
+    icsha_dedup = icsha.drop_duplicates("finess", keep="first")
+    merged = esatis.merge(
+        icsha_dedup[["finess", "score", "classe"]].rename(
+            columns={"score": "score_icsha", "classe": "classe_icsha"}
+        ),
+        on="finess",
+        how="left",
+    )
+    merged["score_esatis"] = merged["score"].where(merged["valide"])
+    merged["classe_esatis"] = merged["classement"].where(merged["valide"])
+    cols = ["finess", "nom", "region", "type", "score_esatis", "classe_esatis", "score_icsha", "classe_icsha"]
+    return merged[cols].sort_values("nom").replace({np.nan: None}).to_dict("records")
+
+
 def build_all(esatis_path: Path, qualhas_path: Path) -> dict:
     esatis = load_esatis(esatis_path)
     icsha = load_icsha(qualhas_path)
@@ -106,4 +124,5 @@ def build_all(esatis_path: Path, qualhas_path: Path) -> dict:
         "esatis_region": regional_avg(esatis),
         "icsha_region": regional_avg(icsha),
         "esatis_top": top_establishments(esatis, "score"),
+        "etablissements": full_establishment_list(esatis, icsha),
     }

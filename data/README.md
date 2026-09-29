@@ -136,7 +136,9 @@ python -m src.extract.build_hopitaux
   data.gouv.fr : `DATASET_ID` dans `src/extract/hopitaux.py` doit être mis à jour à la main
   lorsqu'un nouveau recueil paraît (pas de résolution dynamique possible ici).
 - Traités (`data/processed/hopitaux_*.json`) : classement des 20 meilleurs établissements
-  e-Satis, moyennes régionales, répartition par classe officielle (A à D).
+  e-Satis, moyennes régionales, répartition par classe officielle (A à D), et une liste
+  complète des 993 établissements notés e-Satis (avec score ICSHA quand disponible) pour
+  le tableau recherchable de la page.
 - Nettoyage important : ~180 établissements e-Satis apparaissaient sur plusieurs lignes
   (unités distinctes d'un même hôpital, parfois avec une région incohérente entre lignes) —
   dédupliqués par FINESS. Le score ICSHA peut dépasser 100 % pour de petites structures :

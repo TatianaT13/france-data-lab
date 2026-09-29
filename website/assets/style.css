@@ -126,6 +126,32 @@ select#pieces-select {
   font-family: inherit;
 }
 
+.etab-search {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  margin-bottom: 14px;
+}
+
+table.dvf-table th[data-col] {
+  white-space: nowrap;
+}
+
+table.dvf-table th[data-col].sorted::after {
+  content: " ▾";
+  color: var(--text-muted);
+}
+
+table.dvf-table th[data-col].sorted.asc::after {
+  content: " ▴";
+}
+
 .year-play-row {
   display: flex;
   gap: 8px;

@@ -31,6 +31,7 @@ def build() -> None:
         ("hopitaux_esatis_region.json", result["esatis_region"]),
         ("hopitaux_icsha_region.json", result["icsha_region"]),
         ("hopitaux_esatis_top.json", result["esatis_top"]),
+        ("hopitaux_etablissements.json", result["etablissements"]),
     ]:
         text = json.dumps(payload, ensure_ascii=False)
         (WEBSITE_DATA_DIR / name).write_text(text)
