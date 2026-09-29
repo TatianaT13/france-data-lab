@@ -99,7 +99,7 @@ function renderTrend() {
     line: { color: BLUE, width: 2 }, fill: "tozeroy", fillcolor: "rgba(42, 120, 214, 0.10)",
     hovertemplate: "%{y:,.0f} passages<extra></extra>",
   };
-  const layout = baseLayout(380, 10);
+  const layout = baseLayout(380, 26);
   layout.margin.l = 65;
   layout.margin.r = 20;
   layout.margin.b = 30;
@@ -110,7 +110,7 @@ function renderTrend() {
     fillcolor: ORANGE, opacity: 0.08, line: { width: 0 },
   }];
   layout.annotations = [{
-    x: "2020-04-13", y: 1, yref: "paper", text: "1er confinement", showarrow: false,
+    x: "2020-04-13", y: 1.04, yref: "paper", text: "1er confinement", showarrow: false,
     yanchor: "bottom", font: { color: ORANGE, size: 11 },
   }];
   Plotly.react("trend-graph", [trace], layout, { displayModeBar: false, responsive: true });

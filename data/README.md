@@ -12,6 +12,7 @@ Ce dossier documente les **sources** de données utilisées par le projet, pas f
 | Air | LCSQA / Géod'air (concentrations horaires, stations des AASQA) | [dataset](https://www.data.gouv.fr/datasets/5b98b648634f415309d52a50/) | CSV (un fichier par jour) |
 | Fuites de données | Notifications de violations de données à la CNIL | [dataset](https://www.data.gouv.fr/datasets/notifications-a-la-cnil-de-violations-de-donnees-a-caractere-personnel/) | CSV |
 | Urgences | Passages aux urgences par département (DREES, 2017-2023) | [dataset](https://www.data.gouv.fr/datasets/675b7bbf79cf8f76c2b02f3f/) | CSV |
+| Hôpitaux | Indicateurs qualité des soins par établissement (HAS) | [dataset](https://www.data.gouv.fr/datasets/66e936005e9b27856ef160d1/) | XLSX |
 | Accidents | Base des accidents corporels de la circulation | à compléter | CSV |
 
 ### Immobilier (DVF)
@@ -114,6 +115,32 @@ python -m src.extract.build_urgences
   Lozère (48) est absent, seuls 3 DOM sur 5 sont couverts ; aucune donnée par établissement.
 - Rafraîchi automatiquement chaque semaine par `.github/workflows/update-dvf.yml`.
 - Visualisé dans [`website/urgences.html`](../website/urgences.html).
+
+### Hôpitaux (HAS)
+
+Récupéré par [`src/extract/build_hopitaux.py`](../src/extract/build_hopitaux.py) :
+
+```bash
+python -m src.extract.build_hopitaux
+```
+
+- Source : indicateurs de qualité et de sécurité des soins (IQSS) de la Haute Autorité de
+  Santé — satisfaction des patients (e-Satis, secteur MCO) et hygiène des mains (ICSHA v4),
+  conçus par la HAS pour la comparaison publique entre établissements.
+- ⚠️ La HAS republie un nouveau « recueil » chaque année sous un **nouvel identifiant**
+  data.gouv.fr : `DATASET_ID` dans `src/extract/hopitaux.py` doit être mis à jour à la main
+  lorsqu'un nouveau recueil paraît (pas de résolution dynamique possible ici).
+- Traités (`data/processed/hopitaux_*.json`) : classement des 20 meilleurs établissements
+  e-Satis, moyennes régionales, répartition par classe officielle (A à D).
+- Nettoyage important : ~180 établissements e-Satis apparaissaient sur plusieurs lignes
+  (unités distinctes d'un même hôpital, parfois avec une région incohérente entre lignes) —
+  dédupliqués par FINESS. Le score ICSHA peut dépasser 100 % pour de petites structures :
+  aucun classement par score brut n'est publié pour cet indicateur, uniquement la classe
+  officielle A à C calculée par la HAS.
+- Volontairement absent : la mortalité par établissement, que la HAS ne publie pas en
+  raison des écarts de gravité des cas entre établissements (voir la page pour le détail).
+- Rafraîchi automatiquement chaque semaine par `.github/workflows/update-dvf.yml`.
+- Visualisé dans [`website/hopitaux.html`](../website/hopitaux.html).
 
 ## Organisation suggérée
 

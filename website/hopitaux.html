@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classement des hôpitaux : satisfaction et hygiène (HAS) | France Data Lab</title>
+  <meta name="description" content="Classement officiel des hôpitaux français par satisfaction des patients (e-Satis) et hygiène des mains (ICSHA), indicateurs publiés et validés par la Haute Autorité de Santé." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#2a78d6" />
+  <meta name="author" content="Tatiana Tarasenko" />
+  <link rel="canonical" href="https://tatianat13.github.io/france-data-lab/hopitaux.html" />
+  <link rel="alternate" hreflang="fr" href="https://tatianat13.github.io/france-data-lab/hopitaux.html" />
+  <link rel="alternate" hreflang="x-default" href="https://tatianat13.github.io/france-data-lab/hopitaux.html" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/icon-512.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="France Data Lab" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:title" content="Classement des hôpitaux : satisfaction et hygiène (HAS) | France Data Lab" />
+  <meta property="og:description" content="Classement officiel des hôpitaux français par satisfaction des patients (e-Satis) et hygiène des mains (ICSHA), indicateurs publiés et validés par la Haute Autorité de Santé." />
+  <meta property="og:url" content="https://tatianat13.github.io/france-data-lab/hopitaux.html" />
+  <meta property="og:image" content="https://tatianat13.github.io/france-data-lab/assets/og-hopitaux.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Classement des hôpitaux : satisfaction et hygiène (HAS) | France Data Lab" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Classement des hôpitaux : satisfaction et hygiène (HAS) | France Data Lab" />
+  <meta name="twitter:description" content="Classement officiel des hôpitaux français par satisfaction des patients (e-Satis) et hygiène des mains (ICSHA), indicateurs publiés et validés par la Haute Autorité de Santé." />
+  <meta name="twitter:image" content="https://tatianat13.github.io/france-data-lab/assets/og-hopitaux.png" />
+  <link rel="preconnect" href="https://cdn.plot.ly" crossorigin />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/", "inLanguage": "fr-FR", "description": "Observatoires interactifs bâtis sur des données ouvertes françaises."}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://tatianat13.github.io/france-data-lab/"}, {"@type": "ListItem", "position": 2, "name": "Hôpitaux", "item": "https://tatianat13.github.io/france-data-lab/hopitaux.html"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Classement des hôpitaux : satisfaction et hygiène (HAS) | France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/hopitaux.html", "description": "Classement officiel des hôpitaux français par satisfaction des patients (e-Satis) et hygiène des mains (ICSHA), indicateurs publiés et validés par la Haute Autorité de Santé.", "inLanguage": "fr-FR", "isPartOf": {"@type": "WebSite", "url": "https://tatianat13.github.io/france-data-lab/", "name": "France Data Lab"}}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "Indicateurs qualité des établissements de santé (e-Satis, ICSHA) — HAS", "description": "Résultats officiels des indicateurs de qualité et de sécurité des soins par établissement : satisfaction des patients (e-Satis) et hygiène des mains (ICSHA v4), avec classement A à D calculé et ajusté par la Haute Autorité de Santé.", "url": "https://tatianat13.github.io/france-data-lab/hopitaux.html", "inLanguage": "fr-FR", "keywords": ["hôpital", "santé", "HAS", "e-Satis", "ICSHA", "qualité des soins", "satisfaction patient"], "creator": {"@type": "Organization", "name": "Haute Autorité de Santé"}, "isBasedOn": "https://www.data.gouv.fr/datasets/66e936005e9b27856ef160d1/", "spatialCoverage": {"@type": "Place", "name": "France"}, "isAccessibleForFree": true, "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/hopitaux_esatis_top.json"}, {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/hopitaux_esatis_region.json"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Ce classement inclut-il la mortalité par hôpital ?", "acceptedAnswer": {"@type": "Answer", "text": "Non. La HAS ne publie volontairement pas de mortalité brute par établissement : un hôpital traitant des cas plus graves afficherait toujours une mortalité plus élevée sans que ce soit un signe de moins bons soins. Cette page utilise deux indicateurs conçus et ajustés par la HAS pour la comparaison : la satisfaction des patients et l'hygiène des mains."}}, {"@type": "Question", "name": "Qu'est-ce que le classement A à D ?", "acceptedAnswer": {"@type": "Answer", "text": "C'est une note officielle calculée par la HAS elle-même, qui positionne chaque établissement par rapport à un objectif de performance national. Ce n'est pas un calcul fait par ce site."}}, {"@type": "Question", "name": "Pourquoi certains scores ICSHA dépassent-ils 100 % ?", "acceptedAnswer": {"@type": "Answer", "text": "L'ICSHA compare la consommation réelle de solution hydro-alcoolique à une consommation théorique attendue : dépasser 100 % est possible et n'implique pas une hygiène deux fois meilleure. C'est pourquoi cette page ne classe pas les établissements par score ICSHA brut, seulement par la classe officielle A à C."}}]}</script>
+</head>
+<body>
+  <main class="app-shell">
+    <nav class="site-nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="immobilier.html">Immobilier</a>
+      <a href="emploi.html">Emploi</a>
+      <a href="energie.html">Énergie</a>
+      <a href="air.html">Air</a>
+      <a href="fuites.html">Fuites de données</a>
+      <a href="urgences.html">Urgences</a>
+      <a href="hopitaux.html" class="active">Hôpitaux</a>
+    </nav>
+    <div class="app-header">
+      <div>
+        <h1 class="app-title">Classement des hôpitaux 🇫🇷</h1>
+        <p class="app-subtitle">Satisfaction des patients et hygiène des mains — Haute Autorité de Santé</p>
+      </div>
+      <div class="app-meta" id="last-updated"></div>
+    </div>
+
+    <noscript><p class="loading">Cette page affiche des graphiques interactifs et nécessite JavaScript. Les explications sur les données restent lisibles ci-dessous.</p></noscript>
+    <div id="app-loading" class="loading">Chargement des données…</div>
+
+    <div id="app-content" class="hidden">
+      <div class="kpi-row" id="kpi-row"></div>
+
+      <div class="insights" id="insights"></div>
+
+      <div class="chart-card full-width">
+        <div class="chart-title" role="heading" aria-level="2">Les 20 hôpitaux les mieux notés par leurs patients (e-Satis)</div>
+        <div id="top-graph" role="img" aria-label="Classement des 20 établissements ayant le meilleur score de satisfaction patient e-Satis"></div>
+        <p class="chart-note">Score de satisfaction ajusté sur 100, calculé par la HAS à partir des réponses des patients hospitalisés plus de 48h. Un seul résultat par établissement (FINESS).</p>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2">Satisfaction patients — moyenne par région</div>
+          <div id="map-esatis-graph" role="img" aria-label="Carte du score moyen de satisfaction patient e-Satis par région"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2">Hygiène des mains — moyenne par région</div>
+          <div id="map-icsha-graph" role="img" aria-label="Carte du score moyen d'hygiène des mains ICSHA par région"></div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2">Satisfaction patients — répartition par classe</div>
+          <div id="dist-esatis-graph" role="img" aria-label="Nombre d'établissements par classe officielle A à D pour la satisfaction patient"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2">Hygiène des mains — répartition par classe</div>
+          <div id="dist-icsha-graph" role="img" aria-label="Nombre d'établissements par classe officielle A à C pour l'hygiène des mains"></div>
+        </div>
+      </div>
+    </div>
+
+    <details class="doc" open>
+      <summary>À propos des données</summary>
+      <h3>Comment lire cette page</h3>
+      <ul>
+        <li>Le <strong>classement A à D</strong> (ou A à C pour l'hygiène des mains) est calculé et validé par la HAS elle-même : il positionne chaque établissement par rapport à un objectif national de performance, pas un simple tri par score brut.</li>
+        <li><strong>e-Satis</strong> : satisfaction des patients hospitalisés plus de 48h en médecine/chirurgie/obstétrique (MCO), interrogés après leur sortie.</li>
+        <li><strong>ICSHA v4</strong> : rapporte la consommation de solution hydro-alcoolique d'un établissement à un niveau théorique attendu compte tenu de son activité — un indicateur usuel de suivi de l'hygiène des mains, pas une mesure directe des infections.</li>
+      </ul>
+      <h3>D'où viennent les données</h3>
+      <p>La <strong>Haute Autorité de Santé</strong> (HAS) publie chaque année les résultats des <a href="https://www.data.gouv.fr/datasets/66e936005e9b27856ef160d1/" target="_blank" rel="noopener">indicateurs de qualité et de sécurité des soins</a> (IQSS), conçus explicitement pour permettre au public de comparer les établissements.</p>
+      <h3>Mise à jour</h3>
+      <p>⚠️ La HAS republie un nouveau « recueil » chaque année sous une nouvelle adresse : ce site vérifie la source chaque semaine, mais l'identifiant du jeu de données doit être mis à jour manuellement dans le code lorsqu'un nouveau recueil paraît. Les données affichées datent du recueil le plus récent connu au moment de la dernière mise à jour indiquée ci-dessus.</p>
+      <h3>Pourquoi pas de mortalité ?</h3>
+      <p>La HAS ne publie volontairement <strong>aucune mortalité brute par établissement</strong>. Un centre spécialisé en cancérologie ou un CHU qui prend en charge les cas les plus graves affichera toujours une mortalité plus élevée qu'une clinique de proximité, sans que ce soit un signe de moins bons soins : comparer des établissements sans ajuster sur la gravité des cas serait trompeur. C'est pourquoi cette page utilise deux indicateurs que la HAS elle-même juge comparables tels quels.</p>
+      <h3>Limites à connaître</h3>
+      <ul>
+        <li>Le score ICSHA peut <strong>dépasser 100 %</strong> pour de petites structures (numérateur/dénominateur sur de faibles effectifs) : cette page ne classe donc pas les établissements par score ICSHA brut, uniquement par classe officielle.</li>
+        <li>Certains grands établissements (CHU, groupes hospitaliers) publient plusieurs résultats pour un même numéro FINESS (une ligne par service) : un seul résultat par établissement est conservé ici.</li>
+        <li>Tous les établissements ne participent pas à chaque enquête ; les non-répondants ou non-concernés sont exclus des classements et moyennes.</li>
+        <li>La qualité perçue (satisfaction) et l'hygiène des mains ne couvrent pas tous les aspects des soins (compétence médicale, résultats cliniques, délais d'attente…).</li>
+      </ul>
+      <h3>Glossaire</h3>
+      <dl>
+        <dt>FINESS</dt><dd>Numéro d'identification officiel de chaque établissement de santé en France.</dd>
+        <dt>MCO</dt><dd>Médecine, Chirurgie, Obstétrique — le secteur de soins aigus le plus courant.</dd>
+        <dt>Solution hydro-alcoolique (SHA)</dt><dd>Gel ou solution utilisé pour se désinfecter les mains sans eau, mesure clé de prévention des infections.</dd>
+      </dl>
+      <h3>Questions fréquentes</h3>
+      <dl>
+        <dt>Ce classement inclut-il la mortalité par hôpital ?</dt><dd>Non. La HAS ne publie volontairement pas de mortalité brute par établissement : un hôpital traitant des cas plus graves afficherait toujours une mortalité plus élevée sans que ce soit un signe de moins bons soins. Cette page utilise deux indicateurs conçus et ajustés par la HAS pour la comparaison : la satisfaction des patients et l'hygiène des mains.</dd>
+        <dt>Qu'est-ce que le classement A à D ?</dt><dd>C'est une note officielle calculée par la HAS elle-même, qui positionne chaque établissement par rapport à un objectif de performance national. Ce n'est pas un calcul fait par ce site.</dd>
+        <dt>Pourquoi certains scores ICSHA dépassent-ils 100 % ?</dt><dd>L'ICSHA compare la consommation réelle de solution hydro-alcoolique à une consommation théorique attendue : dépasser 100 % est possible et n'implique pas une hygiène deux fois meilleure. C'est pourquoi cette page ne classe pas les établissements par score ICSHA brut, seulement par la classe officielle A à C.</dd>
+      </dl>
+      <div class="doc-bottom"></div>
+    </details>
+
+    <div class="app-footer">
+      Données : <a href="https://www.data.gouv.fr/" target="_blank" rel="noopener">data.gouv.fr</a>
+      (indicateurs qualité et sécurité des soins, Haute Autorité de Santé) · Vérifié chaque semaine ·
+      <a href="index.html">Autres observatoires</a> ·
+      <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
+    </div>
+  </main>
+
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
+  <script src="assets/hopitaux.js" defer></script>
+</body>
+</html>

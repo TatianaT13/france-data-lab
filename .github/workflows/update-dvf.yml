@@ -30,6 +30,9 @@ jobs:
       - name: Run urgences extraction (DREES)
         run: python -m src.extract.build_urgences
 
+      - name: Run hopitaux extraction (HAS)
+        run: python -m src.extract.build_hopitaux
+
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
