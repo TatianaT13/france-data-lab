@@ -1,0 +1,56 @@
+"""Pipeline accidents : télécharge, agrège, écrit le JSON du site."""
+
+import json
+import shutil
+from datetime import datetime, timezone
+from pathlib import Path
+
+from src.extract.accidents import download_year, resolve_resources
+from src.extract.dvf import GEO_PATH, download_geojson
+from src.transform.accidents import build_all
+
+ROOT = Path(__file__).resolve().parents[2]
+PROCESSED_DIR = ROOT / "data" / "processed"
+WEBSITE_DATA_DIR = ROOT / "website" / "data"
+
+
+def build() -> None:
+    print("[accidents] résolution des fichiers disponibles...")
+    resources = resolve_resources()
+
+    years_paths = {}
+    for year, urls in sorted(resources.items()):
+        print(f"[accidents] téléchargement {year}...")
+        years_paths[year] = download_year(year, urls)
+
+    result = build_all(years_paths)
+
+    download_geojson()
+
+    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+    WEBSITE_DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+    for name, payload in [
+        ("accidents_monthly.json", result["monthly"]),
+        ("accidents_dept_year.json", result["dept_year"]),
+        ("accidents_severity.json", result["severity"]),
+    ]:
+        text = json.dumps(payload, ensure_ascii=False)
+        (WEBSITE_DATA_DIR / name).write_text(text)
+        (PROCESSED_DIR / name).write_text(text)
+
+    meta = {**result["meta"], "last_updated": datetime.now(timezone.utc).isoformat()}
+    text = json.dumps(meta, ensure_ascii=False)
+    (WEBSITE_DATA_DIR / "accidents_meta.json").write_text(text)
+    (PROCESSED_DIR / "accidents_meta.json").write_text(text)
+
+    shutil.copyfile(GEO_PATH, WEBSITE_DATA_DIR / "departements.geojson")
+
+    print(
+        f"[accidents] terminé : {meta['total_accidents']:,} accidents, "
+        f"{meta['total_tues']:,} tués, {meta['annee_min']}-{meta['annee_max']}"
+    )
+
+
+if __name__ == "__main__":
+    build()

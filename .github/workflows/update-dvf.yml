@@ -33,6 +33,9 @@ jobs:
       - name: Run hopitaux extraction (HAS)
         run: python -m src.extract.build_hopitaux
 
+      - name: Run accidents extraction (ONISR)
+        run: python -m src.extract.build_accidents
+
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"

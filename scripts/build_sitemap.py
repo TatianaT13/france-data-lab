@@ -5,7 +5,7 @@ from pathlib import Path
 
 BASE = "https://tatianat13.github.io/france-data-lab/"
 PAGES = [("", "1.0", "weekly"), ("immobilier.html", "0.9", "weekly"), ("emploi.html", "0.8", "daily"),
-         ("energie.html", "0.8", "daily"), ("air.html", "0.8", "daily"), ("fuites.html", "0.8", "weekly"), ("urgences.html", "0.7", "weekly"), ("hopitaux.html", "0.7", "weekly")]
+         ("energie.html", "0.8", "daily"), ("air.html", "0.8", "daily"), ("fuites.html", "0.8", "weekly"), ("urgences.html", "0.7", "weekly"), ("hopitaux.html", "0.7", "weekly"), ("accidents.html", "0.7", "weekly")]
 SITE = Path(__file__).resolve().parents[1] / "website"
 
 today = date.today().isoformat()

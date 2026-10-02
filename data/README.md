@@ -13,7 +13,7 @@ Ce dossier documente les **sources** de données utilisées par le projet, pas f
 | Fuites de données | Notifications de violations de données à la CNIL | [dataset](https://www.data.gouv.fr/datasets/notifications-a-la-cnil-de-violations-de-donnees-a-caractere-personnel/) | CSV |
 | Urgences | Passages aux urgences par département (DREES, 2017-2023) | [dataset](https://www.data.gouv.fr/datasets/675b7bbf79cf8f76c2b02f3f/) | CSV |
 | Hôpitaux | Indicateurs qualité des soins par établissement (HAS) | [dataset](https://www.data.gouv.fr/datasets/66e936005e9b27856ef160d1/) | XLSX |
-| Accidents | Base des accidents corporels de la circulation | à compléter | CSV |
+| Accidents | Accidents corporels de la circulation routière, 2019-2024 (ONISR/BAAC) | [dataset](https://www.data.gouv.fr/datasets/53698f4ca3a729239d2036df/) | CSV |
 
 ### Immobilier (DVF)
 
@@ -148,6 +148,30 @@ python -m src.extract.build_hopitaux
   raison des écarts de gravité des cas entre établissements (voir la page pour le détail).
 - Rafraîchi automatiquement chaque semaine par `.github/workflows/update-dvf.yml`.
 - Visualisé dans [`website/hopitaux.html`](../website/hopitaux.html).
+
+### Accidents (ONISR)
+
+Récupéré par [`src/extract/build_accidents.py`](../src/extract/build_accidents.py) :
+
+```bash
+python -m src.extract.build_accidents
+```
+
+- Source : fichier BAAC (Bulletin d'Analyse des Accidents Corporels) de l'ONISR, un
+  enregistrement par accident corporel constaté par les forces de l'ordre, avec un fichier
+  « caractéristiques » (date, département) et un fichier « usagers » (gravité) par année.
+  Les URLs sont résolues dynamiquement via l'identifiant stable du jeu de données
+  data.gouv.fr (les noms de fichiers changent et contiennent des coquilles selon les années,
+  ex. « carcteristiques-2022.csv »).
+- Limité à **2019-2024** : avant 2019, le format change trop (séparateur, année sur 2
+  chiffres, département non zéro-paddé) pour être agrégé de façon fiable avec les années
+  récentes.
+- Traités (`data/processed/accidents_*.json`) : tendance mensuelle nationale (accidents et
+  tués), agrégats par département et par année, répartition des usagers par gravité.
+- Limites : nombre brut, pas de taux par habitant ni par volume de trafic ; seuls les
+  accidents corporels sont comptabilisés (pas les accidents matériels).
+- Rafraîchi automatiquement chaque semaine par `.github/workflows/update-dvf.yml`.
+- Visualisé dans [`website/accidents.html`](../website/accidents.html).
 
 ## Organisation suggérée
 

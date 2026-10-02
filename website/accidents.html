@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accidents de la route en France par département (2019-2024) | France Data Lab</title>
+  <meta name="description" content="Bilan interactif des accidents corporels de la circulation en France : accidents, tués et blessés par mois et par département, carte animée 2019-2024. Données officielles ONISR." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#2a78d6" />
+  <meta name="author" content="Tatiana Tarasenko" />
+  <link rel="canonical" href="https://tatianat13.github.io/france-data-lab/accidents.html" />
+  <link rel="alternate" hreflang="fr" href="https://tatianat13.github.io/france-data-lab/accidents.html" />
+  <link rel="alternate" hreflang="x-default" href="https://tatianat13.github.io/france-data-lab/accidents.html" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/icon-512.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="France Data Lab" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:title" content="Accidents de la route en France par département (2019-2024) | France Data Lab" />
+  <meta property="og:description" content="Bilan interactif des accidents corporels de la circulation en France : accidents, tués et blessés par mois et par département, carte animée 2019-2024. Données officielles ONISR." />
+  <meta property="og:url" content="https://tatianat13.github.io/france-data-lab/accidents.html" />
+  <meta property="og:image" content="https://tatianat13.github.io/france-data-lab/assets/og-accidents.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Accidents de la route en France par département (2019-2024) | France Data Lab" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Accidents de la route en France par département (2019-2024) | France Data Lab" />
+  <meta name="twitter:description" content="Bilan interactif des accidents corporels de la circulation en France : accidents, tués et blessés par mois et par département, carte animée 2019-2024. Données officielles ONISR." />
+  <meta name="twitter:image" content="https://tatianat13.github.io/france-data-lab/assets/og-accidents.png" />
+  <link rel="preconnect" href="https://cdn.plot.ly" crossorigin />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/", "inLanguage": "fr-FR", "description": "Observatoires interactifs bâtis sur des données ouvertes françaises."}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://tatianat13.github.io/france-data-lab/"}, {"@type": "ListItem", "position": 2, "name": "Accidents de la route", "item": "https://tatianat13.github.io/france-data-lab/accidents.html"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Accidents de la route en France par département (2019-2024) | France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/accidents.html", "description": "Bilan interactif des accidents corporels de la circulation en France : accidents, tués et blessés par mois et par département, carte animée 2019-2024. Données officielles ONISR.", "inLanguage": "fr-FR", "isPartOf": {"@type": "WebSite", "url": "https://tatianat13.github.io/france-data-lab/", "name": "France Data Lab"}}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "Accidents corporels de la circulation routière en France, 2019-2024 (agrégé)", "description": "Nombre mensuel d'accidents corporels et de tués en France, et agrégats par département et par année, à partir du fichier BAAC de l'ONISR.", "url": "https://tatianat13.github.io/france-data-lab/accidents.html", "inLanguage": "fr-FR", "keywords": ["accidents", "route", "sécurité routière", "ONISR", "BAAC"], "creator": {"@type": "Organization", "name": "ONISR"}, "isBasedOn": "https://www.data.gouv.fr/datasets/53698f4ca3a729239d2036df/", "temporalCoverage": "2019-01-01/2024-12-31", "spatialCoverage": {"@type": "Place", "name": "France"}, "isAccessibleForFree": true, "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/accidents_monthly.json"}, {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/accidents_dept_year.json"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Pourquoi seulement 2019-2024 et pas plus ancien ?", "acceptedAnswer": {"@type": "Answer", "text": "Avant 2019, le format des fichiers change trop (séparateur, encodage du département, année sur 2 chiffres) pour être agrégé de façon fiable avec les années récentes. Se limiter à 2019-2024 garantit des comparaisons cohérentes."}}, {"@type": "Question", "name": "Qu'est-ce qu'un accident corporel ?", "acceptedAnswer": {"@type": "Answer", "text": "Un accident de la route impliquant au moins un véhicule et faisant au moins une victime nécessitant des soins (blessé ou tué). Les accidents matériels sans victime ne sont pas comptabilisés dans le fichier BAAC."}}, {"@type": "Question", "name": "Pourquoi ce département a-t-il le plus de tués ?", "acceptedAnswer": {"@type": "Answer", "text": "Le nombre brut de tués dépend fortement du volume de trafic et de la longueur du réseau routier d'un département : ce n'est pas un taux par habitant ni un indicateur de dangerosité relative."}}]}</script>
+</head>
+<body>
+  <main class="app-shell">
+    <nav class="site-nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="immobilier.html">Immobilier</a>
+      <a href="emploi.html">Emploi</a>
+      <a href="energie.html">Énergie</a>
+      <a href="air.html">Air</a>
+      <a href="fuites.html">Fuites de données</a>
+      <a href="urgences.html">Urgences</a>
+      <a href="hopitaux.html">Hôpitaux</a>
+      <a href="accidents.html" class="active">Accidents</a>
+    </nav>
+    <div class="app-header">
+      <div>
+        <h1 class="app-title">Accidents de la route 🇫🇷</h1>
+        <p class="app-subtitle">Accidents corporels, tués et blessés par département — ONISR, 2019-2024</p>
+      </div>
+      <div class="app-meta" id="last-updated"></div>
+    </div>
+
+    <noscript><p class="loading">Cette page affiche des graphiques interactifs et nécessite JavaScript. Les explications sur les données restent lisibles ci-dessous.</p></noscript>
+    <div id="app-loading" class="loading">Chargement des données…</div>
+
+    <div id="app-content" class="hidden">
+      <div class="kpi-row" id="kpi-row"></div>
+
+      <div class="insights" id="insights"></div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2">Accidents corporels par mois en France</div>
+          <div id="monthly-graph" role="img" aria-label="Courbe mensuelle du nombre d'accidents corporels en France"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2">Personnes tuées par mois en France</div>
+          <div id="tues-graph" role="img" aria-label="Courbe mensuelle du nombre de personnes tuées sur la route en France"></div>
+        </div>
+      </div>
+
+      <div class="chart-card full-width">
+        <div class="chart-title" role="heading" aria-level="2">Répartition des usagers impliqués par gravité</div>
+        <div id="severity-graph" role="img" aria-label="Nombre d'usagers impliqués par catégorie de gravité : indemne, blessé léger, blessé hospitalisé, tué"></div>
+        <p class="chart-note">Gravité au sens du fichier BAAC : un même accident peut impliquer plusieurs usagers de gravités différentes.</p>
+      </div>
+
+      <div class="chart-card full-width">
+        <div class="chart-card-head">
+          <div class="chart-title" role="heading" aria-level="2" id="map-title"></div>
+          <div class="year-play-row">
+            <input type="range" id="year-slider" class="year-slider" style="width:200px" />
+            <button type="button" id="play-btn" class="play-btn">▶ Animer</button>
+          </div>
+        </div>
+        <div id="map-graph" role="img" aria-label="Carte animée du nombre d'accidents corporels par département, année par année de 2019 à 2024"></div>
+      </div>
+    </div>
+
+    <details class="doc" open>
+      <summary>À propos des données</summary>
+      <h3>Comment lire cette page</h3>
+      <ul>
+        <li>Un <strong>accident corporel</strong> implique au moins un véhicule et fait au moins une victime nécessitant des soins — les accidents purement matériels ne sont pas comptabilisés.</li>
+        <li>La carte et les totaux par département sont en <strong>nombre brut</strong>, pas par habitant : un département à fort trafic (autoroutes, grande agglomération) affichera toujours plus d'accidents, sans que ce soit un indicateur de dangerosité relative.</li>
+        <li>La <strong>gravité</strong> est mesurée par usager impliqué, pas par accident : un accident peut faire à la fois un tué et un blessé léger.</li>
+      </ul>
+      <h3>D'où viennent les données</h3>
+      <p>L'<strong>ONISR</strong> (Observatoire national interministériel de la sécurité routière) publie chaque année le <a href="https://www.data.gouv.fr/datasets/53698f4ca3a729239d2036df/" target="_blank" rel="noopener">fichier BAAC</a> (Bulletin d'Analyse des Accidents Corporels), rempli par les forces de l'ordre pour chaque accident corporel constaté.</p>
+      <h3>Mise à jour</h3>
+      <p>Le site vérifie la source chaque semaine. L'ONISR publie généralement les données d'une année donnée avec plusieurs mois de retard (le millésime le plus récent peut rester incomplet un moment après sa première publication).</p>
+      <h3>Limites à connaître</h3>
+      <ul>
+        <li>Cette page se limite à <strong>2019-2024</strong> : avant 2019, le format des fichiers change trop (séparateur, encodage du département, année sur 2 chiffres) pour être agrégé de façon fiable avec les années récentes.</li>
+        <li>Seuls les accidents <strong>corporels</strong> (avec au moins un blessé ou un tué) figurent dans cette base : les accidents matériels ne sont pas recensés par l'ONISR.</li>
+        <li>Le classement par département est en nombre brut : il ne tient compte ni de la population, ni du volume de trafic, ni de la longueur du réseau routier.</li>
+        <li>Un tué au sens du BAAC est une personne décédée sur le coup ou dans les <strong>30 jours</strong> suivant l'accident (définition officielle depuis 2005).</li>
+      </ul>
+      <h3>Glossaire</h3>
+      <dl>
+        <dt>BAAC</dt><dd>Bulletin d'Analyse des Accidents Corporels — le formulaire rempli par les forces de l'ordre pour chaque accident corporel, base de toutes les statistiques de l'ONISR.</dd>
+        <dt>Blessé hospitalisé</dt><dd>Victime admise à l'hôpital plus de 24h.</dd>
+        <dt>Blessé léger</dt><dd>Victime ayant reçu des soins mais non hospitalisée plus de 24h.</dd>
+      </dl>
+      <h3>Questions fréquentes</h3>
+      <dl>
+        <dt>Pourquoi seulement 2019-2024 et pas plus ancien ?</dt><dd>Avant 2019, le format des fichiers change trop (séparateur, encodage du département, année sur 2 chiffres) pour être agrégé de façon fiable avec les années récentes. Se limiter à 2019-2024 garantit des comparaisons cohérentes.</dd>
+        <dt>Qu'est-ce qu'un accident corporel ?</dt><dd>Un accident de la route impliquant au moins un véhicule et faisant au moins une victime nécessitant des soins (blessé ou tué). Les accidents matériels sans victime ne sont pas comptabilisés dans le fichier BAAC.</dd>
+        <dt>Pourquoi ce département a-t-il le plus de tués ?</dt><dd>Le nombre brut de tués dépend fortement du volume de trafic et de la longueur du réseau routier d'un département : ce n'est pas un taux par habitant ni un indicateur de dangerosité relative.</dd>
+      </dl>
+      <div class="doc-bottom"></div>
+    </details>
+
+    <div class="app-footer">
+      Données : <a href="https://www.data.gouv.fr/" target="_blank" rel="noopener">data.gouv.fr</a>
+      (fichier BAAC, Observatoire national interministériel de la sécurité routière) · Vérifié chaque semaine ·
+      <a href="index.html">Autres observatoires</a> ·
+      <a href="https://github.com/TatianaT13/france-data-lab" target="_blank" rel="noopener">Code source</a>
+    </div>
+  </main>
+
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
+  <script src="assets/accidents.js" defer></script>
+</body>
+</html>
