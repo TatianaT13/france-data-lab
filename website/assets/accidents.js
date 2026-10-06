@@ -19,6 +19,7 @@ const SEVERITY_COLORS = { "Indemne": "#0ca30c", "Blessé léger": "#eda100", "Bl
 
 const state = {
   meta: null, monthly: [], deptYear: [], severity: [], geo: null, names: {},
+  roadCategory: [], topRoutes: null, speedLimit: [], maneuvers: [],
   years: [], yearIdx: 0, timer: null,
 };
 
@@ -38,14 +39,18 @@ function fmtInt(v) {
 }
 
 async function loadData() {
-  const [meta, monthly, deptYear, severity, geo] = await Promise.all([
+  const [meta, monthly, deptYear, severity, roadCategory, topRoutes, speedLimit, maneuvers, geo] = await Promise.all([
     fetch("data/accidents_meta.json").then((r) => r.json()),
     fetch("data/accidents_monthly.json").then((r) => r.json()),
     fetch("data/accidents_dept_year.json").then((r) => r.json()),
     fetch("data/accidents_severity.json").then((r) => r.json()),
+    fetch("data/accidents_road_category.json").then((r) => r.json()),
+    fetch("data/accidents_top_routes.json").then((r) => r.json()),
+    fetch("data/accidents_speed_limit.json").then((r) => r.json()),
+    fetch("data/accidents_maneuvers.json").then((r) => r.json()),
     fetch("data/departements.geojson").then((r) => r.json()),
   ]);
-  Object.assign(state, { meta, monthly, deptYear, severity, geo });
+  Object.assign(state, { meta, monthly, deptYear, severity, roadCategory, topRoutes, speedLimit, maneuvers, geo });
   state.names = Object.fromEntries(geo.features.map((f) => [f.properties.code, f.properties.nom]));
   state.years = [...new Set(deptYear.map((d) => d.annee))].sort();
   state.yearIdx = state.years.length - 1;
@@ -89,9 +94,12 @@ function renderInsights() {
   const tueCount = state.severity.find((s) => s.gravite === "Tué")?.count || 0;
   const pctTue = ((tueCount / m.total_usagers) * 100).toFixed(1);
   const topName = state.names[m.top_dept_tues_code] || m.top_dept_tues_code;
+  const topCategorie = [...state.roadCategory].sort((a, b) => b.nb_tues - a.nb_tues)[0];
+  const pctCategorie = ((topCategorie.nb_tues / m.total_tues) * 100).toFixed(0);
   const bullets = [
     `Entre ${m.annee_min} et ${m.annee_max}, la France a enregistré <strong>${fmtInt(m.total_accidents)} accidents corporels</strong>, causant <strong>${fmtInt(m.total_tues)} décès</strong>.`,
     `Sur les ${fmtInt(m.total_usagers)} usagers impliqués, <strong>${pctTue} %</strong> ont été tués — la majorité des accidents corporels n'est pas mortelle, mais chacun implique au moins un blessé.`,
+    `La catégorie <strong>${topCategorie.categorie.toLowerCase()}</strong> concentre à elle seule <strong>${pctCategorie} %</strong> des tués (${fmtInt(topCategorie.nb_tues)}) — la catégorie de route la plus meurtrière, loin devant les autoroutes.`,
     `En ${m.top_dept_tues_annee} (dernière année disponible), <strong>${topName}</strong> est le département comptant le plus de tués en nombre brut (${fmtInt(m.top_dept_tues_valeur)}), ce qui reflète surtout le volume de trafic routier — pas un taux par habitant.`,
   ];
   document.getElementById("insights").innerHTML =
@@ -137,6 +145,79 @@ function renderSeverity() {
   layout.xaxis = { color: TEXT_SECONDARY, linecolor: BASELINE };
   layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE };
   Plotly.react("severity-graph", [trace], layout, { displayModeBar: false, responsive: true });
+}
+
+function renderRoadCategory() {
+  const rows = [...state.roadCategory].reverse();
+  const trace = {
+    type: "bar", orientation: "h",
+    x: rows.map((d) => d.nb_tues), y: rows.map((d) => d.categorie),
+    marker: { color: RED },
+    text: rows.map((d) => fmtInt(d.nb_tues)), textposition: "outside", cliponaxis: false,
+    textfont: { color: TEXT_SECONDARY, size: 11 },
+    customdata: rows.map((d) => d.nb_accidents),
+    hovertemplate: "%{y}<br>%{customdata:,.0f} accidents<br>%{x:,.0f} tués<extra></extra>",
+  };
+  const layout = baseLayout(280, 10);
+  layout.margin = { l: 190, r: 30, t: 10, b: 30 };
+  layout.xaxis = { showgrid: true, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE };
+  layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, automargin: true };
+  layout.showlegend = false;
+  Plotly.react("road-category-graph", [trace], layout, { displayModeBar: false, responsive: true });
+}
+
+function renderSpeedLimit() {
+  const trace = {
+    type: "bar", x: state.speedLimit.map((d) => d.vitesse), y: state.speedLimit.map((d) => d.nb_tues),
+    marker: { color: RED },
+    text: state.speedLimit.map((d) => fmtInt(d.nb_tues)), textposition: "outside",
+    textfont: { color: TEXT_SECONDARY, size: 11 },
+    hovertemplate: "%{x}<br>%{y:,.0f} tués<extra></extra>",
+  };
+  const layout = baseLayout(300, 10);
+  layout.margin = { l: 50, r: 20, t: 10, b: 30 };
+  layout.xaxis = { color: TEXT_SECONDARY, linecolor: BASELINE };
+  layout.yaxis = { gridcolor: GRIDLINE, zeroline: false, color: TEXT_SECONDARY, linecolor: BASELINE };
+  Plotly.react("speed-limit-graph", [trace], layout, { displayModeBar: false, responsive: true });
+}
+
+function renderTopRoutes() {
+  const rows = [...state.topRoutes.routes].reverse();
+  document.getElementById("top-routes-note").textContent =
+    `Numéro de route identifié avec certitude pour ${state.topRoutes.couverture_pct} % des accidents sur autoroute ou route nationale ; les enregistrements ambigus sont exclus plutôt que mal classés.`;
+  const trace = {
+    type: "bar", orientation: "h",
+    x: rows.map((d) => d.nb_tues), y: rows.map((d) => `${d.route} · ${d.categorie}`),
+    marker: { color: BLUE },
+    text: rows.map((d) => fmtInt(d.nb_tues)), textposition: "outside", cliponaxis: false,
+    textfont: { color: TEXT_SECONDARY, size: 11 },
+    customdata: rows.map((d) => d.nb_accidents),
+    hovertemplate: "%{y}<br>%{customdata:,.0f} accidents<br>%{x:,.0f} tués<extra></extra>",
+  };
+  const layout = baseLayout(420, 10);
+  layout.margin = { l: 150, r: 30, t: 10, b: 30 };
+  layout.xaxis = { showgrid: true, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE };
+  layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, automargin: true };
+  layout.showlegend = false;
+  Plotly.react("top-routes-graph", [trace], layout, { displayModeBar: false, responsive: true });
+}
+
+function renderManeuvers() {
+  const rows = [...state.maneuvers].reverse();
+  const trace = {
+    type: "bar", orientation: "h",
+    x: rows.map((d) => d.count), y: rows.map((d) => d.manoeuvre),
+    marker: { color: RED },
+    text: rows.map((d) => fmtInt(d.count)), textposition: "outside", cliponaxis: false,
+    textfont: { color: TEXT_SECONDARY, size: 11 },
+    hovertemplate: "%{y}<br>%{x:,.0f} véhicules<extra></extra>",
+  };
+  const layout = baseLayout(380, 10);
+  layout.margin = { l: 230, r: 30, t: 10, b: 30 };
+  layout.xaxis = { showgrid: true, gridcolor: GRIDLINE, color: TEXT_SECONDARY, linecolor: BASELINE };
+  layout.yaxis = { showgrid: false, color: TEXT_SECONDARY, linecolor: BASELINE, automargin: true };
+  layout.showlegend = false;
+  Plotly.react("maneuvers-graph", [trace], layout, { displayModeBar: false, responsive: true });
 }
 
 function renderMap() {
@@ -203,6 +284,10 @@ async function init() {
   renderMonthly();
   renderTuesMonthly();
   renderSeverity();
+  renderRoadCategory();
+  renderSpeedLimit();
+  renderTopRoutes();
+  renderManeuvers();
 
   const slider = document.getElementById("year-slider");
   slider.min = 0;

@@ -34,6 +34,10 @@ def build() -> None:
         ("accidents_monthly.json", result["monthly"]),
         ("accidents_dept_year.json", result["dept_year"]),
         ("accidents_severity.json", result["severity"]),
+        ("accidents_road_category.json", result["road_category"]),
+        ("accidents_top_routes.json", result["top_routes"]),
+        ("accidents_speed_limit.json", result["speed_limit"]),
+        ("accidents_maneuvers.json", result["maneuvers"]),
     ]:
         text = json.dumps(payload, ensure_ascii=False)
         (WEBSITE_DATA_DIR / name).write_text(text)

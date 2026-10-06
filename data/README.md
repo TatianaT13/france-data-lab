@@ -167,9 +167,15 @@ python -m src.extract.build_accidents
   chiffres, département non zéro-paddé) pour être agrégé de façon fiable avec les années
   récentes.
 - Traités (`data/processed/accidents_*.json`) : tendance mensuelle nationale (accidents et
-  tués), agrégats par département et par année, répartition des usagers par gravité.
+  tués), agrégats par département et par année, répartition des usagers par gravité, par
+  catégorie de route, par limitation de vitesse, classement des autoroutes/routes
+  nationales les plus meurtrières, et manœuvres des véhicules impliqués dans un accident
+  mortel.
 - Limites : nombre brut, pas de taux par habitant ni par volume de trafic ; seuls les
-  accidents corporels sont comptabilisés (pas les accidents matériels).
+  accidents corporels sont comptabilisés (pas les accidents matériels) ; le classement par
+  route ne couvre que les ~91 % d'accidents où le numéro de route a pu être identifié avec
+  certitude dans un champ texte libre ; la « manœuvre » du véhicule n'est pas une cause
+  légale de l'accident (le BAAC n'attribue aucune responsabilité).
 - Rafraîchi automatiquement chaque semaine par `.github/workflows/update-dvf.yml`.
 - Visualisé dans [`website/accidents.html`](../website/accidents.html).
 

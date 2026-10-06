@@ -19,6 +19,8 @@ MIN_YEAR = 2019  # format stable (séparateur ";", "an" sur 4 chiffres, dep en c
 
 CARACT_RE = re.compile(r"^(caracteristiques|caract|carcteristiques|carct)[-_](\d{4})\.csv$", re.I)
 USAGERS_RE = re.compile(r"^usagers[-_](\d{4})\.csv$", re.I)
+LIEUX_RE = re.compile(r"^lieux[-_](\d{4})\.csv$", re.I)
+VEHICULES_RE = re.compile(r"^vehicules[-_](\d{4})\.csv$", re.I)
 
 DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 RAW_DIR = DATA_DIR / "raw" / "accidents"
@@ -29,7 +31,7 @@ def _resource_filename(resource: dict) -> str:
 
 
 def resolve_resources() -> dict[int, dict[str, str]]:
-    """Retourne {année: {"caract": url, "usagers": url}} pour les années >= MIN_YEAR."""
+    """Retourne {année: {"caract": url, "usagers": url, "lieux": url, "vehicules": url}}."""
     meta = requests.get(DATASET_API_URL, timeout=30).json()
     by_year: dict[int, dict[str, str]] = {}
     for resource in meta["resources"]:
@@ -45,7 +47,20 @@ def resolve_resources() -> dict[int, dict[str, str]]:
             year = int(m.group(1))
             if year >= MIN_YEAR:
                 by_year.setdefault(year, {})["usagers"] = resource["url"]
-    return {year: urls for year, urls in by_year.items() if "caract" in urls and "usagers" in urls}
+            continue
+        m = LIEUX_RE.match(name)
+        if m:
+            year = int(m.group(1))
+            if year >= MIN_YEAR:
+                by_year.setdefault(year, {})["lieux"] = resource["url"]
+            continue
+        m = VEHICULES_RE.match(name)
+        if m:
+            year = int(m.group(1))
+            if year >= MIN_YEAR:
+                by_year.setdefault(year, {})["vehicules"] = resource["url"]
+    required = {"caract", "usagers", "lieux", "vehicules"}
+    return {year: urls for year, urls in by_year.items() if required.issubset(urls)}
 
 
 def download_year(year: int, urls: dict[str, str], force: bool = False) -> dict[str, Path]:

@@ -33,8 +33,8 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/", "inLanguage": "fr-FR", "description": "Observatoires interactifs bâtis sur des données ouvertes françaises."}</script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://tatianat13.github.io/france-data-lab/"}, {"@type": "ListItem", "position": 2, "name": "Accidents de la route", "item": "https://tatianat13.github.io/france-data-lab/accidents.html"}]}</script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Accidents de la route en France par département (2019-2024) | France Data Lab", "url": "https://tatianat13.github.io/france-data-lab/accidents.html", "description": "Bilan interactif des accidents corporels de la circulation en France : accidents, tués et blessés par mois et par département, carte animée 2019-2024. Données officielles ONISR.", "inLanguage": "fr-FR", "isPartOf": {"@type": "WebSite", "url": "https://tatianat13.github.io/france-data-lab/", "name": "France Data Lab"}}</script>
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "Accidents corporels de la circulation routière en France, 2019-2024 (agrégé)", "description": "Nombre mensuel d'accidents corporels et de tués en France, et agrégats par département et par année, à partir du fichier BAAC de l'ONISR.", "url": "https://tatianat13.github.io/france-data-lab/accidents.html", "inLanguage": "fr-FR", "keywords": ["accidents", "route", "sécurité routière", "ONISR", "BAAC"], "creator": {"@type": "Organization", "name": "ONISR"}, "isBasedOn": "https://www.data.gouv.fr/datasets/53698f4ca3a729239d2036df/", "temporalCoverage": "2019-01-01/2024-12-31", "spatialCoverage": {"@type": "Place", "name": "France"}, "isAccessibleForFree": true, "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/accidents_monthly.json"}, {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/accidents_dept_year.json"}]}</script>
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Pourquoi seulement 2019-2024 et pas plus ancien ?", "acceptedAnswer": {"@type": "Answer", "text": "Avant 2019, le format des fichiers change trop (séparateur, encodage du département, année sur 2 chiffres) pour être agrégé de façon fiable avec les années récentes. Se limiter à 2019-2024 garantit des comparaisons cohérentes."}}, {"@type": "Question", "name": "Qu'est-ce qu'un accident corporel ?", "acceptedAnswer": {"@type": "Answer", "text": "Un accident de la route impliquant au moins un véhicule et faisant au moins une victime nécessitant des soins (blessé ou tué). Les accidents matériels sans victime ne sont pas comptabilisés dans le fichier BAAC."}}, {"@type": "Question", "name": "Pourquoi ce département a-t-il le plus de tués ?", "acceptedAnswer": {"@type": "Answer", "text": "Le nombre brut de tués dépend fortement du volume de trafic et de la longueur du réseau routier d'un département : ce n'est pas un taux par habitant ni un indicateur de dangerosité relative."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "Accidents corporels de la circulation routière en France, 2019-2024 (agrégé)", "description": "Nombre mensuel d'accidents corporels et de tués en France, et agrégats par département et par année, à partir du fichier BAAC de l'ONISR.", "url": "https://tatianat13.github.io/france-data-lab/accidents.html", "inLanguage": "fr-FR", "keywords": ["accidents", "route", "sécurité routière", "ONISR", "BAAC"], "creator": {"@type": "Organization", "name": "ONISR"}, "isBasedOn": "https://www.data.gouv.fr/datasets/53698f4ca3a729239d2036df/", "temporalCoverage": "2019-01-01/2024-12-31", "spatialCoverage": {"@type": "Place", "name": "France"}, "isAccessibleForFree": true, "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/accidents_monthly.json"}, {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/accidents_dept_year.json"}, {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://tatianat13.github.io/france-data-lab/data/accidents_top_routes.json"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Pourquoi seulement 2019-2024 et pas plus ancien ?", "acceptedAnswer": {"@type": "Answer", "text": "Avant 2019, le format des fichiers change trop (séparateur, encodage du département, année sur 2 chiffres) pour être agrégé de façon fiable avec les années récentes. Se limiter à 2019-2024 garantit des comparaisons cohérentes."}}, {"@type": "Question", "name": "Qu'est-ce qu'un accident corporel ?", "acceptedAnswer": {"@type": "Answer", "text": "Un accident de la route impliquant au moins un véhicule et faisant au moins une victime nécessitant des soins (blessé ou tué). Les accidents matériels sans victime ne sont pas comptabilisés dans le fichier BAAC."}}, {"@type": "Question", "name": "Pourquoi ce département a-t-il le plus de tués ?", "acceptedAnswer": {"@type": "Answer", "text": "Le nombre brut de tués dépend fortement du volume de trafic et de la longueur du réseau routier d'un département : ce n'est pas un taux par habitant ni un indicateur de dangerosité relative."}}, {"@type": "Question", "name": "La manœuvre indique-t-elle la cause de l'accident ?", "acceptedAnswer": {"@type": "Answer", "text": "Non. Le fichier BAAC décrit le déplacement du véhicule juste avant le choc, tel que relevé par les forces de l'ordre. Il n'attribue aucune responsabilité ni cause légale."}}]}</script>
 </head>
 <body>
   <main class="app-shell">
@@ -82,6 +82,30 @@
         <p class="chart-note">Gravité au sens du fichier BAAC : un même accident peut impliquer plusieurs usagers de gravités différentes.</p>
       </div>
 
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2">Tués par catégorie de route</div>
+          <div id="road-category-graph" role="img" aria-label="Nombre de tués par catégorie de route : autoroute, route nationale, départementale, voie communale"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2">Tués par limitation de vitesse du lieu de l'accident</div>
+          <div id="speed-limit-graph" role="img" aria-label="Nombre de tués selon la vitesse maximale autorisée à l'endroit de l'accident"></div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2">Autoroutes et routes nationales les plus meurtrières</div>
+          <div id="top-routes-graph" role="img" aria-label="Classement des 15 autoroutes et routes nationales ayant fait le plus de tués, 2019-2024"></div>
+          <p class="chart-note" id="top-routes-note"></p>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title" role="heading" aria-level="2">Manœuvres des véhicules impliqués dans un accident mortel</div>
+          <div id="maneuvers-graph" role="img" aria-label="Manœuvres les plus fréquentes des véhicules impliqués dans un accident mortel"></div>
+          <p class="chart-note">Décrit le déplacement du véhicule juste avant le choc, pas une détermination de responsabilité ou de cause légale de l'accident.</p>
+        </div>
+      </div>
+
       <div class="chart-card full-width">
         <div class="chart-card-head">
           <div class="chart-title" role="heading" aria-level="2" id="map-title"></div>
@@ -101,6 +125,8 @@
         <li>Un <strong>accident corporel</strong> implique au moins un véhicule et fait au moins une victime nécessitant des soins — les accidents purement matériels ne sont pas comptabilisés.</li>
         <li>La carte et les totaux par département sont en <strong>nombre brut</strong>, pas par habitant : un département à fort trafic (autoroutes, grande agglomération) affichera toujours plus d'accidents, sans que ce soit un indicateur de dangerosité relative.</li>
         <li>La <strong>gravité</strong> est mesurée par usager impliqué, pas par accident : un accident peut faire à la fois un tué et un blessé léger.</li>
+        <li>Le classement des <strong>routes les plus meurtrières</strong> se limite aux autoroutes et routes nationales, dont la numérotation est unique au niveau national (contrairement aux routes départementales, où un même numéro comme « D1 » existe dans presque chaque département).</li>
+        <li>La <strong>manœuvre</strong> d'un véhicule avant le choc (tournant, dépassant, sans changement de direction…) décrit un déplacement, pas une cause légale ou une responsabilité : le fichier BAAC n'attribue aucune faute.</li>
       </ul>
       <h3>D'où viennent les données</h3>
       <p>L'<strong>ONISR</strong> (Observatoire national interministériel de la sécurité routière) publie chaque année le <a href="https://www.data.gouv.fr/datasets/53698f4ca3a729239d2036df/" target="_blank" rel="noopener">fichier BAAC</a> (Bulletin d'Analyse des Accidents Corporels), rempli par les forces de l'ordre pour chaque accident corporel constaté.</p>
@@ -112,18 +138,22 @@
         <li>Seuls les accidents <strong>corporels</strong> (avec au moins un blessé ou un tué) figurent dans cette base : les accidents matériels ne sont pas recensés par l'ONISR.</li>
         <li>Le classement par département est en nombre brut : il ne tient compte ni de la population, ni du volume de trafic, ni de la longueur du réseau routier.</li>
         <li>Un tué au sens du BAAC est une personne décédée sur le coup ou dans les <strong>30 jours</strong> suivant l'accident (définition officielle depuis 2005).</li>
+        <li>Le numéro de route (ex. « A6 », « N7 ») est reconstruit à partir d'un champ texte libre rempli par les forces de l'ordre, qui contient parfois des libellés trop ambigus pour être identifiés avec certitude : le classement par route ne couvre que les accidents où ce numéro a pu être reconnu (taux de couverture indiqué sous le graphique), les autres sont exclus plutôt que mal classés.</li>
       </ul>
       <h3>Glossaire</h3>
       <dl>
         <dt>BAAC</dt><dd>Bulletin d'Analyse des Accidents Corporels — le formulaire rempli par les forces de l'ordre pour chaque accident corporel, base de toutes les statistiques de l'ONISR.</dd>
         <dt>Blessé hospitalisé</dt><dd>Victime admise à l'hôpital plus de 24h.</dd>
         <dt>Blessé léger</dt><dd>Victime ayant reçu des soins mais non hospitalisée plus de 24h.</dd>
+        <dt>Manœuvre</dt><dd>Déplacement du véhicule juste avant le choc (ex. « tournant à gauche »), tel que relevé par les forces de l'ordre — ne désigne pas une cause légale.</dd>
+        <dt>VMA</dt><dd>Vitesse maximale autorisée à l'endroit de l'accident, au sens du code de la route.</dd>
       </dl>
       <h3>Questions fréquentes</h3>
       <dl>
         <dt>Pourquoi seulement 2019-2024 et pas plus ancien ?</dt><dd>Avant 2019, le format des fichiers change trop (séparateur, encodage du département, année sur 2 chiffres) pour être agrégé de façon fiable avec les années récentes. Se limiter à 2019-2024 garantit des comparaisons cohérentes.</dd>
         <dt>Qu'est-ce qu'un accident corporel ?</dt><dd>Un accident de la route impliquant au moins un véhicule et faisant au moins une victime nécessitant des soins (blessé ou tué). Les accidents matériels sans victime ne sont pas comptabilisés dans le fichier BAAC.</dd>
         <dt>Pourquoi ce département a-t-il le plus de tués ?</dt><dd>Le nombre brut de tués dépend fortement du volume de trafic et de la longueur du réseau routier d'un département : ce n'est pas un taux par habitant ni un indicateur de dangerosité relative.</dd>
+        <dt>La « manœuvre » indique-t-elle la cause de l'accident ?</dt><dd>Non. Le fichier BAAC décrit le déplacement du véhicule juste avant le choc (tournant, dépassant, sans changement de direction…), tel que relevé par les forces de l'ordre. Il n'attribue aucune responsabilité ni cause légale.</dd>
       </dl>
       <div class="doc-bottom"></div>
     </details>
