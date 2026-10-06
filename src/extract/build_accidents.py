@@ -38,6 +38,7 @@ def build() -> None:
         ("accidents_top_routes.json", result["top_routes"]),
         ("accidents_speed_limit.json", result["speed_limit"]),
         ("accidents_maneuvers.json", result["maneuvers"]),
+        ("accidents_mortal_points.json", result["mortal_points"]),
     ]:
         text = json.dumps(payload, ensure_ascii=False)
         (WEBSITE_DATA_DIR / name).write_text(text)

@@ -78,7 +78,9 @@ def load_caract(path: Path, year: int) -> pd.DataFrame:
     df["dep"] = df["dep"].str.strip().str.zfill(2)
     df["annee"] = year
     df["mois"] = pd.to_numeric(df["mois"], errors="coerce")
-    return df[["Num_Acc", "annee", "mois", "dep"]]
+    df["lat"] = pd.to_numeric(df["lat"].astype(str).str.replace(",", ".", regex=False), errors="coerce")
+    df["long"] = pd.to_numeric(df["long"].astype(str).str.replace(",", ".", regex=False), errors="coerce")
+    return df[["Num_Acc", "annee", "mois", "dep", "lat", "long"]]
 
 
 def load_usagers(path: Path, year: int) -> pd.DataFrame:
@@ -240,6 +242,21 @@ def maneuver_distribution(accidents: pd.DataFrame, vehicules: pd.DataFrame, n: i
     ]
 
 
+def mortal_accident_points(accidents: pd.DataFrame) -> list[dict]:
+    """Localisation (lat/lon) de chaque accident mortel, pour un calque de points sur la carte.
+
+    Limité à la métropole (comme le fond de carte, dont le GeoJSON ne couvre pas les
+    outre-mer) : inclure les coordonnées réelles des DOM-TOM ferait exploser le cadrage
+    automatique de la carte, très éloignées de la métropole.
+    """
+    mainland = accidents["dep"].str.fullmatch(r"\d{2}|2A|2B", na=False)
+    mortal = accidents[accidents["mortel"] & mainland & accidents["lat"].notna() & accidents["long"].notna()]
+    return [
+        {"annee": int(r["annee"]), "lat": round(float(r["lat"]), 4), "lon": round(float(r["long"]), 4), "nb_tues": int(r["nb_tues"])}
+        for _, r in mortal.iterrows()
+    ]
+
+
 def build_summary(accidents: pd.DataFrame, all_usagers: pd.DataFrame) -> dict:
     last_year = int(accidents["annee"].max())
     first_year = int(accidents["annee"].min())
@@ -279,4 +296,5 @@ def build_all(years_paths: dict[int, dict[str, Path]]) -> dict:
         "top_routes": top_named_roads(accidents),
         "speed_limit": speed_limit_distribution(accidents),
         "maneuvers": maneuver_distribution(accidents, vehicules),
+        "mortal_points": mortal_accident_points(accidents),
     }

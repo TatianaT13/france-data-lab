@@ -19,8 +19,8 @@ const SEVERITY_COLORS = { "Indemne": "#0ca30c", "Blessé léger": "#eda100", "Bl
 
 const state = {
   meta: null, monthly: [], deptYear: [], severity: [], geo: null, names: {},
-  roadCategory: [], topRoutes: null, speedLimit: [], maneuvers: [],
-  years: [], yearIdx: 0, timer: null,
+  roadCategory: [], topRoutes: null, speedLimit: [], maneuvers: [], mortalPoints: [],
+  years: [], yearIdx: 0, timer: null, showPoints: true,
 };
 
 function baseLayout(height, topMargin) {
@@ -39,7 +39,7 @@ function fmtInt(v) {
 }
 
 async function loadData() {
-  const [meta, monthly, deptYear, severity, roadCategory, topRoutes, speedLimit, maneuvers, geo] = await Promise.all([
+  const [meta, monthly, deptYear, severity, roadCategory, topRoutes, speedLimit, maneuvers, mortalPoints, geo] = await Promise.all([
     fetch("data/accidents_meta.json").then((r) => r.json()),
     fetch("data/accidents_monthly.json").then((r) => r.json()),
     fetch("data/accidents_dept_year.json").then((r) => r.json()),
@@ -48,9 +48,10 @@ async function loadData() {
     fetch("data/accidents_top_routes.json").then((r) => r.json()),
     fetch("data/accidents_speed_limit.json").then((r) => r.json()),
     fetch("data/accidents_maneuvers.json").then((r) => r.json()),
+    fetch("data/accidents_mortal_points.json").then((r) => r.json()),
     fetch("data/departements.geojson").then((r) => r.json()),
   ]);
-  Object.assign(state, { meta, monthly, deptYear, severity, roadCategory, topRoutes, speedLimit, maneuvers, geo });
+  Object.assign(state, { meta, monthly, deptYear, severity, roadCategory, topRoutes, speedLimit, maneuvers, mortalPoints, geo });
   state.names = Object.fromEntries(geo.features.map((f) => [f.properties.code, f.properties.nom]));
   state.years = [...new Set(deptYear.map((d) => d.annee))].sort();
   state.yearIdx = state.years.length - 1;
@@ -247,7 +248,24 @@ function renderMap() {
     colorbar: { title: { text: "accidents", font: { color: TEXT_SECONDARY } }, tickfont: { color: TEXT_SECONDARY }, len: 0.75 },
     hovertemplate: "<b>%{text}</b><br>%{z:,.0f} accidents<br>%{customdata:,.0f} tués<extra></extra>",
   };
-  Plotly.react("map-graph", [trace], layout, { displayModeBar: false, responsive: true });
+
+  const traces = [trace];
+  if (state.showPoints) {
+    const points = state.mortalPoints.filter((d) => d.annee === year);
+    traces.push({
+      type: "scattergeo", mode: "markers", geo: "geo",
+      lat: points.map((d) => d.lat), lon: points.map((d) => d.lon),
+      marker: { size: 4, color: RED, opacity: 0.5, line: { width: 0 } },
+      customdata: points.map((d) => d.nb_tues),
+      hovertemplate: "Accident mortel<br>%{customdata} tué(s)<extra></extra>",
+      showlegend: false,
+    });
+    document.getElementById("points-count").textContent = `${fmtInt(points.length)} accidents mortels localisés en ${year}.`;
+  } else {
+    document.getElementById("points-count").textContent = "";
+  }
+
+  Plotly.react("map-graph", traces, layout, { displayModeBar: false, responsive: true });
 }
 
 function stopPlayback() {
@@ -299,6 +317,10 @@ async function init() {
     renderMap();
   });
   document.getElementById("play-btn").addEventListener("click", togglePlayback);
+  document.getElementById("points-toggle").addEventListener("change", (e) => {
+    state.showPoints = e.target.checked;
+    renderMap();
+  });
   renderMap();
 }
 
