@@ -5,13 +5,23 @@ import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 
-from src.extract.accidents import download_year, resolve_resources
+from src.extract.accidents import download_route_geometry, download_year, resolve_resources
 from src.extract.dvf import GEO_PATH, download_geojson
 from src.transform.accidents import build_all
 
 ROOT = Path(__file__).resolve().parents[2]
 PROCESSED_DIR = ROOT / "data" / "processed"
 WEBSITE_DATA_DIR = ROOT / "website" / "data"
+
+
+def build_route_geometries(routes: list[dict]) -> list[dict]:
+    """Associe à chaque route du classement son tracé géographique (IGN)."""
+    features = []
+    for r in routes:
+        segments = download_route_geometry(r["route"])
+        if segments:
+            features.append({**r, "segments": segments})
+    return features
 
 
 def build() -> None:
@@ -24,6 +34,9 @@ def build() -> None:
         years_paths[year] = download_year(year, urls)
 
     result = build_all(years_paths)
+
+    print("[accidents] tracé des routes du classement...")
+    route_geometries = build_route_geometries(result["top_routes"]["routes"])
 
     download_geojson()
 
@@ -39,6 +52,7 @@ def build() -> None:
         ("accidents_speed_limit.json", result["speed_limit"]),
         ("accidents_maneuvers.json", result["maneuvers"]),
         ("accidents_mortal_points.json", result["mortal_points"]),
+        ("accidents_route_geometries.json", route_geometries),
     ]:
         text = json.dumps(payload, ensure_ascii=False)
         (WEBSITE_DATA_DIR / name).write_text(text)

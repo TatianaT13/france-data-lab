@@ -74,3 +74,52 @@ def download_year(year: int, urls: dict[str, str], force: bool = False) -> dict[
             dest.write_bytes(response.content)
         paths[kind] = dest
     return paths
+
+
+# Tracé géographique des routes, pour les superposer sur la carte des accidents.
+IGN_WFS_URL = "https://data.geopf.fr/wfs/ows"
+
+# Bornes larges de la métropole : les requêtes renvoient aussi des homonymes dans les
+# DOM-TOM (ex. "N1" existe en Guadeloupe) qu'on écarte en filtrant sur ces coordonnées.
+MAINLAND_BBOX = {"lat_min": 41.0, "lat_max": 51.5, "lon_min": -5.5, "lon_max": 9.9}
+
+MAX_POINTS_PER_SEGMENT = 150
+
+
+def _decimate(points: list[list[float]], max_points: int = MAX_POINTS_PER_SEGMENT) -> list[list[float]]:
+    if len(points) <= max_points:
+        return points
+    step = len(points) / max_points
+    indices = sorted({round(i * step) for i in range(max_points)} | {len(points) - 1})
+    return [points[i] for i in indices if i < len(points)]
+
+
+def _in_mainland(point: list[float]) -> bool:
+    lon, lat = point[0], point[1]
+    return (
+        MAINLAND_BBOX["lat_min"] <= lat <= MAINLAND_BBOX["lat_max"]
+        and MAINLAND_BBOX["lon_min"] <= lon <= MAINLAND_BBOX["lon_max"]
+    )
+
+
+def download_route_geometry(route: str) -> list[list[list[float]]]:
+    """Récupère le tracé (liste de segments [lon, lat]) d'une route via le WFS de l'IGN."""
+    params = {
+        "SERVICE": "WFS", "VERSION": "2.0.0", "REQUEST": "GetFeature",
+        "TYPENAMES": "BDTOPO_V3:route_numerotee_ou_nommee",
+        "CQL_FILTER": f"numero='{route}'",
+        "OUTPUTFORMAT": "application/json", "SRSNAME": "EPSG:4326",
+    }
+    response = requests.get(IGN_WFS_URL, params=params, timeout=60)
+    response.raise_for_status()
+    data = response.json()
+
+    segments = []
+    for feature in data.get("features", []):
+        geom = feature.get("geometry") or {}
+        if geom.get("type") != "MultiLineString":
+            continue
+        for line in geom["coordinates"]:
+            if line and _in_mainland(line[0]):
+                segments.append(_decimate(line))
+    return segments

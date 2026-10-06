@@ -19,8 +19,8 @@ const SEVERITY_COLORS = { "Indemne": "#0ca30c", "Blessé léger": "#eda100", "Bl
 
 const state = {
   meta: null, monthly: [], deptYear: [], severity: [], geo: null, names: {},
-  roadCategory: [], topRoutes: null, speedLimit: [], maneuvers: [], mortalPoints: [],
-  years: [], yearIdx: 0, timer: null, showPoints: true,
+  roadCategory: [], topRoutes: null, speedLimit: [], maneuvers: [], mortalPoints: [], routeGeometries: [],
+  years: [], yearIdx: 0, timer: null, showPoints: true, showRoutes: true,
 };
 
 function baseLayout(height, topMargin) {
@@ -39,7 +39,7 @@ function fmtInt(v) {
 }
 
 async function loadData() {
-  const [meta, monthly, deptYear, severity, roadCategory, topRoutes, speedLimit, maneuvers, mortalPoints, geo] = await Promise.all([
+  const [meta, monthly, deptYear, severity, roadCategory, topRoutes, speedLimit, maneuvers, mortalPoints, routeGeometries, geo] = await Promise.all([
     fetch("data/accidents_meta.json").then((r) => r.json()),
     fetch("data/accidents_monthly.json").then((r) => r.json()),
     fetch("data/accidents_dept_year.json").then((r) => r.json()),
@@ -49,9 +49,10 @@ async function loadData() {
     fetch("data/accidents_speed_limit.json").then((r) => r.json()),
     fetch("data/accidents_maneuvers.json").then((r) => r.json()),
     fetch("data/accidents_mortal_points.json").then((r) => r.json()),
+    fetch("data/accidents_route_geometries.json").then((r) => r.json()),
     fetch("data/departements.geojson").then((r) => r.json()),
   ]);
-  Object.assign(state, { meta, monthly, deptYear, severity, roadCategory, topRoutes, speedLimit, maneuvers, mortalPoints, geo });
+  Object.assign(state, { meta, monthly, deptYear, severity, roadCategory, topRoutes, speedLimit, maneuvers, mortalPoints, routeGeometries, geo });
   state.names = Object.fromEntries(geo.features.map((f) => [f.properties.code, f.properties.nom]));
   state.years = [...new Set(deptYear.map((d) => d.annee))].sort();
   state.yearIdx = state.years.length - 1;
@@ -250,6 +251,25 @@ function renderMap() {
   };
 
   const traces = [trace];
+  if (state.showRoutes) {
+    const maxTues = Math.max(...state.routeGeometries.map((r) => r.nb_tues));
+    state.routeGeometries.forEach((r) => {
+      const lat = [], lon = [];
+      r.segments.forEach((seg) => {
+        seg.forEach(([lonPt, latPt]) => { lat.push(latPt); lon.push(lonPt); });
+        lat.push(null); lon.push(null);
+      });
+      traces.push({
+        type: "scattergeo", mode: "lines", geo: "geo",
+        lat, lon,
+        line: { color: RED, width: 1 + (r.nb_tues / maxTues) * 2.5 },
+        opacity: 0.75,
+        name: r.route,
+        hovertemplate: `<b>${r.route}</b> (${r.categorie})<br>${fmtInt(r.nb_tues)} tués, ${fmtInt(r.nb_accidents)} accidents (2019-2024)<extra></extra>`,
+        showlegend: false,
+      });
+    });
+  }
   if (state.showPoints) {
     const points = state.mortalPoints.filter((d) => d.annee === year);
     traces.push({
@@ -319,6 +339,10 @@ async function init() {
   document.getElementById("play-btn").addEventListener("click", togglePlayback);
   document.getElementById("points-toggle").addEventListener("change", (e) => {
     state.showPoints = e.target.checked;
+    renderMap();
+  });
+  document.getElementById("routes-toggle").addEventListener("change", (e) => {
+    state.showRoutes = e.target.checked;
     renderMap();
   });
   renderMap();

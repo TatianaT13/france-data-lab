@@ -170,13 +170,18 @@ python -m src.extract.build_accidents
   tués), agrégats par département et par année, répartition des usagers par gravité, par
   catégorie de route, par limitation de vitesse, classement des autoroutes/routes
   nationales les plus meurtrières, manœuvres des véhicules impliqués dans un accident
-  mortel, et localisation GPS de chaque accident mortel (pour le calque de points sur la
-  carte).
+  mortel, localisation GPS de chaque accident mortel, et tracé géographique des routes du
+  classement (pour les calques de la carte).
+- Le tracé des routes vient du WFS IGN Géoplateforme (`BDTOPO_V3:route_numerotee_ou_nommee`,
+  filtré par numéro de route, simplifié à ~150 points par segment) — interrogé à chaque
+  exécution du pipeline pour les routes actuellement en tête du classement.
 - Limites : nombre brut, pas de taux par habitant ni par volume de trafic ; seuls les
   accidents corporels sont comptabilisés (pas les accidents matériels) ; le classement par
   route ne couvre que les ~91 % d'accidents où le numéro de route a pu être identifié avec
   certitude dans un champ texte libre ; la « manœuvre » du véhicule n'est pas une cause
-  légale de l'accident (le BAAC n'attribue aucune responsabilité).
+  légale de l'accident (le BAAC n'attribue aucune responsabilité) ; pas de classement par
+  société d'autoroute car la plupart des grands axes sont partagés entre plusieurs
+  gestionnaires sur leur longueur (vérifié route par route, voir la page pour le détail).
 - Rafraîchi automatiquement chaque semaine par `.github/workflows/update-dvf.yml`.
 - Visualisé dans [`website/accidents.html`](../website/accidents.html).
 
