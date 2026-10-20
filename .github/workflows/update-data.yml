@@ -29,8 +29,8 @@ jobs:
 
       - name: Commit updated data
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "TatianaT13"
+          git config user.email "tarasenko.tetyana@yahoo.com"
           git add data/processed/ website/data/
           git diff --cached --quiet || git commit -m "chore: update data (daily) [automated]"
           git pull --rebase
