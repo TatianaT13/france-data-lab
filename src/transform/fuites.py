@@ -31,9 +31,18 @@ TAILLE_ORDER = [
 ]
 
 
+def _read_lines(path: Path) -> list[str]:
+    # La CNIL a changé l'encodage du fichier au fil du temps (cp1252 historiquement,
+    # UTF-8 avec BOM depuis) : on détecte via le BOM plutôt que de figer un encodage.
+    with open(path, "rb") as f:
+        head = f.read(3)
+    encoding = "utf-8-sig" if head == b"\xef\xbb\xbf" else "cp1252"
+    with open(path, encoding=encoding) as f:
+        return f.readlines()
+
+
 def load_fuites(path: Path) -> pd.DataFrame:
-    with open(path, encoding="cp1252") as f:
-        lines = f.readlines()
+    lines = _read_lines(path)
     # La première ligne est une note d'extraction, pas l'en-tête.
     df = pd.read_csv(pd.io.common.StringIO("".join(lines[1:])), sep=";")
     df.columns = [c.strip().rstrip("\xa0") for c in df.columns]
