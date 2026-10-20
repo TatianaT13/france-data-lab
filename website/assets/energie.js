@@ -14,7 +14,7 @@ const ORANGE = "#eb6834";
 const AQUA = "#1baf7a";
 const YELLOW = "#eda100";
 const MAGENTA = "#e87ba4";
-const GREEN = "#008300";
+const GREEN = "#0ca30c";
 const VIOLET = "#4a3aa7";
 
 const SEQUENTIAL_BLUE = [
