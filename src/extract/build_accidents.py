@@ -5,6 +5,8 @@ import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 
+import requests
+
 from src.extract.accidents import download_route_geometry, download_year, resolve_resources
 from src.extract.dvf import GEO_PATH, download_geojson
 from src.transform.accidents import build_all
@@ -14,11 +16,28 @@ PROCESSED_DIR = ROOT / "data" / "processed"
 WEBSITE_DATA_DIR = ROOT / "website" / "data"
 
 
+def _previous_segments() -> dict[str, list]:
+    """Tracés déjà publiés, utilisés en secours si le WFS de l'IGN est indisponible."""
+    path = WEBSITE_DATA_DIR / "accidents_route_geometries.json"
+    try:
+        return {r["route"]: r["segments"] for r in json.loads(path.read_text())}
+    except (OSError, ValueError, KeyError, TypeError):
+        return {}
+
+
 def build_route_geometries(routes: list[dict]) -> list[dict]:
     """Associe à chaque route du classement son tracé géographique (IGN)."""
+    previous = _previous_segments()
     features = []
     for r in routes:
-        segments = download_route_geometry(r["route"])
+        try:
+            segments = download_route_geometry(r["route"])
+        except (requests.RequestException, ValueError) as exc:
+            segments = previous.get(r["route"], [])
+            print(
+                f"[accidents] tracé {r['route']} indisponible ({exc}) : "
+                + ("tracé précédent conservé" if segments else "route sans tracé")
+            )
         if segments:
             features.append({**r, "segments": segments})
     return features
