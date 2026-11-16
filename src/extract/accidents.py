@@ -8,6 +8,7 @@ au fil des ans ("caracteristiques-2019.csv", "Caract_2024.csv",
 """
 
 import re
+import time
 from pathlib import Path
 
 import requests
@@ -84,6 +85,7 @@ IGN_WFS_URL = "https://data.geopf.fr/wfs/ows"
 MAINLAND_BBOX = {"lat_min": 41.0, "lat_max": 51.5, "lon_min": -5.5, "lon_max": 9.9}
 
 MAX_POINTS_PER_SEGMENT = 150
+WFS_MAX_ATTEMPTS = 4
 
 
 def _decimate(points: list[list[float]], max_points: int = MAX_POINTS_PER_SEGMENT) -> list[list[float]]:
@@ -110,9 +112,18 @@ def download_route_geometry(route: str) -> list[list[list[float]]]:
         "CQL_FILTER": f"numero='{route}'",
         "OUTPUTFORMAT": "application/json", "SRSNAME": "EPSG:4326",
     }
-    response = requests.get(IGN_WFS_URL, params=params, timeout=60)
-    response.raise_for_status()
-    data = response.json()
+    # Le WFS de l'IGN renvoie parfois des erreurs passagères (400/5xx, timeout) :
+    # on réessaie quelques fois avant d'abandonner.
+    for attempt in range(WFS_MAX_ATTEMPTS):
+        try:
+            response = requests.get(IGN_WFS_URL, params=params, timeout=60)
+            response.raise_for_status()
+            data = response.json()
+            break
+        except (requests.RequestException, ValueError):
+            if attempt == WFS_MAX_ATTEMPTS - 1:
+                raise
+            time.sleep(5 * 2**attempt)
 
     segments = []
     for feature in data.get("features", []):
